@@ -17,8 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex justify-center px-[22rem]`}>
-        <div className="grid grid-cols-[1fr_1fr_1fr] w-screen">
+      <body className={`${inter.className} flex justify-center px-[16rem]`}>
+        <div className="grid grid-cols-[1fr_1.5fr_1fr] w-full">
           <Sidebar />
           {children}
         </div>
