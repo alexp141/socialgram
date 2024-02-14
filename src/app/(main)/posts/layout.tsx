@@ -1,16 +1,13 @@
-export default function HomeLayout({
+export default function layout({
   children,
-  feed,
   extras,
 }: {
   children: React.ReactNode;
-  feed: React.ReactNode;
   extras: React.ReactNode;
 }) {
   return (
     <>
       {children}
-      {feed}
       {extras}
     </>
   );
