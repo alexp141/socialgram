@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Sidebar from "@/components/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,8 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex justify-center`}>
-        <div className="grid grid-cols-3">
+      <body className={`${inter.className} flex justify-center px-[22rem]`}>
+        <div className="grid grid-cols-[1fr_1fr_1fr] w-screen">
           <Sidebar />
           {children}
         </div>

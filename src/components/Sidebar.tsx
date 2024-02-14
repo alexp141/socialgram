@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 text-lg font-semibold justify-self-center">
       <Link href="/home">Home</Link>
       <Link href="/favorites">Favorites</Link>
       <Link href="/post">Post</Link>
