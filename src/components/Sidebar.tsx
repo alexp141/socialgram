@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CreatePost from "./CreatePost";
 
 export default function Sidebar() {
   return (
@@ -6,7 +7,7 @@ export default function Sidebar() {
       <div className="flex flex-col gap-4 text-lg font-semibold justify-self-center sticky top-0">
         <Link href="/home">Home</Link>
         <Link href="/favorites">Favorites</Link>
-        <Link href="/post">Post</Link>
+        <CreatePost />
         <Link href="/about">About</Link>
       </div>
     </div>
