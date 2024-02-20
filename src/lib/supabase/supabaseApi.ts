@@ -1,12 +1,12 @@
-import { PostgrestError, createClient } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import { createPostReturn } from "../types";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL as string,
-  process.env.NEXT_PUBLIC_SUPABASE_API_KEY as string
-);
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 
 export async function getLocalSession() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
@@ -21,6 +21,9 @@ export async function getLocalSession() {
 }
 
 export async function getUser() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase.auth.getUser();
 
   if (error) {
@@ -40,6 +43,9 @@ export async function signUpNewUser({
   email: string;
   password: string;
 }) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -58,6 +64,9 @@ export async function signInWithEmail({
   email: string;
   password: string;
 }) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -76,6 +85,9 @@ export interface createNewPostProps {
 }
 
 export async function createNewPost({ content, image }: createNewPostProps) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const user_id = (await getLocalSession()).user.id;
 
   //CREATE POST
@@ -120,6 +132,9 @@ export async function uploadPostImage({
   user_id: string;
   post_id: number;
 }) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   console.log("image file", file);
 
   if (!file.name || !file.size) {
@@ -144,6 +159,9 @@ export async function uploadPostImage({
 }
 
 export async function downloadPostImage(postId: string) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase.storage
     .from("avatars")
     .download("public/avatar1.png");
@@ -159,6 +177,9 @@ export async function getNextPostsPage(
   currentPage: number,
   itemsPerPage: number
 ) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
   const start = currentPage * itemsPerPage - itemsPerPage;
   const end = start + itemsPerPage - 1;
   const { data, error } = await supabase
