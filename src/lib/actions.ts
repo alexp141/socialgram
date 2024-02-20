@@ -37,11 +37,16 @@ export async function signUpUser(prevState: any, formData: FormData) {
   };
 }
 
-export async function emailLogin(formData: FormData) {
+export async function emailLogin(prevState: any, formData: FormData) {
   let email = formData.get("email");
   let password = formData.get("password");
   if (!email || !password) {
-    return { error: "email or password is null" };
+    return {
+      message: "",
+      generalError: "email or password is null",
+      emailError: null,
+      passwordError: null,
+    };
   }
 
   email = email.toString();
@@ -52,16 +57,28 @@ export async function emailLogin(formData: FormData) {
   } catch (error) {
     if (error instanceof Error) {
       return {
-        error: error.message,
+        message: "",
+        generalError: error.message,
+        emailError: null,
+        passwordError: null,
       };
     }
 
     return {
-      error: "something went wrong while logging in",
+      message: "",
+      generalError: "something went wrong while signing in",
+      emailError: null,
+      passwordError: null,
     };
   }
-  console.log("redirecting");
-  redirect("/home");
+  // console.log("redirecting");
+  // redirect("/home");
+  return {
+    message: "success",
+    generalError: null,
+    emailError: null,
+    passwordError: null,
+  };
 }
 
 export async function createPost(prevState: any, formData: FormData) {
