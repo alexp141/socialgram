@@ -2,8 +2,8 @@ import { PostgrestError, createClient } from "@supabase/supabase-js";
 import { createPostReturn } from "../types";
 
 const supabase = createClient(
-  process.env.SUPABASE_PROJECT_URL as string,
-  process.env.SUPABASE_API_KEY as string
+  process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL as string,
+  process.env.NEXT_PUBLIC_SUPABASE_API_KEY as string
 );
 
 export async function getLocalSession() {
