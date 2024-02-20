@@ -11,8 +11,8 @@ export default function AuthLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex justify-center px-[22rem]`}>
-        {children}
+      <body>
+        <div className={`flex justify-center px-[22rem]`}>{children}</div>
       </body>
     </html>
   );

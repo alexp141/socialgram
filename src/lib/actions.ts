@@ -1,6 +1,12 @@
 "use server";
 
-import { signInWithEmail, signUpNewUser } from "./supabase/supabaseApi";
+import { redirect } from "next/navigation";
+import {
+  createNewPost,
+  createNewPostProps,
+  signInWithEmail,
+  signUpNewUser,
+} from "./supabase/supabaseApi";
 
 export async function signUpUser(prevState: any, formData: FormData) {
   let email = formData.get("email");
@@ -31,7 +37,7 @@ export async function signUpUser(prevState: any, formData: FormData) {
   };
 }
 
-export async function emailLogin(prevState: any, formData: FormData) {
+export async function emailLogin(formData: FormData) {
   let email = formData.get("email");
   let password = formData.get("password");
   if (!email || !password) {
@@ -54,8 +60,23 @@ export async function emailLogin(prevState: any, formData: FormData) {
       error: "something went wrong while logging in",
     };
   }
-  return {
-    message: "success",
-    error: null,
-  };
+  console.log("redirecting");
+  redirect("/home");
+}
+
+export async function createPost(prevState: any, formData: FormData) {
+  const content = formData.get("content") as FormDataEntryValue;
+  if (!content) {
+    return {};
+  }
+
+  //console.log("CREATE NEW POST DATA", data);
+  const image = formData.get("post_image") as File;
+
+  const data = await createNewPost({
+    content: content.toString(),
+    image,
+  });
+
+  return {};
 }
