@@ -87,8 +87,7 @@ export async function createPost(prevState: any, formData: FormData) {
     return {};
   }
 
-  //console.log("CREATE NEW POST DATA", data);
-  const image = formData.get("post_image") as File;
+  const image = formData.get("post_image");
 
   const data = await createNewPost({
     content: content.toString(),

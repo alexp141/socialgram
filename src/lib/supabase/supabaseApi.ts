@@ -72,7 +72,7 @@ export async function signInWithEmail({
 
 export interface createNewPostProps {
   content?: string;
-  image?: File;
+  image?: FormDataEntryValue | null;
 }
 
 export async function createNewPost({ content, image }: createNewPostProps) {
@@ -83,10 +83,16 @@ export async function createNewPost({ content, image }: createNewPostProps) {
     data,
     error,
   }: { data: createPostReturn[] | null; error: PostgrestError | null } =
-    await supabase.from("posts").insert([{ content, user_id, image }]).select();
-  console.log("data", data);
+    await supabase
+      .from("posts")
+      .insert([{ content, user_id, imagePath: null }])
+      .select();
 
-  if (!data?.[0]?.id) {
+  if (!data || !data[0]) {
+    throw new Error("unable to fetch data");
+  }
+
+  if (!data[0].id) {
     throw new Error("record id is undefined");
   }
 
@@ -95,14 +101,12 @@ export async function createNewPost({ content, image }: createNewPostProps) {
   }
 
   //UPLOAD IMAGE
-  if (image) {
-    const imageUrl = await uploadPostImage({
-      file: image,
-      user_id,
-      post_id: data[0].id,
-    });
-    console.log("image URL", imageUrl);
-  }
+  const imageUrl = await uploadPostImage({
+    file: image as File,
+    user_id,
+    post_id: data[0].id,
+  });
+  console.log("image URL", imageUrl);
 
   return data;
 }
@@ -116,6 +120,12 @@ export async function uploadPostImage({
   user_id: string;
   post_id: number;
 }) {
+  console.log("image file", file);
+
+  if (!file.name || !file.size) {
+    return;
+  }
+
   // Upload file using standard upload
   const { data, error } = await supabase.storage
     .from("post_images")
@@ -137,6 +147,24 @@ export async function downloadPostImage(postId: string) {
   const { data, error } = await supabase.storage
     .from("avatars")
     .download("public/avatar1.png");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function getNextPostsPage(
+  currentPage: number,
+  itemsPerPage: number
+) {
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .range(start, end);
 
   if (error) {
     throw new Error(error.message);

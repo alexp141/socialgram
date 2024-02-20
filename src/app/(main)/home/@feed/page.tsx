@@ -1,5 +1,6 @@
 import Post from "@/components/Post";
 
+const ITEMS_PER_PAGE = 10;
 export default function FeedPage() {
   return (
     <div>
