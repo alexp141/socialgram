@@ -3,8 +3,9 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { createPostReturn } from "./types";
+import { Database } from "./types/supabase";
 import { PostgrestError } from "@supabase/supabase-js";
+import { PostInsert, PostRow, PostUpdate } from "./types/type-collection";
 
 export async function signUpUser(prevState: any, formData: FormData) {
   const cookieStore = cookies();
@@ -90,9 +91,11 @@ export async function getUser() {
   return data.user;
 }
 
+type PostsInsertType = Database["public"]["Tables"]["posts"]["Insert"];
 export async function createPost(prevState: any, formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
   const user_id = (await supabase.auth.getUser()).data.user?.id;
 
   if (!user_id) {
@@ -108,14 +111,10 @@ export async function createPost(prevState: any, formData: FormData) {
   const image = formData.get("post_image");
 
   //CREATE POST
-  const {
-    data,
-    error,
-  }: { data: createPostReturn[] | null; error: PostgrestError | null } =
-    await supabase
-      .from("posts")
-      .insert([{ content, user_id, image_path: null }])
-      .select();
+  const { data, error } = await supabase
+    .from("posts")
+    .insert<PostInsert>({ user_id })
+    .select();
 
   if (error) {
     throw new Error(error.message);
@@ -128,6 +127,8 @@ export async function createPost(prevState: any, formData: FormData) {
   if (!data[0].id) {
     throw new Error("record id is undefined");
   }
+
+  const postData: PostRow[] = data;
 
   //UPLOAD IMAGE IF IT EXISTS
   const imageUrl = await uploadPostImage({
@@ -182,7 +183,7 @@ export async function uploadPostImage({
   //UPDATE IMAGE URL IN POSTS TABLE
   const { error: updateError } = await supabase
     .from("posts")
-    .update({ image_path: data.path })
+    .update<PostUpdate>({ image_path: data.path })
     .eq("id", post_id);
 
   if (updateError) {
@@ -220,7 +221,7 @@ export async function downloadPostImage(postId: string) {
 
   const { data, error } = await supabase.storage
     .from("post_images")
-    .download("public/avatar1.png");
+    .download("pathHere");
 
   if (error) {
     throw new Error(error.message);

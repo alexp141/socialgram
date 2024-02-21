@@ -3,24 +3,13 @@ import { getNextPostsPage } from "@/lib/actions";
 
 const ITEMS_PER_PAGE = 10;
 export default async function FeedPage() {
-  const posts = await getNextPostsPage(1, 10);
+  const posts: any[] = await getNextPostsPage(1, 10);
   return (
     <div>
       <p className="text-center">feed page</p>
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      {posts.map((post) => {
+        return <Post key={post.id} post={post} />;
+      })}
     </div>
   );
 }
