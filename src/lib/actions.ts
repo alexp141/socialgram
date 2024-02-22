@@ -13,16 +13,28 @@ export async function signUpUser(prevState: any, formData: FormData) {
 
   let email = formData.get("email");
   let password = formData.get("password");
+  let username = formData.get("username");
+
   if (!email || !password) {
     return { error: "email or password is null" };
   }
 
+  if (!username) {
+    return { error: "user name is null" };
+  }
+
   email = email.toString();
   password = password.toString();
+  username = username.toString();
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        username,
+      },
+    },
   });
 
   if (error) {

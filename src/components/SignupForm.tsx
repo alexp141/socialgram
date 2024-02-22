@@ -11,10 +11,15 @@ export default function SignupForm() {
 
   return (
     <form action={formAction}>
+      <label htmlFor="username">Username</label>
+      <input type="username" name="username" id="username" required />
+
       <label htmlFor="email">Email</label>
       <input type="email" name="email" id="email" required />
+
       <label htmlFor="password">Password</label>
       <input type="password" name="password" id="password" required />
+
       <button type="submit" className="text-blue-500">
         submit
       </button>
