@@ -9,6 +9,7 @@ export default function Sidebar() {
         <Link href="/favorites">Favorites</Link>
         <Link href="/about">About</Link>
         <CreatePost />
+        <Link href="/tempuser">Profile</Link>
       </div>
     </div>
   );
