@@ -91,7 +91,6 @@ export async function getUser() {
   return data.user;
 }
 
-type PostsInsertType = Database["public"]["Tables"]["posts"]["Insert"];
 export async function createPost(prevState: any, formData: FormData) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -113,7 +112,11 @@ export async function createPost(prevState: any, formData: FormData) {
   //CREATE POST
   const { data, error } = await supabase
     .from("posts")
-    .insert<PostInsert>({ user_id })
+    .insert<PostInsert>({
+      user_id,
+      content: content.toString(),
+      image_path: null,
+    })
     .select();
 
   if (error) {
@@ -203,25 +206,31 @@ export async function getNextPostsPage(
 
   const start = currentPage * itemsPerPage - itemsPerPage;
   const end = start + itemsPerPage - 1;
+
   const { data, error } = await supabase
     .from("posts")
     .select("*")
     .range(start, end);
-  console.log("post data", data);
+
   if (error) {
     throw new Error(error.message);
   }
 
-  return data;
+  const posts: PostRow[] = data;
+
+  console.log("post data", data);
+
+  return posts;
 }
 
-export async function downloadPostImage(postId: string) {
+export async function downloadPostImage(imagePath: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+  console.log("image path", imagePath);
 
   const { data, error } = await supabase.storage
     .from("post_images")
-    .download("pathHere");
+    .download(`${imagePath}`);
 
   if (error) {
     throw new Error(error.message);
