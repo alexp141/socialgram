@@ -33,6 +33,7 @@ export async function signUpUser(prevState: any, formData: FormData) {
     options: {
       data: {
         username,
+        email,
       },
     },
   });
@@ -85,6 +86,17 @@ export async function emailLogin(prevState: any, formData: FormData) {
     emailError: null,
     passwordError: null,
   };
+}
+
+export async function signOutUser() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }
 
 export async function getUser() {

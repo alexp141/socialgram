@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CreatePost from "./CreatePost";
+import SignOutButton from "./SignOutButton";
 
 export default function Sidebar() {
   return (
@@ -10,6 +11,7 @@ export default function Sidebar() {
         <Link href="/about">About</Link>
         <CreatePost />
         <Link href="/tempuser">Profile</Link>
+        <SignOutButton />
       </div>
     </div>
   );

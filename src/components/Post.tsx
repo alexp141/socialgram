@@ -14,10 +14,17 @@ export default async function Post({ post }: { post: PostRow }) {
       <div className="flex flex-col">
         <div>name</div>
         <div>{post.content}</div>
-        <div>image</div>
-        {postImageURL && (
-          <Image src={postImageURL} alt="post image" width={200} height={200} />
-        )}
+        <div>
+          {postImageURL && (
+            <Image
+              src={postImageURL}
+              alt="post image"
+              width={200}
+              height={200}
+            />
+          )}
+        </div>
+
         <div>interactions</div>
       </div>
     </div>
