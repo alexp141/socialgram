@@ -5,7 +5,12 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { Database } from "./types/supabase";
 import { PostgrestError } from "@supabase/supabase-js";
-import { PostInsert, PostRow, PostUpdate } from "./types/type-collection";
+import {
+  PostInsert,
+  PostLikesInsert,
+  PostRow,
+  PostUpdate,
+} from "./types/type-collection";
 
 export async function signUpUser(prevState: any, formData: FormData) {
   const cookieStore = cookies();
@@ -261,4 +266,32 @@ export async function downloadPostImage(imagePath: string) {
   }
 
   return data;
+}
+
+export async function likePost(postId: number, userId: string) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { error } = await supabase
+    .from("post_likes")
+    .insert<PostLikesInsert>({ post_id: postId, user_id: userId });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getPostLikes(postId: number) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data, error } = await supabase
+    .from("post_likes")
+    .select(undefined, { count: "estimated" });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  console.log("getpostslikes data", data);
 }

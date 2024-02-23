@@ -1,5 +1,7 @@
 import { PostRow } from "@/lib/types/type-collection";
+import { FaRegBookmark } from "react-icons/fa6";
 import Image from "next/image";
+import LikeButton from "./LikeButton";
 
 export default async function Post({ post }: { post: PostRow }) {
   let postImageURL;
@@ -24,8 +26,9 @@ export default async function Post({ post }: { post: PostRow }) {
             />
           )}
         </div>
-
-        <div>interactions</div>
+        <div className="flex border border-sky-500">
+          <LikeButton postId={post.id} userId={post.user_id} />
+        </div>
       </div>
     </div>
   );
