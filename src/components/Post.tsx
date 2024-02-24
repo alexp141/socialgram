@@ -1,9 +1,10 @@
+"use client";
 import { PostRow } from "@/lib/types/type-collection";
 import { FaRegBookmark } from "react-icons/fa6";
 import Image from "next/image";
 import LikeButton from "./LikeButton";
 
-export default async function Post({ post }: { post: PostRow }) {
+export default function Post({ post }: { post: PostRow }) {
   let postImageURL;
   if (post.image_path) {
     postImageURL = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${post.image_path}`;
@@ -27,7 +28,11 @@ export default async function Post({ post }: { post: PostRow }) {
           )}
         </div>
         <div className="flex border border-sky-500">
-          <LikeButton postId={post.id} userId={post.user_id} />
+          <LikeButton
+            postId={post.id}
+            userId={post.user_id}
+            numberOfLikes={1}
+          />
         </div>
       </div>
     </div>

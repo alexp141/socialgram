@@ -279,19 +279,28 @@ export async function likePost(postId: number, userId: string) {
   if (error) {
     throw new Error(error.message);
   }
+
+  //revalidatePath("/home");
 }
 
 export async function getPostLikes(postId: number) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data, error } = await supabase
+  const { count, error } = await supabase
     .from("post_likes")
-    .select(undefined, { count: "estimated" });
+    .select("*", { count: "estimated", head: true })
+    .eq("post_id", postId);
 
   if (error) {
     throw new Error(error.message);
   }
 
-  console.log("getpostslikes data", data);
+  if (count === null) {
+    throw new Error("could not get like count");
+  }
+
+  console.log("getpostslikes data", count);
+
+  return count;
 }
