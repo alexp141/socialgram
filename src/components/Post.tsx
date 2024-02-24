@@ -28,11 +28,7 @@ export default function Post({ post }: { post: PostRow }) {
           )}
         </div>
         <div className="flex border border-sky-500">
-          <LikeButton
-            postId={post.id}
-            userId={post.user_id}
-            numberOfLikes={1}
-          />
+          <LikeButton postId={post.id} userId={post.user_id} />
         </div>
       </div>
     </div>

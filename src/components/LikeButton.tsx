@@ -1,18 +1,18 @@
 "use client";
 
+import useLikeCount from "@/hooks/useLikeCount";
 import { likePost } from "@/lib/actions";
-import { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
 export default function LikeButton({
   postId,
   userId,
-  numberOfLikes,
 }: {
   postId: number;
   userId: string;
-  numberOfLikes: number;
 }) {
+  const { likeCount, fetchStatus } = useLikeCount(postId);
+
   async function handleLike() {
     await likePost(postId, userId);
   }
@@ -20,7 +20,7 @@ export default function LikeButton({
   return (
     <div className="">
       <button type="button" onClick={handleLike}>
-        <FaRegHeart /> {numberOfLikes}
+        <FaRegHeart /> {likeCount}
       </button>
     </div>
   );

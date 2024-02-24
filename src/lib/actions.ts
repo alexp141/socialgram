@@ -13,8 +13,7 @@ import {
 } from "./types/type-collection";
 
 export async function signUpUser(prevState: any, formData: FormData) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let email = formData.get("email");
   let password = formData.get("password");
@@ -54,8 +53,7 @@ export async function signUpUser(prevState: any, formData: FormData) {
 }
 
 export async function emailLogin(prevState: any, formData: FormData) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   let email = formData.get("email");
   let password = formData.get("password");
@@ -94,8 +92,7 @@ export async function emailLogin(prevState: any, formData: FormData) {
 }
 
 export async function signOutUser() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { error } = await supabase.auth.signOut();
 
@@ -105,8 +102,7 @@ export async function signOutUser() {
 }
 
 export async function getUser() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { data, error } = await supabase.auth.getUser();
 
@@ -121,8 +117,7 @@ export async function getUser() {
 }
 
 export async function createPost(prevState: any, formData: FormData) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const user_id = (await supabase.auth.getUser()).data.user?.id;
 
@@ -181,8 +176,7 @@ export async function uploadPostImage({
   user_id: string;
   post_id: number;
 }) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   console.log("image file", file);
 
@@ -230,8 +224,7 @@ export async function getNextPostsPage(
   currentPage: number,
   itemsPerPage: number
 ) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const start = currentPage * itemsPerPage - itemsPerPage;
   const end = start + itemsPerPage - 1;
@@ -253,8 +246,7 @@ export async function getNextPostsPage(
 }
 
 export async function downloadPostImage(imagePath: string) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
   console.log("image path", imagePath);
 
   const { data, error } = await supabase.storage
@@ -269,8 +261,7 @@ export async function downloadPostImage(imagePath: string) {
 }
 
 export async function likePost(postId: number, userId: string) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { error } = await supabase
     .from("post_likes")
@@ -284,8 +275,7 @@ export async function likePost(postId: number, userId: string) {
 }
 
 export async function getPostLikes(postId: number) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   const { count, error } = await supabase
     .from("post_likes")

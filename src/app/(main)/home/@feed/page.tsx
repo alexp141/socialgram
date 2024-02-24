@@ -1,7 +1,5 @@
 import InfiniteScroller from "@/components/InfiniteScroller";
 
-export const dynamic = "force-dynamic";
-
 const ITEMS_PER_PAGE = 10;
 export default async function FeedPage() {
   return (
