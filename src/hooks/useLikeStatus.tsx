@@ -1,4 +1,4 @@
-import { getLikeStatus } from "@/lib/actions";
+import { getLikeStatus } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useLikeStatus(postId: number) {
@@ -8,9 +8,8 @@ export default function useLikeStatus(postId: number) {
     fetchStatus,
   } = useQuery({
     queryKey: ["like-status", postId],
-    queryFn: () => {
-      return getLikeStatus(postId);
-    },
+    queryFn: () => getLikeStatus(postId),
   });
+
   return { hasLikedPost, error, fetchStatus };
 }

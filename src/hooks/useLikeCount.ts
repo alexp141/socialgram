@@ -1,4 +1,4 @@
-import { getPostLikes } from "@/lib/actions";
+import { getPostLikes } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useLikeCount(postId: number) {

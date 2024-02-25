@@ -3,8 +3,21 @@ import { PostRow } from "@/lib/types/type-collection";
 import { FaRegBookmark } from "react-icons/fa6";
 import Image from "next/image";
 import LikeButton from "./LikeButton";
+import useLikeCount from "@/hooks/useLikeCount";
+import useLikeStatus from "@/hooks/useLikeStatus";
 
 export default function Post({ post }: { post: PostRow }) {
+  const { likeCount, fetchStatus, error } = useLikeCount(post.id);
+  const { hasLikedPost } = useLikeStatus(post.id);
+
+  if (error) {
+    return <p>error fetching like data</p>;
+  }
+
+  if (fetchStatus === "fetching") {
+    return <p>loading...</p>;
+  }
+
   let postImageURL;
   if (post.image_path) {
     postImageURL = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${post.image_path}`;
@@ -28,7 +41,12 @@ export default function Post({ post }: { post: PostRow }) {
           )}
         </div>
         <div className="flex border border-sky-500">
-          <LikeButton postId={post.id} userId={post.user_id} />
+          <LikeButton
+            postId={post.id}
+            userId={post.user_id}
+            likeCount={likeCount}
+            hasLikedPost={hasLikedPost}
+          />
         </div>
       </div>
     </div>
