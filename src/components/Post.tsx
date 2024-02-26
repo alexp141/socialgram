@@ -5,6 +5,7 @@ import Image from "next/image";
 import LikeButton from "./LikeButton";
 import useLikeCount from "@/hooks/useLikeCount";
 import useLikeStatus from "@/hooks/useLikeStatus";
+import FavoriteButton from "./FavoriteButton";
 
 export default function Post({ post }: { post: PostRow }) {
   let postImageURL;
@@ -31,6 +32,7 @@ export default function Post({ post }: { post: PostRow }) {
         </div>
         <div className="flex border border-sky-500">
           <LikeButton postId={post.id} userId={post.user_id} />
+          <FavoriteButton postId={post.id} userId={post.user_id} />
         </div>
       </div>
     </div>

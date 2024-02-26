@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import {
+  FavoritesInsert,
   PostInsert,
   PostLikesInsert,
   PostRow,
@@ -264,8 +265,6 @@ export async function likePost(postId: number, userId: string) {
   if (error) {
     throw new Error(error.message);
   }
-
-  //revalidatePath("/home");
 }
 
 export async function unlikePost(postId: number, userId: string) {
@@ -273,6 +272,32 @@ export async function unlikePost(postId: number, userId: string) {
 
   const { error } = await supabase
     .from("post_likes")
+    .delete()
+    .eq("user_id", userId)
+    .eq("post_id", postId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function favoritePost(postId: number, userId: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("favorites")
+    .insert<FavoritesInsert>({ post_id: postId, user_id: userId });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function unfavoritePost(postId: number, userId: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("favorites")
     .delete()
     .eq("user_id", userId)
     .eq("post_id", postId);

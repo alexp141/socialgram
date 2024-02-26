@@ -3,7 +3,6 @@
 import { getNextPostsPage } from "@/lib/actions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
-import { PostRow } from "@/lib/types/type-collection";
 
 export default function InfiniteScroller() {
   const {

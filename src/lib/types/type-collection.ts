@@ -10,3 +10,9 @@ export type PostLikesInsert =
   Database["public"]["Tables"]["post_likes"]["Insert"];
 export type PostLikesUpdate =
   Database["public"]["Tables"]["post_likes"]["Update"];
+
+export type FavoritesRow = Database["public"]["Tables"]["favorites"]["Row"];
+export type FavoritesInsert =
+  Database["public"]["Tables"]["favorites"]["Insert"];
+export type FavoritesUpdate =
+  Database["public"]["Tables"]["favorites"]["Update"];
