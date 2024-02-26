@@ -26,7 +26,9 @@ export default function InfiniteScroller() {
   });
 
   return status === "pending" ? (
-    <p>Loading...</p>
+    <div className="lg:min-w-[35rem]">
+      <p className="text-center">Loading...</p>
+    </div>
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
