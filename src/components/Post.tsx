@@ -7,17 +7,6 @@ import useLikeCount from "@/hooks/useLikeCount";
 import useLikeStatus from "@/hooks/useLikeStatus";
 
 export default function Post({ post }: { post: PostRow }) {
-  const { likeCount, fetchStatus, error } = useLikeCount(post.id);
-  const { hasLikedPost } = useLikeStatus(post.id);
-
-  if (error) {
-    return <p>error fetching like data</p>;
-  }
-
-  if (fetchStatus === "fetching") {
-    return <p>loading...</p>;
-  }
-
   let postImageURL;
   if (post.image_path) {
     postImageURL = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${post.image_path}`;
@@ -41,12 +30,7 @@ export default function Post({ post }: { post: PostRow }) {
           )}
         </div>
         <div className="flex border border-sky-500">
-          <LikeButton
-            postId={post.id}
-            userId={post.user_id}
-            likeCount={likeCount}
-            hasLikedPost={hasLikedPost}
-          />
+          <LikeButton postId={post.id} userId={post.user_id} />
         </div>
       </div>
     </div>

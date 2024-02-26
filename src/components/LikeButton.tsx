@@ -1,5 +1,7 @@
 "use client";
 
+import useLikeCount from "@/hooks/useLikeCount";
+import useLikeStatus from "@/hooks/useLikeStatus";
 import { likePost, unlikePost } from "@/lib/actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -8,16 +10,18 @@ import { FaRegHeart, FaHeart } from "react-icons/fa6";
 export default function LikeButton({
   postId,
   userId,
-  likeCount,
-  hasLikedPost,
 }: {
   postId: number;
   userId: string;
-  likeCount: number | undefined;
-  hasLikedPost: boolean | undefined;
 }) {
-  const [localLikeCount, setLocalLikeCount] = useState(likeCount);
+  const { likeCount, fetchStatus, error } = useLikeCount(postId);
+  const { hasLikedPost } = useLikeStatus(postId);
+  const [localLikeCount, setLocalLikeCount] = useState<number | undefined>(0);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setLocalLikeCount(likeCount);
+  }, [likeCount]);
 
   async function handleLike() {
     await likePost(postId, userId);
@@ -31,16 +35,24 @@ export default function LikeButton({
     setLocalLikeCount((curr) => curr! - 1);
   }
 
+  if (error) {
+    return <p>error</p>;
+  }
+
+  if (fetchStatus === "fetching") {
+    return "...";
+  }
+
   return (
     <div className="">
       {!hasLikedPost && (
         <button type="button" onClick={handleLike}>
-          <FaRegHeart /> {localLikeCount}
+          <FaRegHeart /> <span>{localLikeCount}</span>
         </button>
       )}
       {hasLikedPost && (
         <button type="button" onClick={handleDislike}>
-          <FaHeart /> {localLikeCount}
+          <FaHeart /> <span>{localLikeCount}</span>
         </button>
       )}
     </div>

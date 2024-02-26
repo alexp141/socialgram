@@ -9,6 +9,7 @@ export default function useLikeCount(postId: number) {
   } = useQuery({
     queryKey: ["like-count", postId],
     queryFn: () => getPostLikes(postId),
+    //refetchOnMount: "always",
   });
 
   return { likeCount, error, fetchStatus };
