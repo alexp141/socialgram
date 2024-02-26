@@ -15,22 +15,28 @@ export default function Post({ post }: { post: PostRow }) {
   }
 
   return (
-    <div className="flex border border-sky-500">
-      <div className="flex basis-16 bg-cyan-500"></div>
+    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
+      <div className="">
+        <div className="w-12 h-12 bg-orange-500 border rounded-full mx-1"></div>
+      </div>
       <div className="flex flex-col">
-        <div>name</div>
-        <div>{post.content}</div>
+        <div>@name</div>
+        <div className="my-1">{post.content}</div>
         <div>
           {postImageURL && (
             <Image
+              className="border rounded-md"
               src={postImageURL}
               alt="post image"
-              width={200}
-              height={200}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "95%", height: "auto" }}
+              placeholder="empty"
             />
           )}
         </div>
-        <div className="flex border border-sky-500">
+        <div className="flex border justify-around items-center py-2">
           <LikeButton postId={post.id} userId={post.user_id} />
           <FavoriteButton postId={post.id} userId={post.user_id} />
         </div>

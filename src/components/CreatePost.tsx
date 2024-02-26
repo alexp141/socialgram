@@ -20,7 +20,7 @@ export default function CreatePost() {
   }
 
   return (
-    <>
+    <div>
       <button
         type="button"
         onClick={() => {
@@ -47,6 +47,6 @@ export default function CreatePost() {
           {image && <Image src={image} width={200} height={200} alt="image" />}
         </form>
       </Modal>
-    </>
+    </div>
   );
 }

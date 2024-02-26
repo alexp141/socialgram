@@ -1,3 +1,3 @@
 export default function Extras() {
-  return <p className="text-center">extras page</p>;
+  return <p className="hidden lg:block text-center">extras page</p>;
 }

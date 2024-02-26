@@ -42,22 +42,28 @@ export default function FavoriteButton({
     return <p>error</p>;
   }
 
-  if (fetchStatus === "fetching") {
-    return "...";
-  }
+  //   if (fetchStatus === "fetching") {
+  //     return "...";
+  //   }
 
   return (
-    <div className="">
+    <>
       {!hasFavoritedPost && (
-        <button type="button" onClick={handleFavorite}>
-          <FaRegBookmark /> <span>{localFavoriteCount}</span>
-        </button>
+        <div className="flex gap-1">
+          <button type="button" onClick={handleFavorite}>
+            <FaRegBookmark />
+          </button>
+          <span>{localFavoriteCount}</span>
+        </div>
       )}
       {hasFavoritedPost && (
-        <button type="button" onClick={handleUnfavorite}>
-          <FaBookmark /> <span>{localFavoriteCount}</span>
-        </button>
+        <div className="flex gap-1">
+          <button type="button" onClick={handleUnfavorite}>
+            <FaBookmark />
+          </button>
+          <span>{localFavoriteCount}</span>
+        </div>
       )}
-    </div>
+    </>
   );
 }

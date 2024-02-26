@@ -6,8 +6,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`flex justify-center px-[16rem]`}>
-      <div className="grid grid-cols-[1fr_1.5fr_1fr] w-full">
+    <div className={`md:flex md:justify-center md:w-screen`}>
+      <div className="sm:grid sm:grid-cols-[auto_1fr] lg:grid-cols-[1fr_auto_1fr]">
         <Sidebar />
         {children}
       </div>

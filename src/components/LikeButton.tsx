@@ -39,22 +39,28 @@ export default function LikeButton({
     return <p>error</p>;
   }
 
-  if (fetchStatus === "fetching") {
-    return "...";
-  }
+  // if (fetchStatus === "fetching") {
+  //   return "...";
+  // }
 
   return (
-    <div className="">
+    <>
       {!hasLikedPost && (
-        <button type="button" onClick={handleLike}>
-          <FaRegHeart /> <span>{localLikeCount}</span>
-        </button>
+        <div className="flex gap-1">
+          <button type="button" onClick={handleLike}>
+            <FaRegHeart />
+          </button>
+          <span>{localLikeCount}</span>
+        </div>
       )}
       {hasLikedPost && (
-        <button type="button" onClick={handleDislike}>
-          <FaHeart /> <span>{localLikeCount}</span>
-        </button>
+        <div className="flex gap-1">
+          <button type="button" onClick={handleDislike}>
+            <FaHeart />
+          </button>
+          <span>{localLikeCount}</span>
+        </div>
       )}
-    </div>
+    </>
   );
 }

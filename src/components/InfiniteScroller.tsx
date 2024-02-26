@@ -30,7 +30,7 @@ export default function InfiniteScroller() {
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
-    <>
+    <div className="md:min-w-[35rem] lg:max-w-[40rem] border-x border-red-500">
       {data.pages.map((group, i) => (
         <div key={i}>
           {group.map((post) => (
@@ -50,6 +50,6 @@ export default function InfiniteScroller() {
             : "Nothing more to load"}
         </button>
       </div>
-    </>
+    </div>
   );
 }
