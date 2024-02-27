@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import {
+  CommentsInsert,
   FavoritesInsert,
   PostInsert,
   PostLikesInsert,
@@ -305,4 +306,23 @@ export async function unfavoritePost(postId: number, userId: string) {
   if (error) {
     throw new Error(error.message);
   }
+}
+
+export async function postComment(
+  postId: number,
+  userId: string,
+  prevState: {},
+  formData: FormData
+) {
+  //const supabase = createClient();
+  console.log(postId, userId, prevState, formData);
+
+  // const { error } = await supabase
+  //   .from("comments")
+  //   .insert<CommentsInsert>({ post_id: postId, user_id: userId, comment });
+  // if (error) {
+  //   throw new Error(error.message);
+  // }
+
+  return { message: "success" };
 }

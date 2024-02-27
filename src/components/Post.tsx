@@ -6,6 +6,7 @@ import LikeButton from "./LikeButton";
 import useLikeCount from "@/hooks/useLikeCount";
 import useLikeStatus from "@/hooks/useLikeStatus";
 import FavoriteButton from "./FavoriteButton";
+import CommentButton from "./CommentButton";
 
 export default function Post({ post }: { post: PostRow }) {
   let postImageURL;
@@ -37,6 +38,7 @@ export default function Post({ post }: { post: PostRow }) {
           )}
         </div>
         <div className="flex border justify-around items-center py-2">
+          <CommentButton postId={post.id} userId={post.user_id} />
           <LikeButton postId={post.id} userId={post.user_id} />
           <FavoriteButton postId={post.id} userId={post.user_id} />
         </div>

@@ -94,3 +94,22 @@ export async function getFavoritedStatus(postId: number, userId: string) {
   }
   return false;
 }
+
+export async function getCommentCount(postId: number) {
+  const supabase = createClient();
+
+  const { count, error } = await supabase
+    .from("comments")
+    .select("*", { count: "estimated", head: true })
+    .eq("post_id", postId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (count === null) {
+    throw new Error("could not get comments count");
+  }
+
+  return count;
+}
