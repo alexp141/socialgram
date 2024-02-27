@@ -1,8 +1,11 @@
 "use server";
 
+import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
   CommentsInsert,
+  CommentsRow,
+  CommentsUpdate,
   FavoritesInsert,
   PostInsert,
   PostLikesInsert,
@@ -176,8 +179,6 @@ export async function uploadPostImage({
 }) {
   const supabase = createClient();
 
-  console.log("image file", file);
-
   if (!file.name || !file.size) {
     return;
   }
@@ -214,7 +215,6 @@ export async function uploadPostImage({
     throw new Error(updateError.message);
   }
 
-  console.log("IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
 
@@ -243,7 +243,6 @@ export async function getNextPostsPage(
 
 export async function downloadPostImage(imagePath: string) {
   const supabase = createClient();
-  console.log("image path", imagePath);
 
   const { data, error } = await supabase.storage
     .from("post_images")
@@ -307,6 +306,31 @@ export async function unfavoritePost(postId: number, userId: string) {
     throw new Error(error.message);
   }
 }
+const MAX_FILE_SIZE = 1024 * 1024 * 10;
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+const commentSchema = z.object({
+  comment: z.string().optional(),
+  post_image: z
+    .any()
+    .refine(
+      (file) => {
+        return file?.size >= MAX_FILE_SIZE ? false : true;
+      },
+      { message: "file size must be less than 10MB" }
+    )
+    .refine(
+      (file) => {
+        return ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type);
+      },
+      { message: "only jpg, png and webp images are allowed" }
+    )
+    .optional(),
+});
 
 export async function postComment(
   postId: number,
@@ -314,15 +338,89 @@ export async function postComment(
   prevState: {},
   formData: FormData
 ) {
-  //const supabase = createClient();
-  console.log(postId, userId, prevState, formData);
+  const validation = commentSchema.safeParse({
+    comment: formData.get("comment"),
+    post_image: formData.get("post_image"),
+  });
+  console.log("image file", formData.get("post_image"));
+  if (!validation.success) {
+    return { error: validation.error.message, message: "" };
+  }
 
-  // const { error } = await supabase
-  //   .from("comments")
-  //   .insert<CommentsInsert>({ post_id: postId, user_id: userId, comment });
-  // if (error) {
-  //   throw new Error(error.message);
-  // }
+  const supabase = createClient();
 
-  return { message: "success" };
+  const { data, error } = await supabase
+    .from("comments")
+    .insert<CommentsInsert>({
+      post_id: postId,
+      user_id: userId,
+      comment: validation.data.comment,
+    })
+    .select("*");
+
+  if (error) {
+    return { message: "", error: error.message };
+  }
+  const commentData: CommentsRow = data[0];
+
+  const res = await uploadCommentImage(
+    validation.data.post_image,
+    postId,
+    commentData.id,
+    commentData.user_id
+  );
+
+  return { message: "success", error: null };
+}
+
+export async function uploadCommentImage(
+  file: File,
+  postId: number,
+  commentId: number,
+  commenterUserId: string
+) {
+  const supabase = createClient();
+
+  console.log("image file", file);
+
+  if (!file.name || !file.size) {
+    return;
+  }
+
+  const fileExtension = file.name.split(".")[1];
+
+  // Upload file using standard upload
+  const { data, error } = await supabase.storage
+    .from("comment_images")
+    .upload(
+      `${commenterUserId}/comments/${postId}/comments/${String(
+        commentId
+      )}/comment-image.${fileExtension}`,
+      file,
+      {
+        contentType: "image/*",
+      }
+    );
+
+  if (error) {
+    // Handle error
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("image data is null");
+  }
+
+  //UPDATE IMAGE URL IN COMMENTS TABLE
+  const { error: updateError } = await supabase
+    .from("comments")
+    .update<CommentsUpdate>({ image_path: data.path })
+    .eq("id", commentId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  console.log("COMMENT IMAGE PATH SUPABASE", data.path);
+  return data.path;
 }

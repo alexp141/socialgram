@@ -17,7 +17,10 @@ export default function CommentButton({
 
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState<null | string>(null);
-  const [formState, formAction] = useFormState(enhancedAction, { message: "" });
+  const [formState, formAction] = useFormState(enhancedAction, {
+    message: "",
+    error: null,
+  });
 
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     console.log("target", e.target.files);
@@ -37,10 +40,12 @@ export default function CommentButton({
         <FaRegComment />
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Replying to: @name">
+        {formState.error}
+        {formState.message}
         <form action={formAction}>
           <textarea
-            name="content"
-            placeholder="what's on your mind?"
+            name="comment"
+            placeholder="Replying to @name"
             className="w-full"
           />
           {image && <Image src={image} width={200} height={200} alt="image" />}
