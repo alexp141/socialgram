@@ -424,3 +424,35 @@ export async function uploadCommentImage(
   console.log("COMMENT IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
+
+export async function getPost(postId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", postId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const post: PostRow = data;
+
+  return post;
+}
+
+export async function getPostInfo(postId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(
+      "id, created_at, content, image_path, user_id, favorites(*), comments(*), post_likes(*)"
+    )
+    .eq("id", postId);
+
+  console.log(data);
+  console.log("asdf", data?.[0]?.favorites);
+}
