@@ -3,6 +3,7 @@ import Image from "next/image";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import FavoriteButton from "./FavoriteButton";
+import { convertDate } from "@/lib/helper";
 
 export default function DetailedPost({ post }: { post: PostRow }) {
   let postImageURL;
@@ -10,6 +11,8 @@ export default function DetailedPost({ post }: { post: PostRow }) {
     postImageURL = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${post.image_path}`;
     console.log("post image", postImageURL);
   }
+
+  let date = convertDate(new Date(post.created_at).toString());
 
   return (
     <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
@@ -32,6 +35,7 @@ export default function DetailedPost({ post }: { post: PostRow }) {
               placeholder="empty"
             />
           )}
+          <div>{date}</div>
         </div>
         <div className="flex border justify-around items-center py-2">
           <CommentButton postId={post.id} userId={post.user_id} />
