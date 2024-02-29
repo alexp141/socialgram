@@ -325,7 +325,9 @@ const commentSchema = z.object({
     )
     .refine(
       (file) => {
-        return ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type);
+        return (
+          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file.size === 0
+        );
       },
       { message: "only jpg, png and webp images are allowed" }
     )
@@ -335,7 +337,6 @@ const commentSchema = z.object({
 export async function postComment(
   postId: number,
   userId: string,
-  prevState: {},
   formData: FormData
 ) {
   const validation = commentSchema.safeParse({

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,18 @@ export default function RootLayout({
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
         </ReactQueryProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </body>
     </html>
   );

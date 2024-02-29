@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import { postComment } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 export default function CommentButton({
   postId,
@@ -19,10 +20,15 @@ export default function CommentButton({
 
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState<null | string>(null);
-  const [formState, formAction] = useFormState(enhancedAction, {
-    message: "",
-    error: null,
-  });
+
+  async function handleAction(formData: FormData) {
+    const res = await postComment(postId, userId, formData);
+    if (res.error) {
+      toast.error(res.error);
+      return;
+    }
+    toast.success("Comment posted");
+  }
 
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     console.log("target", e.target.files);
@@ -42,9 +48,7 @@ export default function CommentButton({
         <FaRegComment />
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Replying to: @name">
-        {formState.error}
-        {formState.message}
-        <form action={formAction}>
+        <form action={handleAction}>
           <textarea
             name="comment"
             placeholder="Replying to @name"
