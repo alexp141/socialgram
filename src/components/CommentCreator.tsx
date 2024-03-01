@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export default function CommentCreator({ post }: { post: PostRow }) {
   async function handleAction(formData: FormData) {
-    const res = await postComment(post.id, post.user_id, formData);
+    const res = await postComment(post.id, formData);
     if (res.error) {
       console.log(res.error);
       toast.error(res.error);
@@ -23,8 +23,7 @@ export default function CommentCreator({ post }: { post: PostRow }) {
       <form action={handleAction}>
         <textarea
           onFocus={() => console.log("focused")}
-          onBlur={() => console.log("unfocused")}
-          className="w-full focus:min-h-32"
+          className="w-full min-h-24"
           placeholder="Post your reply"
           maxLength={300}
           name="comment"

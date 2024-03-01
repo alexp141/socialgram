@@ -1,8 +1,11 @@
 import Link from "next/link";
 import CreatePost from "./CreatePost";
 import SignOutButton from "./SignOutButton";
+import { getUser } from "@/lib/actions";
 
-export default function Sidebar() {
+export default async function Sidebar() {
+  const username = (await getUser()).user_metadata.username;
+
   return (
     <div className="hidden sm:block sm:px-8 sm:py-6">
       <div className="flex flex-col gap-4 text-lg font-semibold sticky top-4">
@@ -10,8 +13,7 @@ export default function Sidebar() {
         <Link href="/favorites">Favorites</Link>
         <Link href="/about">About</Link>
         <CreatePost />
-        <Link href="/tempuser">Profile</Link>
-        <SignOutButton />
+        <Link href={`/${username}`}>Profile</Link> <SignOutButton />
       </div>
     </div>
   );

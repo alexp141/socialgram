@@ -20,3 +20,7 @@ export type FavoritesUpdate =
 export type CommentsRow = Database["public"]["Tables"]["comments"]["Row"];
 export type CommentsInsert = Database["public"]["Tables"]["comments"]["Insert"];
 export type CommentsUpdate = Database["public"]["Tables"]["comments"]["Update"];
+
+export type UsersUpdate = Database["public"]["Tables"]["users"]["Update"];
+export type UsersRow = Database["public"]["Tables"]["users"]["Row"];
+export type UsersInsert = Database["public"]["Tables"]["users"]["Insert"];

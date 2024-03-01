@@ -22,7 +22,7 @@ export default function Modal({
       {/* centers the dialogue */}
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <Dialog.Panel className="bg-red-600 px-4 py-4">
-          <Dialog.Title className="">{title}</Dialog.Title>
+          <Dialog.Title className="text-center">{title}</Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {children}
           <button onClick={() => setIsOpen(false)}>Cancel</button>
