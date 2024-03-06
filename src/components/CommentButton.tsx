@@ -16,13 +16,12 @@ export default function CommentButton({
   userId: string;
 }) {
   //adding extra arguments to the formstate action
-  const enhancedAction = postComment.bind(null, postId, userId);
 
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState<null | string>(null);
 
   async function handleAction(formData: FormData) {
-    const res = await postComment(postId, userId, formData);
+    const res = await postComment(postId, formData);
     if (res.error) {
       toast.error(res.error);
       return;

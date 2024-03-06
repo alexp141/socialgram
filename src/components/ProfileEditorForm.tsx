@@ -1,19 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "./Modal";
 import { updateProfile } from "@/lib/actions";
 import { toast } from "react-toastify";
+import ImageCropper from "./ImageCropper";
+import Image from "next/image";
 
 export default function ProfileEditorForm({
   userId,
   username,
+  initialProfilePic,
 }: {
   userId: string;
   username: string;
+  initialProfilePic: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(initialProfilePic);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
   function handleClick() {
     setIsOpen(true);
   }
@@ -41,14 +47,41 @@ export default function ProfileEditorForm({
         <form action={handleAction}>
           <div>
             <div className="flex justify-between">
-              <div>pfi</div>
-              <label htmlFor="profileImage">Change Profile Picture</label>
-              <input type="file" name="profileImage" />
-
               <label htmlFor="bannerImage">Change banner</label>
               <input type="file" name="bannerImage" />
             </div>
             <div className="flex flex-col">
+              <div className="my-12">
+                <Image src={profilePic} width={200} height={200} alt="test" />
+                <button
+                  type="button"
+                  className="border rounded-sm bg-orange-700"
+                  onClick={() => setIsImageCropperOpen(true)}
+                >
+                  change Profile Pic
+                </button>
+                <input
+                  type="file"
+                  name="profileImage"
+                  hidden
+                  ref={avatarInputRef}
+                />
+                <Modal
+                  isOpen={isImageCropperOpen}
+                  setIsOpen={setIsImageCropperOpen}
+                  title="Edit Profile"
+                >
+                  <ImageCropper
+                    cropAspectRatio={1}
+                    cropMinimumWidth={100}
+                    fileName="profile-pic"
+                    inputName="profileImage"
+                    setIsImageCropperOpen={setIsImageCropperOpen}
+                    setProfilePic={setProfilePic}
+                    avatarInputRef={avatarInputRef}
+                  />
+                </Modal>
+              </div>
               <label htmlFor="firstName">First Name</label>
               <input type="text" name="firstName" />
 

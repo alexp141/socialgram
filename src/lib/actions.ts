@@ -358,7 +358,7 @@ export async function postComment(postId: number, formData: FormData) {
     comment: formData.get("comment"),
     post_image: formData.get("post_image"),
   });
-  console.log("image file", formData.get("post_image"));
+
   if (!validation.success) {
     return { error: validation.error.message, message: "" };
   }
@@ -397,8 +397,6 @@ export async function uploadCommentImage(
   commenterUserId: string
 ) {
   const supabase = createClient();
-
-  console.log("image file", file);
 
   if (!file.name || !file.size) {
     return;
@@ -474,21 +472,20 @@ export async function getPostInfo(postId: string) {
   console.log("asdf", data?.[0]?.favorites);
 }
 
-export async function uploadProfilePic(file: File, userId: number) {
-  const supabase = createClient();
-
-  console.log("image file", file);
+export async function uploadProfilePic(file: File, userId: string) {
+  console.log("profile pic image file", file);
 
   if (!file.name || !file.size) {
     return;
   }
 
   const fileExtension = file.name.split(".")[1];
-  //no validation required
+  // no validation required since it was already done
   // Upload file using standard upload
+  const supabase = createClient();
   const { data, error } = await supabase.storage
     .from("profile")
-    .update(`${userId}/profile_picture/profile-pic.${fileExtension}`, file, {
+    .upload(`${userId}/profile_picture/profile-pic.${fileExtension}`, file, {
       contentType: "image/*",
       cacheControl: "3600",
       upsert: true,
@@ -501,6 +498,17 @@ export async function uploadProfilePic(file: File, userId: number) {
 
   if (!data) {
     throw new Error("image data is null");
+  }
+
+  const { error: updateError } = await supabase
+    .from("users")
+    .update<UsersUpdate>({
+      avatar_url: `${userId}/profile_picture/profile-pic.${fileExtension}`,
+    })
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
   }
 
   console.log("PROFILE PIC IMAGE PATH SUPABASE", data.path);
@@ -550,7 +558,7 @@ const profileDataSchema = z.object({
     .refine(
       (file) => {
         return (
-          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file.size === 0
+          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file?.size === 0
         );
       },
       { message: "only jpg, png and webp images are allowed" }
@@ -559,6 +567,7 @@ const profileDataSchema = z.object({
     .any()
     .refine(
       (file) => {
+        console.log("INCOMING FILE(S)", file);
         return file?.size >= MAX_FILE_SIZE ? false : true;
       },
       { message: "file size must be less than 10MB" }
@@ -566,7 +575,7 @@ const profileDataSchema = z.object({
     .refine(
       (file) => {
         return (
-          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file.size === 0
+          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file?.size === 0
         );
       },
       { message: "only jpg, png and webp images are allowed" }
@@ -587,10 +596,10 @@ export async function updateProfile(
   username: string,
   formData: FormData
 ) {
-  console.log("from", formData);
+  console.log("form pf", formData.get("profileImage"));
   const validation = profileDataSchema.safeParse({
     bannerImage: formData.get("bannerImage"),
-    profileImage: formData.get("bannerImage"),
+    profileImage: formData.get("profileImage"),
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     bio: formData.get("bio"),
@@ -600,6 +609,7 @@ export async function updateProfile(
   });
 
   if (!validation.success) {
+    // console.error(validation.error.message);
     return { error: validation.error.message };
   }
 
@@ -629,11 +639,16 @@ export async function updateProfile(
     .eq("user_id", userId);
 
   if (error) {
+    console.log(error.message);
     return { error: error.message };
   }
 
   //update profile picture
-
+  try {
+    const pfPath = await uploadProfilePic(profileImage as File, userId);
+  } catch (error) {
+    if (error instanceof Error) return { data: null, error: error.message };
+  }
   //update banner picture
   revalidatePath(`/${username}`);
   return { message: "success" };
@@ -644,7 +659,9 @@ export async function getProfileData(username: string) {
 
   const { data, error } = await supabase
     .from("users")
-    .select("created_at, user_id, username, bio, birthday, location")
+    .select(
+      "created_at, user_id, username, bio, birthday, location, avatar_url"
+    )
     .eq("username", username)
     .single();
   if (error) {
