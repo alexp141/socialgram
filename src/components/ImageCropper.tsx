@@ -6,7 +6,6 @@ import {
   MutableRefObject,
   SetStateAction,
   SyntheticEvent,
-  useEffect,
   useRef,
   useState,
 } from "react";
@@ -23,17 +22,17 @@ export default function ImageCropper({
   cropAspectRatio,
   fileName,
   inputName,
-  setIsImageCropperOpen,
-  setProfilePic,
-  avatarInputRef,
+  setIsAvatarCropperOpen,
+  updateImage,
+  exteriorInputRef,
 }: {
   cropMinimumWidth: number;
   cropAspectRatio: number;
   fileName: string;
   inputName: string;
-  setIsImageCropperOpen: Dispatch<SetStateAction<boolean>>;
-  setProfilePic: Dispatch<SetStateAction<string>>;
-  avatarInputRef: MutableRefObject<HTMLInputElement | null>;
+  setIsAvatarCropperOpen: Dispatch<SetStateAction<boolean>>;
+  updateImage: Dispatch<SetStateAction<string>>;
+  exteriorInputRef: MutableRefObject<HTMLInputElement | null>;
 }) {
   const [imageSource, setImageSource] = useState<string>("");
   const [fileExtension, setFileExtension] = useState<string>("");
@@ -56,10 +55,6 @@ export default function ImageCropper({
       });
       fr.readAsDataURL(e.target.files[0]);
       setFileExtension(e.target.files[0].name.split(".")[1]);
-      console.log(
-        "profile picture file extension",
-        e.target.files[0].name.split(".")[1]
-      );
     }
   }
 
@@ -108,15 +103,16 @@ export default function ImageCropper({
             if (
               inputRef.current &&
               inputRef.current.files &&
-              avatarInputRef.current
+              exteriorInputRef.current
             ) {
               // creating new file list and replacing the old one
               const dataTransfer = new DataTransfer();
               dataTransfer.items.add(file);
-              avatarInputRef.current.files = dataTransfer.files;
+
+              exteriorInputRef.current.files = dataTransfer.files;
 
               console.log("input value", inputRef.current);
-              setProfilePic(canvasRef.current!.toDataURL());
+              updateImage(canvasRef.current!.toDataURL());
             } else {
               throw new Error("Filelist does not exist for input");
             }
@@ -174,7 +170,7 @@ export default function ImageCropper({
             crop image
           </button>
           {userHasCropped && (
-            <button type="button" onClick={() => setIsImageCropperOpen(false)}>
+            <button type="button" onClick={() => setIsAvatarCropperOpen(false)}>
               accept
             </button>
           )}

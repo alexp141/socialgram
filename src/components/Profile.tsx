@@ -51,7 +51,7 @@ export default async function Profile({
           <ProfileEditorForm
             userId={userId}
             username={username}
-            initialProfilePic={profileImageSource}
+            initialAvatar={profileImageSource}
           />
         </div>
         <div>username: {profileData.data?.username}</div>

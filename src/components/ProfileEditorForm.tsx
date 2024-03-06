@@ -10,15 +10,15 @@ import Image from "next/image";
 export default function ProfileEditorForm({
   userId,
   username,
-  initialProfilePic,
+  initialAvatar,
 }: {
   userId: string;
   username: string;
-  initialProfilePic: string;
+  initialAvatar: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
-  const [profilePic, setProfilePic] = useState(initialProfilePic);
+  const [isAvatarCropperOpen, setIsAvatarCropperOpen] = useState(false);
+  const [avatar, setAvatar] = useState(initialAvatar);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
   function handleClick() {
     setIsOpen(true);
@@ -52,13 +52,13 @@ export default function ProfileEditorForm({
             </div>
             <div className="flex flex-col">
               <div className="my-12">
-                <Image src={profilePic} width={200} height={200} alt="test" />
+                <Image src={avatar} width={200} height={200} alt="test" />
                 <button
                   type="button"
                   className="border rounded-sm bg-orange-700"
-                  onClick={() => setIsImageCropperOpen(true)}
+                  onClick={() => setIsAvatarCropperOpen(true)}
                 >
-                  change Profile Pic
+                  Change Avatar
                 </button>
                 <input
                   type="file"
@@ -67,8 +67,8 @@ export default function ProfileEditorForm({
                   ref={avatarInputRef}
                 />
                 <Modal
-                  isOpen={isImageCropperOpen}
-                  setIsOpen={setIsImageCropperOpen}
+                  isOpen={isAvatarCropperOpen}
+                  setIsOpen={setIsAvatarCropperOpen}
                   title="Edit Profile"
                 >
                   <ImageCropper
@@ -76,9 +76,9 @@ export default function ProfileEditorForm({
                     cropMinimumWidth={100}
                     fileName="profile-pic"
                     inputName="profileImage"
-                    setIsImageCropperOpen={setIsImageCropperOpen}
-                    setProfilePic={setProfilePic}
-                    avatarInputRef={avatarInputRef}
+                    setIsAvatarCropperOpen={setIsAvatarCropperOpen}
+                    updateImage={setAvatar}
+                    exteriorInputRef={avatarInputRef}
                   />
                 </Modal>
               </div>
