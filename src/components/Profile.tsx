@@ -2,6 +2,7 @@ import { getProfileData } from "@/lib/actions";
 import ProfileEditorForm from "./ProfileEditorForm";
 import { convertDate } from "@/lib/helper";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Profile({
   username,
@@ -96,7 +97,13 @@ export default async function Profile({
           <p>following</p>
           <p>followers</p>
         </div>
-        <div>nav</div>
+        <div>
+          <nav className="flex gap-2">
+            <Link href={`/${username}`}>posts</Link>
+            <Link href={`/${username}/favorites`}>favorites</Link>
+            <Link href={`/${username}/likes`}>likes</Link>
+          </nav>
+        </div>
       </div>
     </div>
   );
