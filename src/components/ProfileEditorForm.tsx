@@ -11,15 +11,22 @@ export default function ProfileEditorForm({
   userId,
   username,
   initialAvatar,
+  initialBanner,
 }: {
   userId: string;
   username: string;
   initialAvatar: string;
+  initialBanner: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isAvatarCropperOpen, setIsAvatarCropperOpen] = useState(false);
+  const [isBannerCropperOpen, setIsBannerCropperOpen] = useState(false);
   const [avatar, setAvatar] = useState(initialAvatar);
+  const [banner, setBanner] = useState(initialBanner);
+
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
+  const bannerInputRef = useRef<HTMLInputElement | null>(null);
+
   function handleClick() {
     setIsOpen(true);
   }
@@ -38,6 +45,10 @@ export default function ProfileEditorForm({
     toast.success("successfuly updated profile");
   }
 
+  function onBannerLoadError() {
+    setBanner("/default-banner.jpg");
+  }
+
   return (
     <>
       <button type="button" onClick={handleClick}>
@@ -46,13 +57,17 @@ export default function ProfileEditorForm({
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Edit Profile">
         <form action={handleAction}>
           <div>
-            <div className="flex justify-between">
-              <label htmlFor="bannerImage">Change banner</label>
-              <input type="file" name="bannerImage" />
-            </div>
+            <div className="flex justify-between"></div>
             <div className="flex flex-col">
               <div className="my-12">
                 <Image src={avatar} width={200} height={200} alt="test" />
+                <Image
+                  src={banner}
+                  width={400}
+                  height={150}
+                  alt="test"
+                  onError={onBannerLoadError}
+                />
                 <button
                   type="button"
                   className="border rounded-sm bg-orange-700"
@@ -69,19 +84,44 @@ export default function ProfileEditorForm({
                 <Modal
                   isOpen={isAvatarCropperOpen}
                   setIsOpen={setIsAvatarCropperOpen}
-                  title="Edit Profile"
+                  title="Edit Avatar"
                 >
                   <ImageCropper
                     cropAspectRatio={1}
                     cropMinimumWidth={100}
                     fileName="profile-pic"
                     inputName="profileImage"
-                    setIsAvatarCropperOpen={setIsAvatarCropperOpen}
+                    setIsCropperOpen={setIsAvatarCropperOpen}
                     updateImage={setAvatar}
                     exteriorInputRef={avatarInputRef}
+                    circularCrop={true}
+                  />
+                </Modal>
+                <button
+                  type="button"
+                  className="border rounded-sm bg-orange-700"
+                  onClick={() => setIsBannerCropperOpen(true)}
+                >
+                  Change Banner
+                </button>
+                <Modal
+                  isOpen={isBannerCropperOpen}
+                  setIsOpen={setIsBannerCropperOpen}
+                  title="Edit Banner"
+                >
+                  <ImageCropper
+                    cropAspectRatio={16 / 9}
+                    cropMinimumWidth={200}
+                    fileName="banner"
+                    inputName="banner"
+                    setIsCropperOpen={setIsBannerCropperOpen}
+                    updateImage={setBanner}
+                    exteriorInputRef={bannerInputRef}
+                    circularCrop={false}
                   />
                 </Modal>
               </div>
+              <input type="file" name="banner" hidden ref={bannerInputRef} />
               <label htmlFor="firstName">First Name</label>
               <input type="text" name="firstName" />
 

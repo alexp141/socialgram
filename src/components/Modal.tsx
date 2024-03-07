@@ -20,7 +20,7 @@ export default function Modal({
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       {/* centers the dialogue */}
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 overflow-y-scroll">
         <Dialog.Panel className="bg-red-600 px-4 py-4">
           <Dialog.Title className="text-center">{title}</Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>

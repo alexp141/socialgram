@@ -436,7 +436,6 @@ export async function uploadCommentImage(
     throw new Error(updateError.message);
   }
 
-  console.log("COMMENT IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
 
@@ -468,7 +467,6 @@ export async function getPostInfo(postId: string) {
     )
     .eq("id", postId);
 
-  console.log(data);
   console.log("asdf", data?.[0]?.favorites);
 }
 
@@ -487,7 +485,6 @@ export async function uploadProfilePic(file: File, userId: string) {
     .from("profile")
     .upload(`${userId}/profile_picture/profile-pic.${fileExtension}`, file, {
       contentType: "image/*",
-      cacheControl: "3600",
       upsert: true,
     });
 
@@ -500,6 +497,7 @@ export async function uploadProfilePic(file: File, userId: string) {
     throw new Error("image data is null");
   }
 
+  //updating path to avatar
   const { error: updateError } = await supabase
     .from("users")
     .update<UsersUpdate>({
@@ -515,11 +513,11 @@ export async function uploadProfilePic(file: File, userId: string) {
   return data.path;
 }
 
-export async function uploadProfileBanner(file: File, userId: number) {
+export async function uploadProfileBanner(file: File, userId: string) {
   //no validation required
   const supabase = createClient();
 
-  console.log("banner image file", file);
+  console.log("banner file", file);
 
   if (!file.name || !file.size) {
     return;
@@ -530,8 +528,9 @@ export async function uploadProfileBanner(file: File, userId: number) {
   // Upload file using standard upload
   const { data, error } = await supabase.storage
     .from("profile")
-    .upload(`${userId}/banner_picture/banner-pic.${fileExtension}`, file, {
+    .upload(`${userId}/banner/banner.${fileExtension}`, file, {
       contentType: "image/*",
+      upsert: true,
     });
 
   if (error) {
@@ -542,15 +541,27 @@ export async function uploadProfileBanner(file: File, userId: number) {
     throw new Error("image data is null");
   }
 
+  const { error: updateError } = await supabase
+    .from("users")
+    .update<UsersUpdate>({
+      banner_url: `${userId}/banner/banner.${fileExtension}`,
+    })
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
   console.log("BANNER PIC IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
 
 const profileDataSchema = z.object({
-  bannerImage: z
+  banner: z
     .any()
     .refine(
       (file) => {
+        console.log("banner file in data schema", file);
         return file?.size >= MAX_FILE_SIZE ? false : true;
       },
       { message: "file size must be less than 10MB" }
@@ -567,7 +578,6 @@ const profileDataSchema = z.object({
     .any()
     .refine(
       (file) => {
-        console.log("INCOMING FILE(S)", file);
         return file?.size >= MAX_FILE_SIZE ? false : true;
       },
       { message: "file size must be less than 10MB" }
@@ -596,9 +606,8 @@ export async function updateProfile(
   username: string,
   formData: FormData
 ) {
-  console.log("form pf", formData.get("profileImage"));
   const validation = profileDataSchema.safeParse({
-    bannerImage: formData.get("bannerImage"),
+    banner: formData.get("banner"),
     profileImage: formData.get("profileImage"),
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
@@ -615,7 +624,7 @@ export async function updateProfile(
 
   const {
     profileImage,
-    bannerImage,
+    banner,
     bio,
     birthday,
     location,
@@ -649,7 +658,14 @@ export async function updateProfile(
   } catch (error) {
     if (error instanceof Error) return { data: null, error: error.message };
   }
+
   //update banner picture
+  try {
+    const pfPath = await uploadProfileBanner(banner as File, userId);
+  } catch (error) {
+    if (error instanceof Error) return { data: null, error: error.message };
+  }
+
   revalidatePath(`/${username}`);
   return { message: "success" };
 }
@@ -660,7 +676,7 @@ export async function getProfileData(username: string) {
   const { data, error } = await supabase
     .from("users")
     .select(
-      "created_at, user_id, username, bio, birthday, location, avatar_url"
+      "created_at, user_id, username, bio, birthday, location, avatar_url, banner_url"
     )
     .eq("username", username)
     .single();

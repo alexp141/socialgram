@@ -22,17 +22,19 @@ export default function ImageCropper({
   cropAspectRatio,
   fileName,
   inputName,
-  setIsAvatarCropperOpen,
+  setIsCropperOpen,
   updateImage,
   exteriorInputRef,
+  circularCrop,
 }: {
   cropMinimumWidth: number;
   cropAspectRatio: number;
   fileName: string;
   inputName: string;
-  setIsAvatarCropperOpen: Dispatch<SetStateAction<boolean>>;
+  setIsCropperOpen: Dispatch<SetStateAction<boolean>>;
   updateImage: Dispatch<SetStateAction<string>>;
   exteriorInputRef: MutableRefObject<HTMLInputElement | null>;
+  circularCrop: boolean;
 }) {
   const [imageSource, setImageSource] = useState<string>("");
   const [fileExtension, setFileExtension] = useState<string>("");
@@ -119,7 +121,7 @@ export default function ImageCropper({
           }
         },
         "image/*",
-        0.9
+        1.0
       );
     } else {
       console.error("fail");
@@ -142,7 +144,7 @@ export default function ImageCropper({
         <>
           <ReactCrop
             crop={crop}
-            circularCrop
+            circularCrop={circularCrop}
             onChange={(pc) => setCrop(pc)}
             keepSelection
             aspect={cropAspectRatio}
@@ -170,14 +172,14 @@ export default function ImageCropper({
             crop image
           </button>
           {userHasCropped && (
-            <button type="button" onClick={() => setIsAvatarCropperOpen(false)}>
+            <button type="button" onClick={() => setIsCropperOpen(false)}>
               accept
             </button>
           )}
           <canvas
-            className={`w-64 h-auto border rounded-full ${
-              userHasCropped ? "block" : "hidden"
-            }`}
+            className={`w-64 h-auto border ${
+              circularCrop ? "rounded-full" : ""
+            } ${userHasCropped ? "block" : "hidden"}`}
             ref={canvasRef}
           />
         </>
