@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { CommentsRow } from "./types/type-collection";
+import { CommentsRow, PostRow } from "./types/type-collection";
 
 export async function getPostLikes(postId: number) {
   const supabase = createClient();
@@ -138,4 +138,30 @@ export async function getNextCommentsPage(
   const comments: CommentsRow[] = data;
 
   return comments;
+}
+
+export async function getUserPosts(
+  currentPage: number,
+  itemsPerPage: number,
+  userId: string
+) {
+  const supabase = createClient();
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .eq("user_id", userId)
+    .range(start, end);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const posts: PostRow[] = data;
+
+  return posts;
 }

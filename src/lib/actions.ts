@@ -136,19 +136,19 @@ export async function getUser() {
   return data.user;
 }
 
-export async function createPost(prevState: any, formData: FormData) {
+export async function createPost(formData: FormData) {
   const supabase = createClient();
 
   const user_id = (await supabase.auth.getUser()).data.user?.id;
 
   if (!user_id) {
-    throw new Error("user id not found");
+    return { error: "user id not found", message: null };
   }
 
   const content = formData.get("content") as FormDataEntryValue;
 
   if (!content) {
-    return {};
+    return { error: "failed to get content from form", message: null };
   }
 
   const image = formData.get("post_image");
@@ -164,18 +164,16 @@ export async function createPost(prevState: any, formData: FormData) {
     .select();
 
   if (error) {
-    throw new Error(error.message);
+    return { error: error.message, message: null };
   }
 
   if (!data || !data[0]) {
-    throw new Error("unable to fetch data");
+    return { error: "unable to fetch newly created post data", message: null };
   }
 
   if (!data[0].id) {
-    throw new Error("record id is undefined");
+    return { error: "record id is undefined", message: null };
   }
-
-  const postData: PostRow[] = data;
 
   //UPLOAD IMAGE IF IT EXISTS
   const imageUrl = await uploadPostImage({
@@ -184,7 +182,7 @@ export async function createPost(prevState: any, formData: FormData) {
     post_id: data[0].id,
   });
 
-  return { message: "success" };
+  return { message: "success", error: null };
 }
 
 export async function uploadPostImage({
