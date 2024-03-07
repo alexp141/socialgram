@@ -130,6 +130,7 @@ export type Database = {
           id: number
           image_path: string | null
           user_id: string
+          username: string
         }
         Insert: {
           content?: string | null
@@ -137,6 +138,7 @@ export type Database = {
           id?: number
           image_path?: string | null
           user_id: string
+          username: string
         }
         Update: {
           content?: string | null
@@ -144,6 +146,7 @@ export type Database = {
           id?: number
           image_path?: string | null
           user_id?: string
+          username?: string
         }
         Relationships: [
           {

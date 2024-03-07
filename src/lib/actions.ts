@@ -139,11 +139,14 @@ export async function getUser() {
 export async function createPost(formData: FormData) {
   const supabase = createClient();
 
-  const user_id = (await supabase.auth.getUser()).data.user?.id;
+  const user = (await supabase.auth.getUser()).data.user;
 
-  if (!user_id) {
-    return { error: "user id not found", message: null };
+  if (!user) {
+    return { error: "user not found", message: null };
   }
+
+  const userId = user.id;
+  const username = user.user_metadata["username"];
 
   const content = formData.get("content") as FormDataEntryValue;
 
@@ -157,9 +160,10 @@ export async function createPost(formData: FormData) {
   const { data, error } = await supabase
     .from("posts")
     .insert<PostInsert>({
-      user_id,
+      user_id: userId,
       content: content.toString(),
       image_path: null,
+      username,
     })
     .select();
 
@@ -178,7 +182,7 @@ export async function createPost(formData: FormData) {
   //UPLOAD IMAGE IF IT EXISTS
   const imageUrl = await uploadPostImage({
     file: image as File,
-    user_id,
+    user_id: userId,
     post_id: data[0].id,
   });
 

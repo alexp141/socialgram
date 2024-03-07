@@ -14,13 +14,15 @@ export default function Post({ post }: { post: PostRow }) {
   }
 
   return (
-    <Link href={`/posts/${post.id}`}>
-      <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
-        <div className="">
-          <div className="w-12 h-12 bg-orange-500 border rounded-full mx-1"></div>
-        </div>
-        <div className="flex flex-col">
-          <div>@name</div>
+    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
+      <div className="">
+        <div className="w-12 h-12 bg-orange-500 border rounded-full mx-1"></div>
+      </div>
+      <div className="flex flex-col">
+        <Link href={`/${post.username}`}>
+          <div>{`@${post.username}`}</div>
+        </Link>
+        <Link href={`/posts/${post.id}`}>
           <div className="my-1">{post.content}</div>
           <div>
             {postImageURL && (
@@ -36,13 +38,13 @@ export default function Post({ post }: { post: PostRow }) {
               />
             )}
           </div>
-          <div className="flex border justify-around items-center py-2">
-            <CommentButton postId={post.id} userId={post.user_id} />
-            <LikeButton postId={post.id} userId={post.user_id} />
-            <FavoriteButton postId={post.id} userId={post.user_id} />
-          </div>
+        </Link>
+        <div className="flex border justify-around items-center py-2">
+          <CommentButton postId={post.id} userId={post.user_id} />
+          <LikeButton postId={post.id} userId={post.user_id} />
+          <FavoriteButton postId={post.id} userId={post.user_id} />
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
