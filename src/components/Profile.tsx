@@ -24,7 +24,7 @@ export default async function Profile({
   //get birthday
 
   if (profileData.error || !profileData.data) {
-    console.log(profileData.error);
+    console.error(profileData.error);
     return <p>error retrieving user data</p>;
   }
   const { created_at, bio, birthday, location, avatar_url, banner_url } =

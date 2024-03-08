@@ -36,13 +36,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_comments_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "posts"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "public_comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -129,6 +122,7 @@ export type Database = {
           created_at: string
           id: number
           image_path: string | null
+          reply_to_id: number | null
           user_id: string
           username: string
         }
@@ -137,6 +131,7 @@ export type Database = {
           created_at?: string
           id?: number
           image_path?: string | null
+          reply_to_id?: number | null
           user_id: string
           username: string
         }
@@ -145,10 +140,18 @@ export type Database = {
           created_at?: string
           id?: number
           image_path?: string | null
+          reply_to_id?: number | null
           user_id?: string
           username?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "public_posts_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_posts_user_id_fkey"
             columns: ["user_id"]

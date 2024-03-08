@@ -26,6 +26,7 @@ export default function ImageCropper({
   updateImage,
   exteriorInputRef,
   circularCrop,
+  isPostImage = false,
 }: {
   cropMinimumWidth: number;
   cropAspectRatio: number;
@@ -35,6 +36,7 @@ export default function ImageCropper({
   updateImage: Dispatch<SetStateAction<string>>;
   exteriorInputRef: MutableRefObject<HTMLInputElement | null>;
   circularCrop: boolean;
+  isPostImage?: boolean;
 }) {
   const [imageSource, setImageSource] = useState<string>("");
   const [fileExtension, setFileExtension] = useState<string>("");
@@ -92,16 +94,21 @@ export default function ImageCropper({
       canvasRef.current.toBlob(
         (blob) => {
           if (blob) {
-            //utilizing cache busting to update the image in real time from the storage bucket
-            //by inserting a random query string
-            const randNum = Math.random() * 10000;
-            const file = new File(
-              [blob],
-              `${fileName}.${fileExtension}?rand=${randNum}`,
-              {
-                type: blob.type,
-              }
-            );
+            let completeFilename;
+            if (isPostImage) {
+              //no cache busting necessary if the file is an image post
+              completeFilename = `${fileName}.${fileExtension}`;
+            } else {
+              //utilizing cache busting to update the image in real time from the storage bucket
+              //by inserting a random query string
+              completeFilename = `${fileName}.${fileExtension}?rand=${
+                Math.random() * 10000
+              }`;
+            }
+
+            const file = new File([blob], completeFilename, {
+              type: blob.type,
+            });
             if (
               inputRef.current &&
               inputRef.current.files &&
@@ -147,7 +154,7 @@ export default function ImageCropper({
             circularCrop={circularCrop}
             onChange={(pc) => setCrop(pc)}
             keepSelection
-            aspect={cropAspectRatio}
+            aspect={cropAspectRatio > 0 ? cropAspectRatio : undefined}
             minWidth={cropMinimumWidth}
             onComplete={(c) => {
               console.log("on complete");

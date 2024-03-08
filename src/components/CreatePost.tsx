@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "./Modal";
 import { createPost } from "@/lib/actions";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import ImageCropper from "./ImageCropper";
 
 export default function CreatePost() {
   const [isOpen, setIsOpen] = useState(false);
-  const [image, setImage] = useState<null | string>(null);
-  const queryClient = useQueryClient();
+  const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
+  const [image, setImage] = useState<string>("");
 
-  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log("target", e.target.files);
-    const imageUrl = URL.createObjectURL(e.target.files?.[0]!);
-    console.log(imageUrl);
-    setImage(imageUrl);
-  }
+  const postInputRef = useRef<HTMLInputElement | null>(null);
+
+  const queryClient = useQueryClient();
 
   async function handleSubmit(formData: FormData) {
     const res = await createPost(formData);
@@ -50,13 +48,30 @@ export default function CreatePost() {
             placeholder="what's on your mind?"
             className="w-full"
           />
-          <label htmlFor="post_image">upload image</label>
-          <input
-            type="file"
-            name="post_image"
-            id="post_image"
-            onChange={handleImageUpload}
-          />
+          <input type="file" name="postImage" hidden ref={postInputRef} />
+          <button
+            type="button"
+            className="border rounded-sm bg-orange-700"
+            onClick={() => setIsImageCropperOpen(true)}
+          >
+            Upload Image
+          </button>
+          <Modal
+            isOpen={isImageCropperOpen}
+            setIsOpen={setIsImageCropperOpen}
+            title="Edit Post Image"
+          >
+            <ImageCropper
+              cropAspectRatio={0}
+              cropMinimumWidth={100}
+              fileName="post-image"
+              inputName="postImage"
+              setIsCropperOpen={setIsImageCropperOpen}
+              updateImage={setImage}
+              exteriorInputRef={postInputRef}
+              circularCrop={false}
+            />
+          </Modal>
           <button>Post</button>
           {image && <Image src={image} width={200} height={200} alt="image" />}
         </form>

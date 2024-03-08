@@ -154,7 +154,7 @@ export async function createPost(formData: FormData) {
     return { error: "failed to get content from form", message: null };
   }
 
-  const image = formData.get("post_image");
+  const image = formData.get("postImage");
 
   //CREATE POST
   const { data, error } = await supabase
@@ -198,12 +198,11 @@ export async function uploadPostImage({
   user_id: string;
   post_id: number;
 }) {
-  const supabase = createClient();
-
-  if (!file.name || !file.size) {
+  if (!file || !file.name || !file.size) {
     return;
   }
 
+  const supabase = createClient();
   const fileExtension = file.name.split(".")[1];
 
   // Upload file using standard upload
