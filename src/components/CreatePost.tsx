@@ -70,6 +70,7 @@ export default function CreatePost() {
               updateImage={setImage}
               exteriorInputRef={postInputRef}
               circularCrop={false}
+              isPostImage
             />
           </Modal>
           <button>Post</button>

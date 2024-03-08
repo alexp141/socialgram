@@ -5,6 +5,8 @@ import LikeButton from "./LikeButton";
 import FavoriteButton from "./FavoriteButton";
 import CommentButton from "./CommentButton";
 import Link from "next/link";
+import { useMemo } from "react";
+import { hashids } from "@/lib/helper";
 
 export default function Post({ post }: { post: PostRow }) {
   let postImageURL;
@@ -13,16 +15,18 @@ export default function Post({ post }: { post: PostRow }) {
     console.log("post image", postImageURL);
   }
 
+  const hashedPostId = useMemo(() => {
+    return hashids.encode(post.id);
+  }, [post.id]);
+
   return (
     <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
       <div className="">
         <div className="w-12 h-12 bg-orange-500 border rounded-full mx-1"></div>
       </div>
       <div className="flex flex-col">
-        <Link href={`/${post.username}`}>
-          <div>{`@${post.username}`}</div>
-        </Link>
-        <Link href={`/posts/${post.id}`}>
+        <Link href={`/${post.username}`}>{`@${post.username}`}</Link>
+        <Link href={`/posts/${hashedPostId}`}>
           <div className="my-1">{post.content}</div>
           <div>
             {postImageURL && (

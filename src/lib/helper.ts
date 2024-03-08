@@ -1,3 +1,7 @@
+import Hashids from "hashids";
+
+const hashids = new Hashids("", 10);
+
 export function convertDate(dateTimestamp: string) {
   const arr = dateTimestamp.split(" ");
   const date = arr.slice(1, 4).join(" ");
@@ -16,3 +20,5 @@ export function convertDate(dateTimestamp: string) {
 
   return `${date} ${hour}:${timeArr[1]} ${isDay ? "AM" : "PM"}`;
 }
+
+export { hashids };
