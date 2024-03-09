@@ -1,5 +1,5 @@
 import Feed from "@/components/Feed";
-import { getNextPostsPage } from "@/lib/actions";
+import { getNextPostsPage } from "@/lib/data";
 
 const ITEMS_PER_PAGE = 4;
 export default async function FeedPage() {

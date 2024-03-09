@@ -242,31 +242,6 @@ export async function uploadPostImage({
   return data.path;
 }
 
-export async function getNextPostsPage(
-  currentPage: number,
-  itemsPerPage: number
-) {
-  const supabase = createClient();
-
-  const start = currentPage * itemsPerPage - itemsPerPage;
-  const end = start + itemsPerPage - 1;
-
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .is("reply_to_id", null)
-    .order("created_at", { ascending: false })
-    .range(start, end);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const posts: PostRow[] = data;
-
-  return posts;
-}
-
 export async function downloadPostImage(imagePath: string) {
   const supabase = createClient();
 

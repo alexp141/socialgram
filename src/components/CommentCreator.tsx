@@ -7,13 +7,13 @@ import Modal from "./Modal";
 import ImageCropper from "./ImageCropper";
 import { useRef, useState } from "react";
 import Image from "next/image";
-// import { QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CommentCreator({ post }: { post: PostRow }) {
   const postInputRef = useRef<HTMLInputElement | null>(null);
   const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
   const [image, setImage] = useState<string>("");
-  // const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   async function handleAction(formData: FormData) {
     const res = await createPost(formData, post.id);
@@ -24,9 +24,10 @@ export default function CommentCreator({ post }: { post: PostRow }) {
       return;
     }
     toast.success("Comment posted");
-    // queryClient.invalidateQueries({
-    //   queryKey: ["comments", post.id],
-    // });
+
+    queryClient.invalidateQueries({
+      queryKey: ["comments", post.id],
+    });
   }
 
   return (
