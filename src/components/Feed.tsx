@@ -44,6 +44,7 @@ export default function Feed({
       return lastPageParam + 1;
     },
     staleTime: Infinity,
+    refetchOnMount: "always",
   });
 
   return status === "pending" ? (

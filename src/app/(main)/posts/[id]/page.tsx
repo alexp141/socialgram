@@ -1,7 +1,8 @@
 import CommentCreator from "@/components/CommentCreator";
 import DetailedPost from "@/components/DetailedPost";
-import InfiniteScrollerComments from "@/components/InfiniteScrollerComments";
+import Feed from "@/components/Feed";
 import { getPost } from "@/lib/actions";
+import { getNextCommentsPage } from "@/lib/data";
 import { hashids } from "@/lib/helper";
 
 export default async function PostPage({ params }: { params: { id: string } }) {
@@ -12,7 +13,13 @@ export default async function PostPage({ params }: { params: { id: string } }) {
       <p>post page</p>
       <DetailedPost post={post} />
       <CommentCreator post={post} />
-      <InfiniteScrollerComments postId={post.id} />
+      <Feed
+        queryKey={["comments", post.id]}
+        queryFunction={getNextCommentsPage}
+        initialPageParam={1}
+        itemsPerPage={4}
+        postId={post.id}
+      />
     </div>
   );
 }

@@ -133,17 +133,19 @@ export async function getNextCommentsPage(
   const end = start + itemsPerPage - 1;
 
   const { data, error } = await supabase
-    .from("comments")
+    .from("posts")
     .select("*")
-    .eq("post_id", postId)
+    .order("created_at", { ascending: false })
+    .eq("reply_to_id", postId)
     .range(start, end);
 
   if (error) {
     throw new Error(error.message);
   }
 
-  const comments: CommentsRow[] = data;
+  const comments: PostRow[] = data;
 
+  console.log("comments", comments);
   return comments;
 }
 
@@ -211,15 +213,12 @@ export async function getUserFavorites(
     .eq("user_id", userId)
     .range(start, end);
 
-  console.log("USER FAVORITES RETURN", data);
-
   if (error) {
     throw new Error(error.message);
   }
 
   const posts: PostRow[] = data.map((res) => res.posts).flat();
 
-  console.log("posts", posts);
   return posts;
 }
 
