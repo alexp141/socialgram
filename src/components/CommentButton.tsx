@@ -4,9 +4,9 @@ import { useState } from "react";
 import { FaRegComment } from "react-icons/fa6";
 import Modal from "./Modal";
 import { postComment } from "@/lib/actions";
-import { useFormState } from "react-dom";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import useCommentCount from "@/hooks/useCommentCount";
 
 export default function CommentButton({
   postId,
@@ -15,10 +15,9 @@ export default function CommentButton({
   postId: number;
   userId: string;
 }) {
-  //adding extra arguments to the formstate action
-
   const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState<null | string>(null);
+  const { commentCount, error, fetchStatus } = useCommentCount(postId);
 
   async function handleAction(formData: FormData) {
     const res = await postComment(postId, formData);
@@ -36,16 +35,23 @@ export default function CommentButton({
     setImage(imageUrl);
   }
 
+  if (error) {
+    <p>error loading comment data</p>;
+  }
+
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
-        <FaRegComment />
-      </button>
+      <div className="flex gap-1">
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          <FaRegComment />
+        </button>
+        <span>{commentCount}</span>
+      </div>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Replying to: @name">
         <form action={handleAction}>
           <textarea

@@ -421,7 +421,7 @@ export async function uploadCommentImage(
   return data.path;
 }
 
-export async function getPost(postId: string) {
+export async function getPost(postId: number) {
   const supabase = createClient();
 
   const { data, error } = await supabase

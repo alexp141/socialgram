@@ -1,12 +1,7 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import {
-  CommentsRow,
-  FavoritesRow,
-  PostLikesRow,
-  PostRow,
-} from "./types/type-collection";
+import { PostRow } from "./types/type-collection";
 
 export async function getPostLikes(postId: number) {
   const supabase = createClient();
@@ -107,9 +102,9 @@ export async function getCommentCount(postId: number) {
   const supabase = createClient();
 
   const { count, error } = await supabase
-    .from("comments")
+    .from("posts")
     .select("*", { count: "estimated", head: true })
-    .eq("post_id", postId);
+    .eq("reply_to_id", postId);
 
   if (error) {
     throw new Error(error.message);
