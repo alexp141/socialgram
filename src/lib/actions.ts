@@ -254,6 +254,7 @@ export async function getNextPostsPage(
   const { data, error } = await supabase
     .from("posts")
     .select("*")
+    .is("reply_to_id", null)
     .order("created_at", { ascending: false })
     .range(start, end);
 
