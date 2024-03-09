@@ -136,7 +136,10 @@ export async function getUser() {
   return data.user;
 }
 
-export async function createPost(formData: FormData) {
+export async function createPost(
+  formData: FormData,
+  replyToId: number | null = null
+) {
   const supabase = createClient();
 
   const user = (await supabase.auth.getUser()).data.user;
@@ -164,6 +167,7 @@ export async function createPost(formData: FormData) {
       content: content.toString(),
       image_path: null,
       username,
+      reply_to_id: replyToId,
     })
     .select();
 

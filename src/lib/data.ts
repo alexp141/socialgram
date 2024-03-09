@@ -121,9 +121,9 @@ export async function getCommentCount(postId: number) {
 }
 
 export async function getNextCommentsPage(
-  postId: number,
   currentPage: number,
-  itemsPerPage: number
+  itemsPerPage: number,
+  postId: number
 ) {
   const supabase = createClient();
 

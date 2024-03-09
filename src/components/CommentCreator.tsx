@@ -1,12 +1,20 @@
 "use client";
 
-import { postComment } from "@/lib/actions";
+import { createPost } from "@/lib/actions";
 import { PostRow } from "@/lib/types/type-collection";
 import { toast } from "react-toastify";
+import Modal from "./Modal";
+import ImageCropper from "./ImageCropper";
+import { useRef, useState } from "react";
+import Image from "next/image";
 
 export default function CommentCreator({ post }: { post: PostRow }) {
+  const postInputRef = useRef<HTMLInputElement | null>(null);
+  const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
+  const [image, setImage] = useState<string>("");
+
   async function handleAction(formData: FormData) {
-    const res = await postComment(post.id, formData);
+    const res = await createPost(formData, post.id);
     if (res.error) {
       console.log(res.error);
       toast.error(res.error);
@@ -26,10 +34,35 @@ export default function CommentCreator({ post }: { post: PostRow }) {
           className="w-full min-h-24"
           placeholder="Post your reply"
           maxLength={300}
-          name="comment"
+          name="content"
         />
-        <input type="file" name="post_image" id="post_image" />
+        <input type="file" name="postImage" hidden ref={postInputRef} />
+        <button
+          type="button"
+          className="border rounded-sm bg-orange-700"
+          onClick={() => setIsImageCropperOpen(true)}
+        >
+          Upload Image
+        </button>
+        <Modal
+          isOpen={isImageCropperOpen}
+          setIsOpen={setIsImageCropperOpen}
+          title="Edit Post Image"
+        >
+          <ImageCropper
+            cropAspectRatio={0}
+            cropMinimumWidth={100}
+            fileName="post-image"
+            inputName="postImage"
+            setIsCropperOpen={setIsImageCropperOpen}
+            updateImage={setImage}
+            exteriorInputRef={postInputRef}
+            circularCrop={false}
+            isPostImage
+          />
+        </Modal>
         <button>Post</button>
+        {image && <Image src={image} width={200} height={200} alt="image" />}
       </form>
     </div>
   );

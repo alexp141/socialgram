@@ -1,11 +1,17 @@
-import InfiniteScroller from "@/components/InfiniteScroller";
+import Feed from "@/components/Feed";
+import { getNextPostsPage } from "@/lib/actions";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 4;
 export default async function FeedPage() {
   return (
     <div>
       <p className="text-center">Your Feed</p>
-      <InfiniteScroller />
+      <Feed
+        queryKey="infinite-scroller"
+        queryFunction={getNextPostsPage}
+        initialPageParam={1}
+        itemsPerPage={ITEMS_PER_PAGE}
+      />
     </div>
   );
 }
