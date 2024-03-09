@@ -1,3 +1,5 @@
+"use client";
+
 import { createClient } from "@/utils/supabase/client";
 import {
   CommentsRow,
@@ -171,11 +173,30 @@ export async function getUserPosts(
   return posts;
 }
 
+export async function getUserId(username: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("user_id")
+    .eq("username", username)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const userId: string = data.user_id;
+  return userId;
+}
+
 export async function getUserFavorites(
   currentPage: number,
   itemsPerPage: number,
-  userId: string
+  username: string
 ) {
+  const userId = await getUserId(username);
+
   const supabase = createClient();
 
   const start = currentPage * itemsPerPage - itemsPerPage;
@@ -183,25 +204,32 @@ export async function getUserFavorites(
 
   const { data, error } = await supabase
     .from("favorites")
-    .select("*")
+    .select(
+      "posts(id,created_at,user_id,content,image_path,username,reply_to_id)"
+    )
     .order("created_at", { ascending: false })
     .eq("user_id", userId)
     .range(start, end);
+
+  console.log("USER FAVORITES RETURN", data);
 
   if (error) {
     throw new Error(error.message);
   }
 
-  const posts: FavoritesRow[] = data;
+  const posts: PostRow[] = data.map((res) => res.posts).flat();
 
+  console.log("posts", posts);
   return posts;
 }
 
 export async function getUserLikes(
   currentPage: number,
   itemsPerPage: number,
-  userId: string
+  username: string
 ) {
+  const userId = await getUserId(username);
+
   const supabase = createClient();
 
   const start = currentPage * itemsPerPage - itemsPerPage;
@@ -209,7 +237,9 @@ export async function getUserLikes(
 
   const { data, error } = await supabase
     .from("post_likes")
-    .select("*")
+    .select(
+      "posts(id,created_at,user_id,content,image_path,username,reply_to_id)"
+    )
     .order("created_at", { ascending: false })
     .eq("user_id", userId)
     .range(start, end);
@@ -218,7 +248,7 @@ export async function getUserLikes(
     throw new Error(error.message);
   }
 
-  const posts: PostLikesRow[] = data;
+  const posts: PostRow[] = data.map((res) => res.posts).flat();
 
   return posts;
 }

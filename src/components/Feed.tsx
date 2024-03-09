@@ -1,6 +1,6 @@
 "use client";
 
-import { PostRow } from "@/lib/types/type-collection";
+import { FavoritesRow, PostRow } from "@/lib/types/type-collection";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
 
@@ -9,8 +9,11 @@ export default function Feed({
   queryFunction,
   itemsPerPage,
   initialPageParam,
+  userId,
+  postId,
+  username,
 }: {
-  queryKey: string;
+  queryKey: Array<string | number>;
   queryFunction: (
     currentPage: number,
     itemsPerPage: number,
@@ -18,6 +21,9 @@ export default function Feed({
   ) => Promise<PostRow[]>;
   itemsPerPage: number;
   initialPageParam: number;
+  userId?: string;
+  postId?: number;
+  username?: string;
 }) {
   const {
     data,
@@ -27,8 +33,9 @@ export default function Feed({
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: [`${queryKey}`],
-    queryFn: ({ pageParam }) => queryFunction(pageParam, itemsPerPage),
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      queryFunction(pageParam, itemsPerPage, userId || postId || username),
     initialPageParam,
     getNextPageParam: (lastPage, _, lastPageParam) => {
       if (lastPage.length < itemsPerPage) {

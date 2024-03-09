@@ -7,7 +7,7 @@ export default async function FeedPage() {
     <div>
       <p className="text-center">Your Feed</p>
       <Feed
-        queryKey="infinite-scroller"
+        queryKey={["main-feed"]}
         queryFunction={getNextPostsPage}
         initialPageParam={1}
         itemsPerPage={ITEMS_PER_PAGE}
