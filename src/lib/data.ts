@@ -222,6 +222,34 @@ export async function getUserFavorites(
   return posts;
 }
 
+export async function getUserFavoritesUsingId(
+  currentPage: number,
+  itemsPerPage: number,
+  userId: string
+) {
+  const supabase = createClient();
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  const { data, error } = await supabase
+    .from("favorites")
+    .select(
+      "posts(id,created_at,user_id,content,image_path,username,reply_to_id)"
+    )
+    .order("created_at", { ascending: false })
+    .eq("user_id", userId)
+    .range(start, end);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const posts: PostRow[] = data.map((res) => res.posts).flat();
+
+  return posts;
+}
+
 export async function getUserLikes(
   currentPage: number,
   itemsPerPage: number,
