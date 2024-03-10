@@ -1,4 +1,3 @@
-import InfiniteScroller from "@/components/InfiniteScroller";
 import UserPosts from "@/components/UserPosts";
 import { getUser } from "@/lib/actions";
 

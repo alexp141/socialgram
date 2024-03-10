@@ -14,7 +14,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="md:min-w-[35rem] lg:max-w-[40rem] border-x border-red-500">
+    <div className="">
       <p>post page</p>
       {parentPost && <DetailedPost post={parentPost} />}
       <DetailedPost post={post} />

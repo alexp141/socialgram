@@ -68,7 +68,7 @@ export default async function Profile({
     .join(" ");
 
   return (
-    <div className="flex flex-col md:min-w-[35rem] lg:max-w-[40rem] border-x border-red-500">
+    <div className="flex flex-col">
       <div className="relative h-[200px]">
         {banner_url ? (
           <Image

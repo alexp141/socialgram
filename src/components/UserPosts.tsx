@@ -33,7 +33,7 @@ export default function UserPosts({ userId }: { userId: string }) {
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
-    <div className="md:min-w-[35rem] lg:max-w-[40rem] border-x border-red-500">
+    <div className="">
       {data.pages.map((group, i) => (
         <div key={i}>
           {group.map((post) => (
