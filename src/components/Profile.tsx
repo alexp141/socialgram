@@ -1,4 +1,8 @@
-import { getProfileData } from "@/lib/actions";
+import {
+  getFollowerCount,
+  getFollowingCount,
+  getProfileData,
+} from "@/lib/actions";
 import ProfileEditorForm from "./ProfileEditorForm";
 import { convertDate } from "@/lib/helper";
 import Image from "next/image";
@@ -11,8 +15,32 @@ export default async function Profile({
   username: string;
   userId: string;
 }) {
-  const profileData = await getProfileData(username);
+  // const profileData = await getProfileData(username);
+  // const followers = await getFollowers(userId);
 
+  const data = await Promise.all([
+    getProfileData(username),
+    getFollowerCount(userId),
+    getFollowingCount(userId),
+  ]);
+  if (
+    data[0].error ||
+    data[1].error ||
+    !data[0] ||
+    !data[1].count ||
+    !data[2].count
+  ) {
+    console.error(data[0].error || data[1].error || data[2].error);
+    throw new Error(
+      data[0].error ||
+        data[1].error ||
+        data[2].error ||
+        "error getting follower data"
+    );
+  }
+  const profileData = data[0];
+  const followerCount = data[1].count;
+  const followingCount = data[2].count;
   //get banner
   //get pf
   //get following
@@ -94,8 +122,14 @@ export default async function Profile({
           <p>birthday: {birthday}</p>
         </div>
         <div className="flex gap-2">
-          <p>following</p>
-          <p>followers</p>
+          <div className="flex gap-1">
+            <p>following</p>
+            <p>{followingCount}</p>
+          </div>
+          <div className="flex gap-1">
+            <p>followers</p>
+            <p>{followerCount}</p>
+          </div>
         </div>
         <div>
           <nav className="flex gap-2">

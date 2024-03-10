@@ -670,3 +670,62 @@ export async function getProfileData(username: string) {
 
   return { data: profileData, error: null };
 }
+
+export async function getFollowers(userId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("followers")
+    .select("follower(username), following(username)")
+    .eq("following", userId);
+
+  console.log("userId", userId);
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  console.log("followers object", data);
+
+  return { data, error: null };
+}
+
+//checks how many users are following userId
+export async function getFollowerCount(userId: string) {
+  const supabase = createClient();
+
+  const { count, error } = await supabase
+    .from("followers")
+    .select("*", { head: true, count: "estimated" })
+    .eq("following", userId);
+
+  console.log("userId", userId);
+
+  if (error) {
+    return { count: null, error: error.message };
+  }
+
+  console.log("follower count", count);
+
+  return { count, error: null };
+}
+
+//gets the count of how many users the userId is following
+export async function getFollowingCount(userId: string) {
+  const supabase = createClient();
+
+  const { count, error } = await supabase
+    .from("followers")
+    .select("*", { head: true, count: "estimated" })
+    .eq("follower", userId);
+
+  console.log("userId", userId);
+
+  if (error) {
+    return { count: null, error: error.message };
+  }
+
+  console.log("following count", count);
+
+  return { count, error: null };
+}
