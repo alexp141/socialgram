@@ -299,3 +299,19 @@ export async function getNextPostsPage(
 
   return posts;
 }
+
+export async function getAvatar(userid: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("avatar_url")
+    .eq("user_id", userid)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.avatar_url as string | null;
+}
