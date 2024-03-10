@@ -122,14 +122,18 @@ export default async function Profile({
           <p>birthday: {birthday}</p>
         </div>
         <div className="flex gap-2">
-          <div className="flex gap-1">
-            <p>following</p>
-            <p>{followingCount}</p>
-          </div>
-          <div className="flex gap-1">
-            <p>followers</p>
-            <p>{followerCount}</p>
-          </div>
+          <Link href={`/${username}/following`}>
+            <div className="flex gap-1">
+              <p>following</p>
+              <p>{followingCount}</p>
+            </div>
+          </Link>
+          <Link href={`/${username}/followers`}>
+            <div className="flex gap-1">
+              <p>followers</p>
+              <p>{followerCount}</p>
+            </div>
+          </Link>
         </div>
         <div>
           <nav className="flex gap-2">
