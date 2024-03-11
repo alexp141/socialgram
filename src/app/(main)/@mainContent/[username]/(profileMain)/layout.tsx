@@ -3,7 +3,6 @@ import { getUser } from "@/lib/actions";
 
 export default async function layout({
   children,
-
   params,
   profileTabs,
 }: {

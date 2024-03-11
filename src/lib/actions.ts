@@ -16,7 +16,7 @@ import {
   UsersUpdate,
 } from "./types/type-collection";
 import { revalidatePath } from "next/cache";
-import { NextRequest } from "next/server";
+import { getUserId } from "./data";
 
 export async function signUpUser(prevState: any, formData: FormData) {
   const supabase = createClient();
@@ -671,12 +671,13 @@ export async function getProfileData(username: string) {
   return { data: profileData, error: null };
 }
 
-export async function getFollowers(userId: string) {
+export async function getFollowers(username: string) {
   const supabase = createClient();
+  const userId = await getUserId(username);
 
   const { data, error } = await supabase
     .from("followers")
-    .select("follower(username), following(username)")
+    .select("follower(username, bio)")
     .eq("following", userId);
 
   console.log("userId", userId);
