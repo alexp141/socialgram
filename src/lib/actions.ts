@@ -728,11 +728,26 @@ export async function getUserId(username: string) {
   return userId;
 }
 
-export async function followUser(currentUser: string, userToFollow: string) {
+export async function followUser(userToFollow: string) {
   const supabase = createClient();
+  const userId = (await getUser()).id;
+
+  const { count, error: isFollowingError } = await supabase
+    .from("followers")
+    .select("*", { head: true, count: "estimated" })
+    .eq("follower", userId)
+    .eq("following", userToFollow);
+
+  console.log("count", count);
+
+  if (isFollowingError) {
+    return { error: isFollowingError.message };
+  } else if (count && count > 0) {
+    return { error: "You already follow this user" };
+  }
 
   const { error } = await supabase.from("followers").insert<FollowersInsert>({
-    follower: currentUser,
+    follower: userId,
     following: userToFollow,
   });
 

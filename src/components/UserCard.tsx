@@ -2,6 +2,7 @@
 
 import { UserCardType } from "@/lib/types/type-collection";
 import Image from "next/image";
+import FollowButton from "./FollowButton";
 
 export default function UserCard({ info }: { info: UserCardType }) {
   const avatar = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${info.avatar_url}`;
@@ -22,7 +23,7 @@ export default function UserCard({ info }: { info: UserCardType }) {
         <p>user bio {info.bio}</p>
       </div>
       <div className="flex justify-center item-center">
-        <button>follow</button>
+        <FollowButton userToFollow={info.user_id} />
       </div>
     </div>
   );
