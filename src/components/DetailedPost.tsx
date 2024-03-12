@@ -31,7 +31,7 @@ export default function DetailedPost({ post }: { post: PostRow }) {
               width={0}
               height={0}
               sizes="100vw"
-              style={{ width: "95%", height: "auto" }}
+              style={{ width: "auto", maxHeight: "30rem" }}
               placeholder="empty"
             />
           )}
