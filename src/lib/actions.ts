@@ -732,6 +732,7 @@ export async function followUser(userToFollow: string) {
   const supabase = createClient();
   const userId = (await getUser()).id;
 
+  //check if already following
   const { count, error: isFollowingError } = await supabase
     .from("followers")
     .select("*", { head: true, count: "estimated" })
@@ -750,6 +751,37 @@ export async function followUser(userToFollow: string) {
     follower: userId,
     following: userToFollow,
   });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { error: null };
+}
+
+export async function unfollowUser(userToUnfollow: string) {
+  const supabase = createClient();
+  const userId = (await getUser()).id;
+
+  const { count, error: isFollowingError } = await supabase
+    .from("followers")
+    .select("*", { head: true, count: "estimated" })
+    .eq("follower", userId)
+    .eq("following", userToUnfollow);
+
+  console.log("count", count);
+
+  if (isFollowingError) {
+    return { error: isFollowingError.message };
+  } else if (count && count === 0) {
+    return { error: "You do not follow this user" };
+  }
+
+  const { error } = await supabase
+    .from("followers")
+    .delete()
+    .eq("follower", userId)
+    .eq("following", userToUnfollow);
 
   if (error) {
     return { error: error.message };

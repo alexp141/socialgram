@@ -16,6 +16,7 @@ export default async function page({
       initialPageParam={1}
       itemsPerPage={4}
       userId={userId}
+      isAlreadyFollowing
     />
   );
 }

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { PostRow } from "./types/type-collection";
+import { getUser } from "./actions";
 
 export async function getPostLikes(postId: number) {
   const supabase = createClient();
@@ -341,4 +342,35 @@ export async function getNextFollowingPage(
   let users = data.map((res) => res.follower).flat();
 
   return users;
+}
+
+//check if current user is following userId
+export async function checkIfFollowing(
+  otherUserId: string,
+  currUserId?: string,
+  isAlreadyFollowing?: boolean //in case we already know that otherUserId is being followed
+) {
+  if (isAlreadyFollowing) {
+    return true;
+  }
+
+  const supabase = createClient();
+
+  if (!currUserId) currUserId = (await getUser()).id;
+
+  const { count, error } = await supabase
+    .from("followers")
+    .select("*", { head: true, count: "estimated" })
+    .eq("follower", currUserId)
+    .eq("following", otherUserId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (count && count > 0) {
+    return true;
+  }
+
+  return false;
 }

@@ -19,6 +19,7 @@ export default function Feed({
   userId,
   postId,
   username,
+  isAlreadyFollowing = false,
 }: {
   queryKey: Array<string | number>;
   queryFunction: (
@@ -31,6 +32,7 @@ export default function Feed({
   userId?: string;
   postId?: number;
   username?: string;
+  isAlreadyFollowing?: boolean;
 }) {
   const {
     data,
@@ -69,7 +71,14 @@ export default function Feed({
               //we know it is a post
               return <Post key={item.id} post={item} />;
             } else {
-              return <UserCard key={item.user_id} info={item} />;
+              return (
+                <UserCard
+                  currUserId={userId}
+                  key={item.user_id}
+                  isAlreadyFollowing={isAlreadyFollowing}
+                  info={item}
+                />
+              );
             }
           })}
         </div>

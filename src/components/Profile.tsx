@@ -7,6 +7,8 @@ import ProfileEditorForm from "./ProfileEditorForm";
 import { convertDate } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
+import FollowButton from "./FollowButton";
+import { checkIfFollowing } from "@/lib/data";
 
 export default async function Profile({
   username,
@@ -23,13 +25,7 @@ export default async function Profile({
     getFollowerCount(userId),
     getFollowingCount(userId),
   ]);
-  if (
-    data[0].error ||
-    data[1].error ||
-    !data[0] ||
-    !data[1].count ||
-    !data[2].count
-  ) {
+  if (data[0].error || data[1].error || data[2].error) {
     console.error(data[0].error || data[1].error || data[2].error);
     throw new Error(
       data[0].error ||
@@ -134,6 +130,9 @@ export default async function Profile({
               <p>{followerCount}</p>
             </div>
           </Link>
+        </div>
+        <div>
+          <FollowButton userToFollow={userId} />
         </div>
         <div>
           <nav className="flex gap-2">
