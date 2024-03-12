@@ -1,4 +1,5 @@
 import Hashids from "hashids";
+import { PostRow, UsersRow } from "./types/type-collection";
 
 const hashids = new Hashids("", 10);
 
@@ -19,6 +20,14 @@ export function convertDate(dateTimestamp: string) {
   timeArr[0] = String(hour);
 
   return `${date} ${hour}:${timeArr[1]} ${isDay ? "AM" : "PM"}`;
+}
+
+export function isTypePostRow(x: any): x is PostRow {
+  if ("reply_to_id" in x) {
+    return true;
+  }
+
+  return false;
 }
 
 export { hashids };

@@ -1,8 +1,15 @@
 "use client";
 
-import { FavoritesRow, PostRow } from "@/lib/types/type-collection";
+import {
+  FavoritesRow,
+  PostRow,
+  UserCardType,
+  UsersRow,
+} from "@/lib/types/type-collection";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
+import UserCard from "./UserCard";
+import { isTypePostRow } from "@/lib/helper";
 
 export default function Feed({
   queryKey,
@@ -18,7 +25,7 @@ export default function Feed({
     currentPage: number,
     itemsPerPage: number,
     arg3?: any
-  ) => Promise<PostRow[]>;
+  ) => Promise<PostRow[] | UserCardType[]>;
   itemsPerPage: number;
   initialPageParam: number;
   userId?: string;
@@ -57,9 +64,14 @@ export default function Feed({
     <div className="">
       {data.pages.map((group, i) => (
         <div key={i}>
-          {group.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
+          {group.map((item) => {
+            if (isTypePostRow(item)) {
+              //we know it is a post
+              return <Post key={item.id} post={item} />;
+            } else {
+              return <UserCard key={item.user_id} info={item} />;
+            }
+          })}
         </div>
       ))}
       <div>

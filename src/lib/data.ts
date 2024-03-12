@@ -315,3 +315,30 @@ export async function getAvatar(userid: string) {
 
   return data.avatar_url as string | null;
 }
+
+export async function getNextFollowingPage(
+  currentPage: number,
+  itemsPerPage: number,
+  userId: string
+) {
+  const supabase = createClient();
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  const { data, error } = await supabase
+    .from("followers")
+    .select("follower(username, user_id, bio, avatar_url)")
+    .eq("following", userId)
+    .range(start, end);
+
+  console.log("followers page ", data);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  let users = data.map((res) => res.follower).flat();
+
+  return users;
+}

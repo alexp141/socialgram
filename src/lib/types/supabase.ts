@@ -80,6 +80,42 @@ export type Database = {
           }
         ]
       }
+      followers: {
+        Row: {
+          created_at: string
+          follower: string
+          following: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          follower: string
+          following: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          follower?: string
+          following?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_followers_follower_fkey"
+            columns: ["follower"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_followers_following_fkey"
+            columns: ["following"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          }
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string
@@ -174,7 +210,7 @@ export type Database = {
           last_name: string | null
           location: string | null
           phone: string | null
-          user_id: string | null
+          user_id: string
           username: string
           website: string | null
         }
@@ -190,7 +226,7 @@ export type Database = {
           last_name?: string | null
           location?: string | null
           phone?: string | null
-          user_id?: string | null
+          user_id?: string
           username: string
           website?: string | null
         }
@@ -206,19 +242,11 @@ export type Database = {
           last_name?: string | null
           location?: string | null
           phone?: string | null
-          user_id?: string | null
+          user_id?: string
           username?: string
           website?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {

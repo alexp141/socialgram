@@ -7,6 +7,7 @@ import {
   CommentsRow,
   CommentsUpdate,
   FavoritesInsert,
+  FollowersInsert,
   PostInsert,
   PostLikesInsert,
   PostRow,
@@ -16,7 +17,6 @@ import {
   UsersUpdate,
 } from "./types/type-collection";
 import { revalidatePath } from "next/cache";
-import { getUserId } from "./data";
 
 export async function signUpUser(prevState: any, formData: FormData) {
   const supabase = createClient();
@@ -671,26 +671,6 @@ export async function getProfileData(username: string) {
   return { data: profileData, error: null };
 }
 
-export async function getFollowers(username: string) {
-  const supabase = createClient();
-  const userId = await getUserId(username);
-
-  const { data, error } = await supabase
-    .from("followers")
-    .select("follower(username, bio)")
-    .eq("following", userId);
-
-  console.log("userId", userId);
-
-  if (error) {
-    return { data: null, error: error.message };
-  }
-
-  console.log("followers object", data);
-
-  return { data, error: null };
-}
-
 //checks how many users are following userId
 export async function getFollowerCount(userId: string) {
   const supabase = createClient();
@@ -729,4 +709,36 @@ export async function getFollowingCount(userId: string) {
   console.log("following count", count);
 
   return { count, error: null };
+}
+
+export async function getUserId(username: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("user_id")
+    .eq("username", username)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const userId: string = data.user_id;
+  return userId;
+}
+
+export async function followUser(currentUser: string, userToFollow: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase.from("followers").insert<FollowersInsert>({
+    follower: currentUser,
+    following: userToFollow,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { error: null };
 }

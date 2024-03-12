@@ -1,6 +1,6 @@
 import FollowingHeader from "@/components/FollowingHeader";
 
-export default function layout({
+export default async function layout({
   children,
   params,
 }: {

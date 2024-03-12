@@ -24,3 +24,14 @@ export type CommentsUpdate = Database["public"]["Tables"]["comments"]["Update"];
 export type UsersUpdate = Database["public"]["Tables"]["users"]["Update"];
 export type UsersRow = Database["public"]["Tables"]["users"]["Row"];
 export type UsersInsert = Database["public"]["Tables"]["users"]["Insert"];
+
+export type FollowersRow = Database["public"]["Tables"]["followers"]["Row"];
+export type FollowersUpdate =
+  Database["public"]["Tables"]["followers"]["Update"];
+export type FollowersInsert =
+  Database["public"]["Tables"]["followers"]["Insert"];
+
+export type UserCardType = Pick<
+  UsersRow,
+  "user_id" | "username" | "avatar_url" | "bio"
+>;
