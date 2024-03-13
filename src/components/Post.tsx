@@ -5,38 +5,43 @@ import LikeButton from "./LikeButton";
 import FavoriteButton from "./FavoriteButton";
 import CommentButton from "./CommentButton";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { hashids } from "@/lib/helper";
+import { useMemo } from "react";
+import { getAvatarImage, getPostImage, hashids } from "@/lib/helper";
 import useAvatar from "@/hooks/useAvatar";
 
 export default function Post({ post }: { post: PostRow }) {
   const { avatar_url, error, fetchStatus } = useAvatar(post.user_id);
+  const avatar = getAvatarImage(avatar_url);
+
   let postImageURL;
 
   if (post.image_path) {
-    postImageURL = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${post.image_path}`;
+    postImageURL = getPostImage(post.image_path);
     console.log("post image", postImageURL);
   }
-  const avatar = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${avatar_url}`;
 
   const hashedPostId = useMemo(() => {
     return hashids.encode(post.id);
   }, [post.id]);
 
   return (
-    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-1">
+    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-2">
       <div className="">
-        <Image
-          className="border rounded-full"
-          src={avatar_url ? avatar : "/empty-avatar.png"}
-          alt="avatar"
-          width={50}
-          height={50}
-          placeholder="empty"
-        />
+        <Link href={`/${post.username}`}>
+          <Image
+            className="border rounded-full"
+            src={avatar_url ? avatar : "/empty-avatar.png"}
+            alt="avatar"
+            width={50}
+            height={50}
+            placeholder="empty"
+          />
+        </Link>
       </div>
-      <div className="flex flex-col">
-        <Link href={`/${post.username}`}>{`@${post.username}`}</Link>
+      <div className="ml-1">
+        <Link href={`/${post.username}`}>
+          <span>{`@${post.username}`}</span>
+        </Link>
         <Link href={`/posts/${hashedPostId}`}>
           <div className="my-1">{post.content}</div>
           <div>
@@ -54,7 +59,7 @@ export default function Post({ post }: { post: PostRow }) {
             )}
           </div>
         </Link>
-        <div className="flex border justify-around items-center py-2">
+        <div className="flex justify-around items-center py-2 mt-2">
           <CommentButton postId={post.id} userId={post.user_id} />
           <LikeButton postId={post.id} userId={post.user_id} />
           <FavoriteButton postId={post.id} userId={post.user_id} />

@@ -789,3 +789,19 @@ export async function unfollowUser(userToUnfollow: string) {
 
   return { error: null };
 }
+
+export async function getAvatar(userId: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("avatar_url")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.avatar_url as string | null;
+}

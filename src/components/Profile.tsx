@@ -7,8 +7,8 @@ import ProfileEditorForm from "./ProfileEditorForm";
 import { convertDate } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
+import { FaLocationDot, FaCalendarDays, FaCakeCandles } from "react-icons/fa6";
 import FollowButton from "./FollowButton";
-import { checkIfFollowing } from "@/lib/data";
 
 export default async function Profile({
   username,
@@ -17,9 +17,6 @@ export default async function Profile({
   username: string;
   userId: string;
 }) {
-  // const profileData = await getProfileData(username);
-  // const followers = await getFollowers(userId);
-
   const data = await Promise.all([
     getProfileData(username),
     getFollowerCount(userId),
@@ -37,15 +34,6 @@ export default async function Profile({
   const profileData = data[0];
   const followerCount = data[1].count;
   const followingCount = data[2].count;
-  //get banner
-  //get pf
-  //get following
-  //get followers
-  //get bio
-  //get name
-  //get username
-  //get join date
-  //get birthday
 
   if (profileData.error || !profileData.data) {
     console.error(profileData.error);
@@ -81,9 +69,7 @@ export default async function Profile({
             placeholder="empty"
           />
         )}
-      </div>
-      <div className="flex flex-col">
-        <div className="flex justify-between">
+        <div className="absolute top-full left-6 -translate-y-1/2">
           {avatar_url ? (
             <Image
               src={profileImageSource}
@@ -91,7 +77,7 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="border rounded-full"
+              className="border-2 border-sky-400 rounded-full"
             />
           ) : (
             <Image
@@ -100,48 +86,69 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="border rounded-full"
+              className="border-2 border-sky-400 rounded-full"
             />
           )}
-          <ProfileEditorForm
-            userId={userId}
-            username={username}
-            initialAvatar={profileImageSource}
-            initialBanner={bannerImageSource}
-          />
         </div>
-        <div>username: {profileData.data?.username}</div>
-        <div>bio: {bio}</div>
-        <div className="flex gap-2">
-          <p>location: {location}</p>
-          <p>join date: {joinDate}</p>
-          <p>birthday: {birthday}</p>
+      </div>
+      <ProfileEditorForm
+        userId={userId}
+        username={username}
+        initialAvatar={profileImageSource}
+        initialBanner={bannerImageSource}
+      />
+      <div className="px-6">
+        <div className="">@{profileData.data?.username}</div>
+        <div className="my-6">bio: {bio}</div>
+        <div className="flex gap-4">
+          {location && (
+            <div className="flex gap-1 items-center">
+              <FaLocationDot />
+              <span>{location}</span>
+            </div>
+          )}
+          {joinDate && (
+            <div className="flex gap-1 items-center">
+              <FaCalendarDays />
+              <span>Joined on {joinDate}</span>
+            </div>
+          )}
+          {birthday && (
+            <div className="flex gap-1 items-center">
+              <FaCakeCandles />
+              <span>{birthday}</span>
+            </div>
+          )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 py-2">
           <Link href={`/${username}/following`}>
             <div className="flex gap-1">
-              <p>following</p>
+              <p>Following</p>
               <p>{followingCount}</p>
             </div>
           </Link>
           <Link href={`/${username}/followers`}>
             <div className="flex gap-1">
-              <p>followers</p>
+              <p>Followers</p>
               <p>{followerCount}</p>
             </div>
           </Link>
         </div>
-        <div>
+        {/* <div>
           <FollowButton userToFollow={userId} />
-        </div>
-        <div>
-          <nav className="flex gap-2">
-            <Link href={`/${username}`}>posts</Link>
-            <Link href={`/${username}/favorites`}>favorites</Link>
-            <Link href={`/${username}/likes`}>likes</Link>
-          </nav>
-        </div>
+        </div> */}
       </div>
+      <nav className="flex justify-evenly mt-4 items-stretch text-lg">
+        <Link href={`/${username}`} className="p-4">
+          Posts
+        </Link>
+        <Link href={`/${username}/favorites`} className="p-4">
+          Favorites
+        </Link>
+        <Link href={`/${username}/likes`} className="p-4">
+          Likes
+        </Link>
+      </nav>
     </div>
   );
 }

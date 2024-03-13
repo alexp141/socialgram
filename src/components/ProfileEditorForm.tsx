@@ -50,9 +50,13 @@ export default function ProfileEditorForm({
   }
 
   return (
-    <>
-      <button type="button" onClick={handleClick}>
-        edit profile
+    <div className="flex justify-end items-center p-2">
+      <button
+        type="button"
+        onClick={handleClick}
+        className="px-4 py-2 border rounded-full"
+      >
+        Edit Profile
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Edit Profile">
         <form action={handleAction}>
@@ -144,6 +148,6 @@ export default function ProfileEditorForm({
           <button>Submit</button>
         </form>
       </Modal>
-    </>
+    </div>
   );
 }

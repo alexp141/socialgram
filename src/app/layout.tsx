@@ -4,6 +4,8 @@ import "./globals.css";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
+import { Providers } from "@/components/Providers";
+import ThemeButton from "@/components/ThemeButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className}`}>
-        <ReactQueryProvider>
-          {children}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ReactQueryProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} box-border`}>
+        <Providers>
+          <ReactQueryProvider>
+            {children}
+            <ThemeButton />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ReactQueryProvider>
+        </Providers>
         <ToastContainer
           position="top-right"
           autoClose={3000}

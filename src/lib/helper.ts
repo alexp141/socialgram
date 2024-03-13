@@ -30,4 +30,18 @@ export function isTypePostRow(x: any): x is PostRow {
   return false;
 }
 
+export function getAvatarImage(avatarPath: string | null | undefined) {
+  if (!avatarPath) {
+    return "";
+  }
+  return `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${avatarPath}`;
+}
+
+export function getPostImage(postImagePath: string | null | undefined) {
+  if (!postImagePath) {
+    return "";
+  }
+  return `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/post_images/${postImagePath}`;
+}
+
 export { hashids };
