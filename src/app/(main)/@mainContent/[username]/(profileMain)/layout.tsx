@@ -1,7 +1,7 @@
 import Profile from "@/components/Profile";
 import { getUser } from "@/lib/actions";
 
-export default async function layout({
+export default async function ProfileTabsLayout({
   children,
   params,
   profileTabs,

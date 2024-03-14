@@ -1,6 +1,6 @@
 import FollowingHeader from "@/components/FollowingHeader";
 
-export default async function layout({
+export default async function ProfileFollowingLayout({
   children,
   params,
 }: {
