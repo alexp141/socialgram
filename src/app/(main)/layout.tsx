@@ -1,11 +1,9 @@
 import Sidebar from "@/components/Sidebar";
 
 export default function MainLayout({
-  children,
   mainContent,
   extras,
 }: {
-  children: React.ReactNode;
   mainContent: React.ReactNode;
   extras: React.ReactNode;
 }) {

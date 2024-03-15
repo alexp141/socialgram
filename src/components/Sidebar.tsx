@@ -40,6 +40,10 @@ export default async function Sidebar() {
           <Link href={`/${username}`}>Profile</Link>
         </SideBarLink>
         <SideBarLink>
+          <FaUser />
+          <Link href={`/explore`}>Explore</Link>
+        </SideBarLink>
+        <SideBarLink>
           <FaTurnDown />
           <SignOutButton />
         </SideBarLink>

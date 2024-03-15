@@ -5,3 +5,5 @@ export type createPostReturn = {
   image: string | null;
   user_id: string;
 };
+
+export type SearchParams = { [key: string]: string | undefined };

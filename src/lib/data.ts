@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/client";
 import { PostRow } from "./types/type-collection";
 import { getUser } from "./actions";
+import { SearchParams } from "./types";
 
 export async function getPostLikes(postId: number) {
   const supabase = createClient();
@@ -373,4 +374,40 @@ export async function checkIfFollowing(
   }
 
   return false;
+}
+
+export async function getSearchResultsPage(
+  currentPage: number,
+  itemsPerPage: number,
+  searchParams: SearchParams,
+  currUserId?: string
+) {
+  let searchQuery = searchParams.search;
+  let orderType = searchParams.orderType;
+  if (!searchQuery) searchQuery = "";
+  if (!orderType) orderType = "desc";
+
+  const supabase = createClient();
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  if (!currUserId) currUserId = (await getUser()).id;
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .textSearch("content", searchQuery, {
+      config: "english",
+      type: "plain",
+    })
+    .order("created_at", { ascending: orderType === "asc" ? true : false })
+    .range(start, end);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const posts: PostRow[] = data;
+
+  return posts;
 }
