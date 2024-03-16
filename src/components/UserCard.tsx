@@ -17,7 +17,7 @@ export default function UserCard({
 
   return (
     <div className="flex gap-1">
-      <div className="flex-initial">
+      <div className=" flex-shrink-0">
         <Image
           className="border rounded-full"
           src={avatar}
@@ -26,9 +26,11 @@ export default function UserCard({
           alt="avatar"
         />
       </div>
-      <div className="flex flex-col">
-        <p>user card {info.username}</p>
-        <p>user bio {info.bio}</p>
+      <div className="flex flex-col min-w-0">
+        <p>@{info.username}</p>
+        <div className=" overflow-y-hidden overflow-ellipsis">
+          <p className="my-1 line-clamp-2">{info.bio}</p>
+        </div>
       </div>
       <div className="flex justify-center item-center">
         <FollowButton

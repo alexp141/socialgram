@@ -9,6 +9,7 @@ import {
   FaPenToSquare,
   FaUser,
   FaTurnDown,
+  FaMagnifyingGlass,
 } from "react-icons/fa6";
 
 const linkStyle = "flex";
@@ -40,7 +41,7 @@ export default async function Sidebar() {
           <Link href={`/${username}`}>Profile</Link>
         </SideBarLink>
         <SideBarLink>
-          <FaUser />
+          <FaMagnifyingGlass />
           <Link href={`/explore`}>Explore</Link>
         </SideBarLink>
         <SideBarLink>

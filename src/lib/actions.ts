@@ -805,3 +805,16 @@ export async function getAvatar(userId: string) {
 
   return data.avatar_url as string | null;
 }
+
+export async function getRecommendedUsers() {
+  const supabase = createClient();
+  const userId = (await getUser()).id;
+
+  const { data, error } = await supabase.from("eight_rec_users").select("*");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
