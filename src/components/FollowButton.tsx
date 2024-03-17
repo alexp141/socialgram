@@ -20,6 +20,7 @@ export default function FollowButton({
     currUserId
   );
   const queryClient = useQueryClient();
+  const buttonStyle = "px-4 py-2 border rounded-full";
 
   async function handleFollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -62,8 +63,16 @@ export default function FollowButton({
 
   return (
     <>
-      {isFollowing && <button onClick={handleUnfollow}>Unfollow</button>}
-      {!isFollowing && <button onClick={handleFollow}>Follow</button>}
+      {isFollowing && (
+        <button onClick={handleUnfollow} className={`${buttonStyle}`}>
+          Unfollow
+        </button>
+      )}
+      {!isFollowing && (
+        <button onClick={handleFollow} className={`${buttonStyle}`}>
+          Follow
+        </button>
+      )}
     </>
   );
 }

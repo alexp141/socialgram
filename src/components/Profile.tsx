@@ -12,15 +12,17 @@ import FollowButton from "./FollowButton";
 
 export default async function Profile({
   username,
-  userId,
+  profileUserId,
+  loggedInUserId,
 }: {
   username: string;
-  userId: string;
+  profileUserId: string;
+  loggedInUserId: string;
 }) {
   const data = await Promise.all([
     getProfileData(username),
-    getFollowerCount(userId),
-    getFollowingCount(userId),
+    getFollowerCount(profileUserId),
+    getFollowingCount(profileUserId),
   ]);
   if (data[0].error || data[1].error || data[2].error) {
     console.error(data[0].error || data[1].error || data[2].error);
@@ -91,12 +93,22 @@ export default async function Profile({
           )}
         </div>
       </div>
-      <ProfileEditorForm
-        userId={userId}
-        username={username}
-        initialAvatar={profileImageSource}
-        initialBanner={bannerImageSource}
-      />
+      {profileUserId === loggedInUserId ? (
+        <ProfileEditorForm
+          userId={profileUserId}
+          username={username}
+          initialAvatar={profileImageSource}
+          initialBanner={bannerImageSource}
+        />
+      ) : (
+        <div className="flex justify-end my-1">
+          <FollowButton
+            userToFollow={profileUserId}
+            currUserId={loggedInUserId}
+          />
+        </div>
+      )}
+
       <div className="px-6">
         <div className="">@{profileData.data?.username}</div>
         <div className="my-6">bio: {bio}</div>

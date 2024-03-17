@@ -1,5 +1,5 @@
 import Profile from "@/components/Profile";
-import { getUser } from "@/lib/actions";
+import { getUser, getUserId } from "@/lib/actions";
 
 export default async function ProfileTabsLayout({
   children,
@@ -10,10 +10,18 @@ export default async function ProfileTabsLayout({
   params: { username: string };
   profileTabs: React.ReactNode;
 }) {
-  const userId = (await getUser()).id;
+  const [loggedInUserId, profileUserId] = await Promise.all([
+    getUser(), //gets currently logged in user's id
+    getUserId(params.username),
+  ]);
+
   return (
     <div>
-      <Profile username={params.username} userId={userId} />
+      <Profile
+        username={params.username}
+        profileUserId={profileUserId}
+        loggedInUserId={loggedInUserId.id}
+      />
       {profileTabs}
       {children}
     </div>
