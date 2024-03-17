@@ -1,13 +1,20 @@
 "use client";
 
 import { signUpUser } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
 
 export default function SignupForm() {
+  const router = useRouter();
   const [state, formAction] = useFormState(signUpUser, {
     message: "",
     error: null,
   });
+
+  //executes when user has signed up
+  if (state.message === "success") {
+    router.push("/home");
+  }
 
   return (
     <form action={formAction}>
