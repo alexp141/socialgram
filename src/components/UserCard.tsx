@@ -4,6 +4,7 @@ import { UserCardType } from "@/lib/types/type-collection";
 import Image from "next/image";
 import FollowButton from "./FollowButton";
 import { getAvatarImage } from "@/lib/helper";
+import Link from "next/link";
 
 export default function UserCard({
   info,
@@ -39,7 +40,7 @@ export default function UserCard({
         )}
       </div>
       <div className="flex flex-col min-w-0">
-        <p>@{info.username}</p>
+        <Link href={`/${info.username}`}>@{info.username}</Link>
         <div className=" overflow-y-hidden overflow-ellipsis">
           <p className="my-1 line-clamp-2">{info.bio}</p>
         </div>
