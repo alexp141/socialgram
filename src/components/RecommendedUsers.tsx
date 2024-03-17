@@ -23,11 +23,14 @@ export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
           <UserCard key={id} info={{ username, bio, avatar_url, user_id }} />
         );
       })}
-      {listLength < users.length ? (
+
+      {listLength < users.length && (
         <button type="button" onClick={handleShowMore}>
           Show More
         </button>
-      ) : (
+      )}
+
+      {listLength > 4 && (
         <button type="button" onClick={handleShowLess}>
           Show Less
         </button>

@@ -1,6 +1,6 @@
 import ExtrasContainer from "@/components/ExtrasContainer";
 import RecommendedUsers from "@/components/RecommendedUsers";
-import { getRecommendedUsers } from "@/lib/actions";
+import { getFollowableUsers } from "@/lib/actions";
 import { SearchParams } from "@/lib/types";
 import { UsersRow } from "@/lib/types/type-collection";
 
@@ -9,7 +9,7 @@ export default async function ExploreFilterPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const recommendedUsers: UsersRow[] = await getRecommendedUsers();
+  const recommendedUsers: UsersRow[] = await getFollowableUsers();
 
   return (
     <div>

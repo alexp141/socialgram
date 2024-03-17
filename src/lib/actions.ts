@@ -813,9 +813,7 @@ export async function getFollowableUsers(loggedInUserId?: string) {
     loggedInUserId = (await getUser()).id;
   }
 
-  const { data, error } = await supabase
-    .from("followable_users")
-    .select("username, avatar_url, bio");
+  const { data, error } = await supabase.from("followable_users").select("*");
 
   if (error) {
     throw new Error(error.message);

@@ -57,19 +57,23 @@ export default function FollowButton({
     return <p>error</p>;
   }
 
-  if (fetchStatus === "fetching") {
-    return <p>loading...</p>;
-  }
-
   return (
     <>
       {isFollowing && (
-        <button onClick={handleUnfollow} className={`${buttonStyle}`}>
+        <button
+          onClick={handleUnfollow}
+          className={`${buttonStyle}`}
+          disabled={fetchStatus === "fetching"}
+        >
           Unfollow
         </button>
       )}
       {!isFollowing && (
-        <button onClick={handleFollow} className={`${buttonStyle}`}>
+        <button
+          onClick={handleFollow}
+          className={`${buttonStyle}`}
+          disabled={fetchStatus === "fetching"}
+        >
           Follow
         </button>
       )}

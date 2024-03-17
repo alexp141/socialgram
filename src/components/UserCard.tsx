@@ -3,6 +3,7 @@
 import { UserCardType } from "@/lib/types/type-collection";
 import Image from "next/image";
 import FollowButton from "./FollowButton";
+import { getAvatarImage } from "@/lib/helper";
 
 export default function UserCard({
   info,
@@ -13,18 +14,29 @@ export default function UserCard({
   currUserId?: string;
   isAlreadyFollowing?: boolean;
 }) {
-  const avatar = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${info.avatar_url}`;
+  const avatar = getAvatarImage(info.avatar_url);
 
   return (
     <div className="flex gap-1">
       <div className=" flex-shrink-0">
-        <Image
-          className="border rounded-full"
-          src={avatar}
-          width={50}
-          height={50}
-          alt="avatar"
-        />
+        {avatar ? (
+          <Image
+            className="border rounded-full"
+            src={avatar}
+            width={50}
+            height={50}
+            alt="avatar"
+          />
+        ) : (
+          <Image
+            src="/empty-avatar.png"
+            alt="default avatar pic"
+            width={50}
+            height={50}
+            placeholder="empty"
+            className="border border-sky-400 rounded-full"
+          />
+        )}
       </div>
       <div className="flex flex-col min-w-0">
         <p>@{info.username}</p>
