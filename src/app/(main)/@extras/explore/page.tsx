@@ -17,20 +17,24 @@ export default async function ExploreFilterPage({
       <ExtrasContainer title="Who To Follow">
         <RecommendedUsers users={recommendedUsers} />
       </ExtrasContainer>
-      <ExtrasContainer title="Filters">
-        <form action="">
-          <fieldset>
-            <div>
-              <input type="radio" name="timeSort" id="newest" />
-              <label htmlFor="newest">Newest</label>
-            </div>
-            <div>
-              <input type="radio" name="timeSort" id="oldest" />
-              <label htmlFor="oldest">Oldest</label>
-            </div>
-          </fieldset>
+      {/* <ExtrasContainer title="Filters">
+        <form>
+          <div>
+            <input
+              type="radio"
+              name="timeSort"
+              id="newest"
+              value="newest"
+              checked
+            />
+            <label htmlFor="newest">Newest</label>
+          </div>
+          <div>
+            <input type="radio" name="timeSort" id="oldest" value="oldest" />
+            <label htmlFor="oldest">Oldest</label>
+          </div>
         </form>
-      </ExtrasContainer>
+      </ExtrasContainer> */}
     </div>
   );
 }

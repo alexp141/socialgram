@@ -1,5 +1,6 @@
 import Profile from "@/components/Profile";
 import { getUser, getUserId } from "@/lib/actions";
+import { Suspense } from "react";
 
 export default async function ProfileTabsLayout({
   children,
@@ -17,13 +18,15 @@ export default async function ProfileTabsLayout({
 
   return (
     <div>
-      <Profile
-        username={params.username}
-        profileUserId={profileUserId}
-        loggedInUserId={loggedInUserId.id}
-      />
-      {profileTabs}
-      {children}
+      <Suspense fallback={<p>loading profile...</p>}>
+        <Profile
+          username={params.username}
+          profileUserId={profileUserId}
+          loggedInUserId={loggedInUserId.id}
+        />
+        {profileTabs}
+        {children}
+      </Suspense>
     </div>
   );
 }

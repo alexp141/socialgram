@@ -2,8 +2,22 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { PostRow } from "./types/type-collection";
-import { getUser } from "./actions";
 import { SearchParams } from "./types";
+
+export async function getUser() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (!data.user) {
+    throw new Error("UNABLE TO FETCH USER DATA");
+  }
+
+  return data.user;
+}
 
 export async function getPostLikes(postId: number) {
   const supabase = createClient();

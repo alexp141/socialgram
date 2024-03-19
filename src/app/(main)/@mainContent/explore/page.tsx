@@ -1,6 +1,7 @@
 import SearchBar from "@/components/SearchBar";
 import SearchFeed from "@/components/SearchFeed";
 import { SearchParams } from "@/lib/types";
+import { Suspense } from "react";
 
 export default function ExplorePage({
   searchParams,
@@ -10,8 +11,10 @@ export default function ExplorePage({
   console.log("SEARCH PARAMS", searchParams);
   return (
     <div>
-      <SearchBar />
-      <SearchFeed itemsPerPage={5} searchParams={searchParams} />
+      <Suspense fallback={<p>loading feed...</p>}>
+        <SearchBar />
+        <SearchFeed itemsPerPage={5} searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }
