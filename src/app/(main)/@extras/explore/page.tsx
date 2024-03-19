@@ -12,7 +12,7 @@ export default async function ExploreFilterPage({
   const recommendedUsers: UsersRow[] = await getFollowableUsers();
 
   return (
-    <div>
+    <div className="space-y-2">
       <p>EXTRAS EXPLORE ROUTE</p>
       <ExtrasContainer title="Who To Follow">
         <RecommendedUsers users={recommendedUsers} />

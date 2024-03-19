@@ -18,8 +18,8 @@ export default function UserCard({
   const avatar = getAvatarImage(info.avatar_url);
 
   return (
-    <div className="flex gap-1">
-      <div className=" flex-shrink-0">
+    <div className="flex gap-1 items-center mt-2">
+      <div className=" flex-shrink-0 self-start">
         {avatar ? (
           <Image
             className="border rounded-full"
@@ -39,10 +39,12 @@ export default function UserCard({
           />
         )}
       </div>
-      <div className="flex flex-col min-w-0">
+      <div className="flex flex-col flex-1">
         <Link href={`/${info.username}`}>@{info.username}</Link>
         <div className=" overflow-y-hidden overflow-ellipsis">
-          <p className="my-1 line-clamp-2">{info.bio}</p>
+          <p className="my-1 line-clamp-2">
+            {info.bio ? info.bio : "<no bio set>"}
+          </p>
         </div>
       </div>
       <div className="flex justify-center item-center">

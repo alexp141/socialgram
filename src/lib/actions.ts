@@ -804,8 +804,6 @@ export async function getFollowableUsers(loggedInUserId?: string) {
     userid: loggedInUserId,
   });
 
-  console.log("folloabel users", data);
-
   if (error) {
     throw new Error(error.message);
   }

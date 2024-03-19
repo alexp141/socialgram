@@ -58,7 +58,7 @@ export default function FollowButton({
   }
 
   return (
-    <>
+    <div>
       {isFollowing && (
         <button
           onClick={handleUnfollow}
@@ -77,6 +77,6 @@ export default function FollowButton({
           Follow
         </button>
       )}
-    </>
+    </div>
   );
 }

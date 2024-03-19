@@ -18,7 +18,7 @@ export default async function Sidebar() {
   const username = (await getUser()).user_metadata.username;
 
   return (
-    <div className="hidden sm:block sm:px-10 sm:py-6">
+    <div className="hidden sm:block sm:px-10 sm:py-6 max-w-72 justify-self-end">
       <div className="flex flex-col gap-5 text-2xl font-semibold sticky top-4">
         <SideBarLink>
           <FaHouse />
