@@ -53,12 +53,16 @@ export async function signUpUser(prevState: any, formData: FormData) {
   }
 
   const userData = data.user;
+
   if (!userData) {
     return { error: "user data not found" };
   }
-  const { error: usersError } = await supabase
+  const { data: usersInsertData, error: usersError } = await supabase
     .from("users")
-    .insert({ user_id: userData.id, username, email });
+    .insert({ user_id: userData.id, username, email })
+    .select();
+
+  console.log("USERS INSERTED DATA", usersInsertData);
 
   if (usersError) {
     return {
@@ -256,9 +260,9 @@ export async function downloadPostImage(imagePath: string) {
   return data;
 }
 
-export async function likePost(postId: number, userId: string) {
+export async function likePost(postId: number) {
   const supabase = createClient();
-
+  const userId = (await getUser()).id;
   const { error } = await supabase
     .from("post_likes")
     .insert<PostLikesInsert>({ post_id: postId, user_id: userId });
@@ -268,8 +272,9 @@ export async function likePost(postId: number, userId: string) {
   }
 }
 
-export async function unlikePost(postId: number, userId: string) {
+export async function unlikePost(postId: number) {
   const supabase = createClient();
+  const userId = (await getUser()).id;
 
   const { error } = await supabase
     .from("post_likes")
@@ -448,13 +453,9 @@ export async function getPostInfo(postId: string) {
       "id, created_at, content, image_path, user_id, favorites(*), comments(*), post_likes(*)"
     )
     .eq("id", postId);
-
-  console.log("asdf", data?.[0]?.favorites);
 }
 
 export async function uploadProfilePic(file: File, userId: string) {
-  console.log("profile pic image file", file);
-
   if (!file.name || !file.size) {
     return;
   }
@@ -491,15 +492,12 @@ export async function uploadProfilePic(file: File, userId: string) {
     throw new Error(updateError.message);
   }
 
-  console.log("PROFILE PIC IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
 
 export async function uploadProfileBanner(file: File, userId: string) {
   //no validation required
   const supabase = createClient();
-
-  console.log("banner file", file);
 
   if (!file.name || !file.size) {
     return;
@@ -534,7 +532,6 @@ export async function uploadProfileBanner(file: File, userId: string) {
     throw new Error(updateError.message);
   }
 
-  console.log("BANNER PIC IMAGE PATH SUPABASE", data.path);
   return data.path;
 }
 
@@ -543,7 +540,6 @@ const profileDataSchema = z.object({
     .any()
     .refine(
       (file) => {
-        console.log("banner file in data schema", file);
         return file?.size >= MAX_FILE_SIZE ? false : true;
       },
       { message: "file size must be less than 10MB" }
@@ -630,7 +626,7 @@ export async function updateProfile(
     .eq("user_id", userId);
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return { error: error.message };
   }
 
@@ -680,13 +676,9 @@ export async function getFollowerCount(userId: string) {
     .select("*", { head: true, count: "estimated" })
     .eq("following", userId);
 
-  console.log("userId", userId);
-
   if (error) {
     return { count: null, error: error.message };
   }
-
-  console.log("follower count", count);
 
   return { count, error: null };
 }
@@ -700,18 +692,17 @@ export async function getFollowingCount(userId: string) {
     .select("*", { head: true, count: "estimated" })
     .eq("follower", userId);
 
-  console.log("userId", userId);
-
   if (error) {
     return { count: null, error: error.message };
   }
 
-  console.log("following count", count);
-
   return { count, error: null };
 }
 
-export async function getUserId(username: string) {
+export async function getUserId(username: string | undefined | null) {
+  if (!username) {
+    return "";
+  }
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -738,8 +729,6 @@ export async function followUser(userToFollow: string) {
     .select("*", { head: true, count: "estimated" })
     .eq("follower", userId)
     .eq("following", userToFollow);
-
-  console.log("count", count);
 
   if (isFollowingError) {
     return { error: isFollowingError.message };
@@ -768,8 +757,6 @@ export async function unfollowUser(userToUnfollow: string) {
     .select("*", { head: true, count: "estimated" })
     .eq("follower", userId)
     .eq("following", userToUnfollow);
-
-  console.log("count", count);
 
   if (isFollowingError) {
     return { error: isFollowingError.message };
@@ -813,7 +800,11 @@ export async function getFollowableUsers(loggedInUserId?: string) {
     loggedInUserId = (await getUser()).id;
   }
 
-  const { data, error } = await supabase.from("followable_users").select("*");
+  const { data, error } = await supabase.rpc("getFollowableUsers", {
+    userid: loggedInUserId,
+  });
+
+  console.log("folloabel users", data);
 
   if (error) {
     throw new Error(error.message);

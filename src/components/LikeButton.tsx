@@ -24,13 +24,13 @@ export default function LikeButton({
   }, [likeCount]);
 
   async function handleLike() {
-    await likePost(postId, userId);
+    await likePost(postId);
     queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
     setLocalLikeCount((curr) => curr! + 1);
   }
 
   async function handleDislike() {
-    await unlikePost(postId, userId);
+    await unlikePost(postId);
     queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
     setLocalLikeCount((curr) => curr! - 1);
   }

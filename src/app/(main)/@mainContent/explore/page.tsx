@@ -9,9 +9,9 @@ export default function ExplorePage({
 }) {
   console.log("SEARCH PARAMS", searchParams);
   return (
-    <>
+    <div>
       <SearchBar />
       <SearchFeed itemsPerPage={5} searchParams={searchParams} />
-    </>
+    </div>
   );
 }

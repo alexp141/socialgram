@@ -15,8 +15,21 @@ export default async function ExploreFilterPage({
     <div>
       <p>EXTRAS EXPLORE ROUTE</p>
       <ExtrasContainer title="Who To Follow">
-        children
         <RecommendedUsers users={recommendedUsers} />
+      </ExtrasContainer>
+      <ExtrasContainer title="Filters">
+        <form action="">
+          <fieldset>
+            <div>
+              <input type="radio" name="timeSort" id="newest" />
+              <label htmlFor="newest">Newest</label>
+            </div>
+            <div>
+              <input type="radio" name="timeSort" id="oldest" />
+              <label htmlFor="oldest">Oldest</label>
+            </div>
+          </fieldset>
+        </form>
       </ExtrasContainer>
     </div>
   );
