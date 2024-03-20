@@ -23,7 +23,12 @@ export default function SearchFeed({
     status,
     error,
   } = useInfiniteQuery({
-    queryKey: ["search"],
+    queryKey: [
+      "search",
+      searchParams.search,
+      searchParams.searchFor,
+      searchParams.timeSort,
+    ],
     queryFn: ({ pageParam }) =>
       getSearchResultsPage(pageParam, itemsPerPage, searchParams),
     initialPageParam: 1,

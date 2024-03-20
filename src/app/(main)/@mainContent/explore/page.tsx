@@ -8,7 +8,6 @@ export default function ExplorePage({
 }: {
   searchParams: SearchParams;
 }) {
-  console.log("SEARCH PARAMS", searchParams);
   return (
     <div>
       <Suspense fallback={<p>loading feed...</p>}>

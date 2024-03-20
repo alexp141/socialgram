@@ -456,11 +456,12 @@ export async function getSearchResultsPage(
 ) {
   let searchQuery = searchParams.search;
   let orderType = searchParams.orderType;
-  let usersOnly = searchParams.usersOnly;
+  let searchFor = searchParams.searchFor;
   if (!searchQuery) searchQuery = "";
   if (!orderType) orderType = "desc";
-  if (!usersOnly) usersOnly = "false";
+  if (!searchFor) searchFor = "false";
 
+  console.log("SEARCH PARAMS", searchParams);
   const supabase = createClient();
 
   const start = currentPage * itemsPerPage - itemsPerPage;
@@ -470,7 +471,7 @@ export async function getSearchResultsPage(
 
   let query;
 
-  if (usersOnly === "true") {
+  if (searchFor === "users") {
     query = supabase
       .from("users")
       .select("*")
