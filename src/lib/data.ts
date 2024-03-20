@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { FollowersRow, PostRow } from "./types/type-collection";
+import { FollowersRow, PostRow, UsersRow } from "./types/type-collection";
 import { SearchParams } from "./types";
 
 export async function getUser() {
@@ -456,8 +456,10 @@ export async function getSearchResultsPage(
 ) {
   let searchQuery = searchParams.search;
   let orderType = searchParams.orderType;
+  let usersOnly = searchParams.usersOnly;
   if (!searchQuery) searchQuery = "";
   if (!orderType) orderType = "desc";
+  if (!usersOnly) usersOnly = "false";
 
   const supabase = createClient();
 
@@ -465,21 +467,44 @@ export async function getSearchResultsPage(
   const end = start + itemsPerPage - 1;
 
   if (!currUserId) currUserId = (await getUser()).id;
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .textSearch("content", searchQuery, {
-      config: "english",
-      type: "plain",
-    })
-    .order("created_at", { ascending: orderType === "asc" ? true : false })
-    .range(start, end);
 
-  if (error) {
-    throw new Error(error.message);
+  let query;
+
+  if (usersOnly === "true") {
+    query = supabase
+      .from("users")
+      .select("*")
+      .ilike("username", `%${searchQuery}%`)
+      .limit(15);
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const users: UsersRow[] = data;
+
+    return users;
+  } else {
+    query = supabase
+      .from("posts")
+      .select("*")
+      .textSearch("content", searchQuery, {
+        config: "english",
+        type: "plain",
+      })
+      .order("created_at", { ascending: orderType === "asc" ? true : false })
+      .range(start, end);
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const posts: PostRow[] = data;
+
+    return posts;
   }
-
-  const posts: PostRow[] = data;
-
-  return posts;
 }

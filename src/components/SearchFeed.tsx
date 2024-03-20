@@ -4,6 +4,8 @@ import { getSearchResultsPage } from "@/lib/data";
 import { SearchParams } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
+import { isTypePostRow } from "@/lib/helper";
+import UserCard from "./UserCard";
 
 //a more specialized version of the generic feed component
 export default function SearchFeed({
@@ -46,7 +48,11 @@ export default function SearchFeed({
       {data.pages.map((group, i) => (
         <div key={i}>
           {group.map((item) => {
-            return <Post key={item.id} post={item} />;
+            if (isTypePostRow(item)) {
+              return <Post key={item.id} post={item} />;
+            } else {
+              return <UserCard info={item} key={item.user_id} />;
+            }
           })}
         </div>
       ))}
