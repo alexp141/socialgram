@@ -2,7 +2,7 @@ import Feed from "@/components/Feed";
 import { getUserId } from "@/lib/actions";
 import { getNextFollowingPage } from "@/lib/data";
 
-export default async function page({
+export default async function Page({
   params,
 }: {
   params: { username: string };

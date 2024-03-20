@@ -18,9 +18,12 @@ export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
 
   return (
     <div>
-      {listToShow.map(({ username, bio, avatar_url, user_id, id }) => {
+      {listToShow.map(({ username, bio, avatar_url, user_id }) => {
         return (
-          <UserCard key={id} info={{ username, bio, avatar_url, user_id }} />
+          <UserCard
+            key={user_id}
+            info={{ username, bio, avatar_url, user_id }}
+          />
         );
       })}
 

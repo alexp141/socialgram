@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { PostRow } from "./types/type-collection";
+import { FollowersRow, PostRow } from "./types/type-collection";
 import { SearchParams } from "./types";
 
 export async function getUser() {
@@ -315,6 +315,64 @@ export async function getNextPostsPage(
 
   return posts;
 }
+//gets posts only from followers
+export async function getNextPostsPageFollowingOnly(
+  currentPage: number,
+  itemsPerPage: number
+) {
+  const supabase = createClient();
+
+  const loggedInUserId = (await getUser()).id;
+  //get list of followers
+  const { data: followersRes, error: followersResError } = await supabase
+    .from("followers")
+    .select("following")
+    .eq("follower", loggedInUserId);
+
+  if (followersResError) {
+    throw new Error(followersResError.message);
+  }
+  const followers: string[] = followersRes.map((res) => res.following);
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .is("reply_to_id", null)
+    .order("created_at", { ascending: false })
+    .in("user_id", followers)
+    .range(start, end);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const posts: PostRow[] = data;
+
+  return posts;
+}
+
+// export async function getFollowers(userId?: string) {
+//   const supabase = createClient();
+
+//   if (!userId) {
+//     userId = (await getUser()).id;
+//   }
+
+//   const { data, error } = await supabase
+//     .from("followers")
+//     .select("following")
+//     .eq("follower", userId);
+
+//   if (error) {
+//     throw new Error(error.message);
+//   }
+//   const followersRes: string[] = data.map((res) => res.following);
+
+//   return followersRes;
+// }
 
 export async function getAvatar(userid: string) {
   const supabase = createClient();

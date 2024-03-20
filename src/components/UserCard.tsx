@@ -1,5 +1,3 @@
-"use client";
-
 import { UserCardType } from "@/lib/types/type-collection";
 import Image from "next/image";
 import FollowButton from "./FollowButton";

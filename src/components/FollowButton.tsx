@@ -35,6 +35,10 @@ export default function FollowButton({
     queryClient.invalidateQueries({
       queryKey: ["following-status", userToFollow],
     });
+    queryClient.invalidateQueries({
+      queryKey: ["following-feed", userToFollow],
+    });
+
     toast.success("user successfully followed");
   }
 
