@@ -455,10 +455,10 @@ export async function getSearchResultsPage(
   currUserId?: string
 ) {
   let searchQuery = searchParams.search;
-  let orderType = searchParams.orderType;
+  let timeSort = searchParams.timeSort;
   let searchFor = searchParams.searchFor;
   if (!searchQuery) searchQuery = "";
-  if (!orderType) orderType = "desc";
+  if (!timeSort) timeSort = "newest";
   if (!searchFor) searchFor = "false";
 
   console.log("SEARCH PARAMS", searchParams);
@@ -476,6 +476,7 @@ export async function getSearchResultsPage(
       .from("users")
       .select("*")
       .ilike("username", `%${searchQuery}%`)
+      .order("created_at", { ascending: timeSort === "newest" ? false : true })
       .limit(15);
 
     const { data, error } = await query;
@@ -495,7 +496,7 @@ export async function getSearchResultsPage(
         config: "english",
         type: "plain",
       })
-      .order("created_at", { ascending: orderType === "asc" ? true : false })
+      .order("created_at", { ascending: timeSort === "newest" ? false : true })
       .range(start, end);
 
     const { data, error } = await query;
