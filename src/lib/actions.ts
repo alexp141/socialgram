@@ -647,7 +647,7 @@ export async function updateProfile(
 
   //update banner picture
   try {
-    const pfPath = await uploadProfileBanner(banner as File, userId);
+    const pbPath = await uploadProfileBanner(banner as File, userId);
   } catch (error) {
     if (error instanceof Error) return { data: null, error: error.message };
   }

@@ -110,8 +110,8 @@ export default async function Profile({
       )}
 
       <div className="px-6">
-        <div className="">@{profileData.data?.username}</div>
-        <div className="my-6">bio: {bio}</div>
+        <div className="mb-4 text-xl">@{profileData.data?.username}</div>
+        {bio && <p className="my-6">{bio}</p>}
         <div className="flex gap-4">
           {location && (
             <div className="flex gap-1 items-center">
@@ -146,9 +146,6 @@ export default async function Profile({
             </div>
           </Link>
         </div>
-        {/* <div>
-          <FollowButton userToFollow={userId} />
-        </div> */}
       </div>
       <nav className="flex justify-evenly mt-4 items-stretch text-lg">
         <Link href={`/${username}`} className="p-4">

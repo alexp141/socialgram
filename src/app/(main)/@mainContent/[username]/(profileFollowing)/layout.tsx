@@ -8,9 +8,9 @@ export default async function ProfileFollowingLayout({
   params: { username: string };
 }) {
   return (
-    <>
+    <div>
       <FollowingHeader username={params.username} />
       {children}
-    </>
+    </div>
   );
 }
