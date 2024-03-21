@@ -121,7 +121,6 @@ export default function ImageCropper({
               exteriorInputRef.current.files = dataTransfer.files;
 
               console.log("input value", inputRef.current);
-              updateImage(canvasRef.current!.toDataURL());
             } else {
               throw new Error("Filelist does not exist for input");
             }
@@ -137,7 +136,66 @@ export default function ImageCropper({
   }
 
   return (
-    <>
+    <div>
+      {error && <p className="text-red-500">{error}</p>}
+      {imageSource && (
+        <div className="flex gap-8">
+          <div className="flex flex-col items-center gap-4">
+            <ReactCrop
+              crop={crop}
+              circularCrop={circularCrop}
+              onChange={(pc) => setCrop(pc)}
+              keepSelection
+              aspect={cropAspectRatio > 0 ? cropAspectRatio : undefined}
+              minWidth={cropMinimumWidth}
+              onComplete={(c) => {
+                console.log("on complete");
+                setCompletedCrop(c);
+              }}
+            >
+              <img
+                ref={imgRef}
+                className="w-64 h-auto"
+                src={imageSource}
+                alt="image that will be cropped"
+                onLoad={onImageLoad}
+              />
+            </ReactCrop>
+            <button
+              type="button"
+              onClick={() => {
+                cropImage();
+                setUserHasCropped(true);
+              }}
+              className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+            >
+              Crop
+            </button>
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            <canvas
+              className={`w-64 h-auto border ${
+                circularCrop ? "rounded-full" : ""
+              } ${userHasCropped ? "block" : "hidden"}`}
+              ref={canvasRef}
+            />
+
+            {userHasCropped && (
+              <button
+                type="button"
+                onClick={() => {
+                  //update preview image to the cropped version
+                  updateImage(canvasRef.current!.toDataURL());
+                  setIsCropperOpen(false);
+                }}
+                className="border border-sky-100 rounded-full bg-green-800 px-4 py-2"
+              >
+                Accept
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <input
         ref={inputRef}
         name={inputName}
@@ -146,51 +204,6 @@ export default function ImageCropper({
         accept="image/*"
         onChange={handleFileSelect}
       />
-      {error && <p className="text-red-500">{error}</p>}
-      {imageSource && (
-        <>
-          <ReactCrop
-            crop={crop}
-            circularCrop={circularCrop}
-            onChange={(pc) => setCrop(pc)}
-            keepSelection
-            aspect={cropAspectRatio > 0 ? cropAspectRatio : undefined}
-            minWidth={cropMinimumWidth}
-            onComplete={(c) => {
-              console.log("on complete");
-              setCompletedCrop(c);
-            }}
-          >
-            <img
-              ref={imgRef}
-              className="w-64 h-auto"
-              src={imageSource}
-              alt="image that will be cropped"
-              onLoad={onImageLoad}
-            />
-          </ReactCrop>
-          <button
-            type="button"
-            onClick={() => {
-              cropImage();
-              setUserHasCropped(true);
-            }}
-          >
-            crop image
-          </button>
-          {userHasCropped && (
-            <button type="button" onClick={() => setIsCropperOpen(false)}>
-              accept
-            </button>
-          )}
-          <canvas
-            className={`w-64 h-auto border ${
-              circularCrop ? "rounded-full" : ""
-            } ${userHasCropped ? "block" : "hidden"}`}
-            ref={canvasRef}
-          />
-        </>
-      )}
-    </>
+    </div>
   );
 }

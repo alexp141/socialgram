@@ -57,8 +57,17 @@ export default function CreatePost() {
               className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
               onClick={() => setIsImageCropperOpen(true)}
             >
-              Upload Image
+              {!image ? "Upload Image" : "Replace Image"}
             </button>
+            {image && (
+              <button
+                type="button"
+                className="border border-sky-100 rounded-full bg-red-800 px-4 py-2"
+                onClick={() => setImage("")}
+              >
+                Clear Image
+              </button>
+            )}
             <button className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2">
               Post
             </button>
@@ -70,7 +79,7 @@ export default function CreatePost() {
             title="Edit Post Image"
           >
             <ImageCropper
-              cropAspectRatio={0}
+              cropAspectRatio={1}
               cropMinimumWidth={100}
               fileName="post-image"
               inputName="postImage"
@@ -81,7 +90,6 @@ export default function CreatePost() {
               isPostImage
             />
           </Modal>
-          {/* {image && <Image src={image} width={200} height={200} alt="image" />} */}
         </form>
       </Modal>
     </div>
