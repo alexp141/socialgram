@@ -287,25 +287,33 @@ export async function unlikePost(postId: number) {
   }
 }
 
-export async function favoritePost(postId: number, userId: string) {
+export async function favoritePost(postId: number, loggedInUserId?: string) {
   const supabase = createClient();
+
+  if (!loggedInUserId) {
+    loggedInUserId = (await getUser()).id;
+  }
 
   const { error } = await supabase
     .from("favorites")
-    .insert<FavoritesInsert>({ post_id: postId, user_id: userId });
+    .insert<FavoritesInsert>({ post_id: postId, user_id: loggedInUserId });
 
   if (error) {
     throw new Error(error.message);
   }
 }
 
-export async function unfavoritePost(postId: number, userId: string) {
+export async function unfavoritePost(postId: number, loggedInUserId?: string) {
   const supabase = createClient();
+
+  if (!loggedInUserId) {
+    loggedInUserId = (await getUser()).id;
+  }
 
   const { error } = await supabase
     .from("favorites")
     .delete()
-    .eq("user_id", userId)
+    .eq("user_id", loggedInUserId)
     .eq("post_id", postId);
 
   if (error) {

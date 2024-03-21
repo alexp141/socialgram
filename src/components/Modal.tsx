@@ -21,11 +21,18 @@ export default function Modal({
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       {/* centers the dialogue */}
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 overflow-y-scroll">
-        <Dialog.Panel className="bg-red-600 px-4 py-4">
-          <Dialog.Title className="text-center">{title}</Dialog.Title>
+        <Dialog.Panel className="bg-gray-950 border-2 rounded-lg px-8 py-4 relative">
+          <Dialog.Title className="text-center text-2xl mb-4">
+            {title}
+          </Dialog.Title>
           <Dialog.Description>{description}</Dialog.Description>
           {children}
-          <button onClick={() => setIsOpen(false)}>Cancel</button>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="rounded-full px-2 py-2 mt-4 absolute top-0 right-4 text-red-700"
+          >
+            Cancel
+          </button>
         </Dialog.Panel>
       </div>
     </Dialog>

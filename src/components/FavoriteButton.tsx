@@ -27,13 +27,13 @@ export default function FavoriteButton({
   }, [favoritesCount]);
 
   async function handleFavorite() {
-    await favoritePost(postId, userId);
+    await favoritePost(postId);
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
     setLocalFavoriteCount((curr) => curr! + 1);
   }
 
   async function handleUnfavorite() {
-    await unfavoritePost(postId, userId);
+    await unfavoritePost(postId);
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
     setLocalFavoriteCount((curr) => curr! - 1);
   }

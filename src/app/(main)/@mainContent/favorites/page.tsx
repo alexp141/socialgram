@@ -3,7 +3,7 @@ import { getUser } from "@/lib/actions";
 import { getUserFavoritesUsingId } from "@/lib/data";
 
 export default async function FavoritesPage() {
-  const userId = await (await getUser()).id;
+  const userId = (await getUser()).id;
   return (
     <div>
       <p>Your Favorites</p>

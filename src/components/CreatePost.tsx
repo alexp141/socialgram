@@ -42,20 +42,28 @@ export default function CreatePost() {
         Create Post
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Create New Post">
-        <form action={handleSubmit}>
+        <form action={handleSubmit} className=" bg-gray-950">
           <textarea
             name="content"
-            placeholder="what's on your mind?"
-            className="w-full"
+            placeholder="What's on your mind?"
+            className="min-w-[32rem] min-h-32 bg-gray-950 outline-blue-800 p-2 my-4"
           />
+          {image && <Image src={image} width={200} height={200} alt="image" />}
           <input type="file" name="postImage" hidden ref={postInputRef} />
-          <button
-            type="button"
-            className="border rounded-sm bg-orange-700"
-            onClick={() => setIsImageCropperOpen(true)}
-          >
-            Upload Image
-          </button>
+
+          <div className="flex justify-between mt-4">
+            <button
+              type="button"
+              className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+              onClick={() => setIsImageCropperOpen(true)}
+            >
+              Upload Image
+            </button>
+            <button className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2">
+              Post
+            </button>
+          </div>
+
           <Modal
             isOpen={isImageCropperOpen}
             setIsOpen={setIsImageCropperOpen}
@@ -73,8 +81,7 @@ export default function CreatePost() {
               isPostImage
             />
           </Modal>
-          <button>Post</button>
-          {image && <Image src={image} width={200} height={200} alt="image" />}
+          {/* {image && <Image src={image} width={200} height={200} alt="image" />} */}
         </form>
       </Modal>
     </div>
