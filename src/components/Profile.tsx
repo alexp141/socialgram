@@ -79,7 +79,7 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="border-2 border-sky-400 rounded-full"
+              className="outline outline-blue-400 rounded-full"
             />
           ) : (
             <Image
@@ -88,7 +88,7 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="border-2 border-sky-400 rounded-full"
+              className="outline outline-blue-400 rounded-full"
             />
           )}
         </div>
@@ -101,7 +101,7 @@ export default async function Profile({
           initialBanner={bannerImageSource}
         />
       ) : (
-        <div className="flex justify-end my-1">
+        <div className="flex justify-end items-center p-2">
           <FollowButton
             userToFollow={profileUserId}
             currUserId={loggedInUserId}
@@ -113,7 +113,7 @@ export default async function Profile({
         <div className="mb-4 text-xl text-blue-500">
           @{profileData.data?.username}
         </div>
-        {bio && <p className="my-6">{bio}</p>}
+        {bio && <p className="my-6 dark:text-sky-100">{bio}</p>}
         <div className="flex gap-4">
           {location && (
             <div className="flex gap-1 items-center">
@@ -150,13 +150,13 @@ export default async function Profile({
         </div>
       </div>
       <nav className="flex justify-evenly mt-4 items-stretch text-lg text-blue-500">
-        <Link href={`/${username}`} className="p-4">
+        <Link href={`/${username}`} className="p-4 hover:underline">
           Posts
         </Link>
-        <Link href={`/${username}/favorites`} className="p-4">
+        <Link href={`/${username}/favorites`} className="p-4 hover:underline">
           Favorites
         </Link>
-        <Link href={`/${username}/likes`} className="p-4">
+        <Link href={`/${username}/likes`} className="p-4 hover:underline">
           Likes
         </Link>
       </nav>

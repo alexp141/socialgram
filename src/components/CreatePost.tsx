@@ -7,8 +7,15 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import ImageCropper from "./ImageCropper";
+import { FaRegComment } from "react-icons/fa6";
 
-export default function CreatePost() {
+export default function CreatePost({
+  replyToId,
+  displayAsCommentButton,
+}: {
+  replyToId?: number;
+  displayAsCommentButton?: boolean;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
   const [image, setImage] = useState<string>("");
@@ -18,7 +25,7 @@ export default function CreatePost() {
   const queryClient = useQueryClient();
 
   async function handleSubmit(formData: FormData) {
-    const res = await createPost(formData);
+    const res = await createPost(formData, replyToId);
     if (res.error) {
       toast.error(res.error);
       return;
@@ -33,15 +40,36 @@ export default function CreatePost() {
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => {
-          setIsOpen(true);
-        }}
+      {displayAsCommentButton ? (
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          <FaRegComment />
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+          className={
+            replyToId
+              ? "px-4 py-2 bg-blue-400 duration-150 hover:bg-blue-900 text-lg border-2 border-sky-1000 rounded-full"
+              : ""
+          }
+        >
+          {replyToId ? "Reply" : "Create Post"}
+        </button>
+      )}
+
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title={replyToId ? "Create Reply" : "Create New Post"}
       >
-        Create Post
-      </button>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Create New Post">
         <form action={handleSubmit} className=" bg-gray-950">
           <textarea
             name="content"

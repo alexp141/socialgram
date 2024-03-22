@@ -6,8 +6,12 @@ export default function FollowingHeader({ username }: { username: string }) {
       <div>
         <p className="text-center">profile name</p>
         <nav className="flex justify-evenly">
-          <Link href={`/${username}/followers`}>Followers</Link>
-          <Link href={`/${username}/following`}>Following</Link>
+          <Link href={`/${username}/followers`} className="hover:underline">
+            Followers
+          </Link>
+          <Link href={`/${username}/following`} className="hover:underline">
+            Following
+          </Link>
         </nav>
       </div>
     </>

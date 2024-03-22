@@ -54,5 +54,9 @@ export default async function Sidebar() {
 }
 
 function SideBarLink({ children }: { children: React.ReactNode }) {
-  return <div className="flex gap-2 items-center">{children}</div>;
+  return (
+    <div className="flex gap-2 items-center hover:text-blue-500">
+      {children}
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-import CommentCreator from "@/components/CommentCreator";
 import DetailedPost from "@/components/DetailedPost";
 import Feed from "@/components/Feed";
 import { getPost } from "@/lib/actions";
@@ -15,10 +14,8 @@ export default async function PostPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="">
-      <p>post page</p>
-      {parentPost && <DetailedPost post={parentPost} />}
-      <DetailedPost post={post} />
-      <CommentCreator post={post} />
+      <h2 className="text-center text-xl p-2">Thread</h2>
+      <DetailedPost post={post} parentPost={parentPost} />
       <Feed
         queryKey={["comments", post.id]}
         queryFunction={getNextCommentsPage}

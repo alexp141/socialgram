@@ -40,7 +40,7 @@ export default function Post({ post }: { post: PostRow }) {
       </div>
       <div className="ml-1">
         <Link href={`/${post.username}`}>
-          <span>{`@${post.username}`}</span>
+          <span className="hover:text-blue-500">{`@${post.username}`}</span>
         </Link>
         <Link href={`/posts/${hashedPostId}`}>
           <div className="my-1">{post.content}</div>

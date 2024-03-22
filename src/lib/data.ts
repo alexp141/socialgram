@@ -19,6 +19,30 @@ export async function getUser() {
   return data.user;
 }
 
+//gets user record from public.users instead of directly from auth
+export async function getLoggedInUserPublic() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (!data.user) {
+    throw new Error("UNABLE TO FETCH USER DATA");
+  }
+
+  const { data: user, error: userError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("user_id", data.user.id)
+    .single();
+
+  const userRecord: UsersRow = user;
+
+  return userRecord;
+}
+
 export async function getPostLikes(postId: number) {
   const supabase = createClient();
 
@@ -389,8 +413,8 @@ export async function getAvatar(userid: string) {
 
   return data.avatar_url as string | null;
 }
-
-export async function getNextFollowingPage(
+//GET LIST OF USERS WHO FOLLOW USERID
+export async function getNextFollowersPage(
   currentPage: number,
   itemsPerPage: number,
   userId: string
@@ -407,6 +431,33 @@ export async function getNextFollowingPage(
     .range(start, end);
 
   console.log("followers page ", data);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  let users = data.map((res) => res.follower).flat();
+
+  return users;
+}
+//GET LIST OF USERS WHO USERID FOLLOWS
+export async function getNextFollowingPage(
+  currentPage: number,
+  itemsPerPage: number,
+  userId: string
+) {
+  const supabase = createClient();
+
+  const start = currentPage * itemsPerPage - itemsPerPage;
+  const end = start + itemsPerPage - 1;
+
+  const { data, error } = await supabase
+    .from("followers")
+    .select("follower(username, user_id, bio, avatar_url)")
+    .eq("follower", userId)
+    .range(start, end);
+
+  console.log("following page ", data);
 
   if (error) {
     throw new Error(error.message);

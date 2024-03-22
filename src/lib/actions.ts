@@ -157,11 +157,11 @@ export async function createPost(
 
   const content = formData.get("content") as FormDataEntryValue;
 
-  if (!content) {
-    return { error: "failed to get content from form", message: null };
-  }
+  const image = formData.get("postImage") as File;
 
-  const image = formData.get("postImage");
+  if (!content && image.size === 0) {
+    return { error: "cannot create post with no content", message: null };
+  }
 
   //CREATE POST
   const { data, error } = await supabase
@@ -347,92 +347,6 @@ const commentSchema = z.object({
     )
     .optional(),
 });
-
-export async function postComment(postId: number, formData: FormData) {
-  const validation = commentSchema.safeParse({
-    comment: formData.get("comment"),
-    post_image: formData.get("post_image"),
-  });
-
-  if (!validation.success) {
-    return { error: validation.error.message, message: "" };
-  }
-
-  const supabase = createClient();
-  const userId = (await getUser()).id;
-
-  const { data, error } = await supabase
-    .from("comments")
-    .insert<CommentsInsert>({
-      post_id: postId,
-      user_id: userId,
-      comment: validation.data.comment,
-    })
-    .select("*");
-
-  if (error) {
-    return { message: "", error: error.message };
-  }
-  const commentData: CommentsRow = data[0];
-
-  const res = await uploadCommentImage(
-    validation.data.post_image,
-    postId,
-    commentData.id,
-    commentData.user_id
-  );
-
-  return { message: "success", error: null };
-}
-
-export async function uploadCommentImage(
-  file: File,
-  postId: number,
-  commentId: number,
-  commenterUserId: string
-) {
-  const supabase = createClient();
-
-  if (!file.name || !file.size) {
-    return;
-  }
-
-  const fileExtension = file.name.split(".")[1];
-
-  // Upload file using standard upload
-  const { data, error } = await supabase.storage
-    .from("comment_images")
-    .upload(
-      `${commenterUserId}/comments/${postId}/comments/${String(
-        commentId
-      )}/comment-image.${fileExtension}`,
-      file,
-      {
-        contentType: "image/*",
-      }
-    );
-
-  if (error) {
-    // Handle error
-    throw new Error(error.message);
-  }
-
-  if (!data) {
-    throw new Error("image data is null");
-  }
-
-  //UPDATE IMAGE URL IN COMMENTS TABLE
-  const { error: updateError } = await supabase
-    .from("comments")
-    .update<CommentsUpdate>({ image_path: data.path })
-    .eq("id", commentId);
-
-  if (updateError) {
-    throw new Error(updateError.message);
-  }
-
-  return data.path;
-}
 
 export async function getPost(postId: number) {
   const supabase = createClient();

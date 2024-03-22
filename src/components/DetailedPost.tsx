@@ -3,14 +3,30 @@ import Image from "next/image";
 import CommentButton from "./CommentButton";
 import LikeButton from "./LikeButton";
 import FavoriteButton from "./FavoriteButton";
-import { convertDate, getAvatarImage, getPostImage } from "@/lib/helper";
+import {
+  convertDate,
+  getAvatarImage,
+  getPostImage,
+  hashids,
+} from "@/lib/helper";
 import { getAvatar } from "@/lib/actions";
 import Link from "next/link";
+import CreatePost from "./CreatePost";
 
-export default async function DetailedPost({ post }: { post: PostRow }) {
+export default async function DetailedPost({
+  post,
+  parentPost,
+}: {
+  post: PostRow;
+  parentPost?: PostRow;
+}) {
   const avatarURL = await getAvatar(post.user_id);
   const avatarImg = getAvatarImage(avatarURL);
+  let parentPostHashedId;
 
+  if (parentPost) {
+    parentPostHashedId = hashids.encode(parentPost.id);
+  }
   let postImageURL;
   if (post.image_path) {
     postImageURL = getPostImage(post.image_path);
@@ -20,7 +36,7 @@ export default async function DetailedPost({ post }: { post: PostRow }) {
   let date = convertDate(new Date(post.created_at).toString());
 
   return (
-    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2">
+    <div className="grid grid-cols-[auto_1fr] border-t border-slate-500 py-2">
       <div className="px-2">
         <Link href={`/${post.username}`}>
           <Image
@@ -34,7 +50,16 @@ export default async function DetailedPost({ post }: { post: PostRow }) {
         </Link>
       </div>
       <div className="">
-        <div>@{post.username}</div>
+        <div className="flex justify-between">
+          @{post.username}{" "}
+          {parentPost && (
+            <span className="text-center text-blue-500 opacity-70 pr-2 hover:underline">
+              <Link href={`/posts/${parentPostHashedId}`}>
+                Replying to {parentPost.username}'s post
+              </Link>
+            </span>
+          )}
+        </div>
         <div className="my-1">{post.content}</div>
         <div>
           {postImageURL && (
@@ -55,6 +80,7 @@ export default async function DetailedPost({ post }: { post: PostRow }) {
           <CommentButton postId={post.id} userId={post.user_id} />
           <LikeButton postId={post.id} userId={post.user_id} />
           <FavoriteButton postId={post.id} userId={post.user_id} />
+          <CreatePost replyToId={post.id} />
         </div>
       </div>
     </div>

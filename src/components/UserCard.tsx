@@ -19,22 +19,26 @@ export default function UserCard({
     <div className="flex gap-1 items-center mt-2">
       <div className=" flex-shrink-0 self-start">
         {avatar ? (
-          <Image
-            className="border rounded-full"
-            src={avatar}
-            width={50}
-            height={50}
-            alt="avatar"
-          />
+          <Link href={`/${info.username}`}>
+            <Image
+              className="border rounded-full"
+              src={avatar}
+              width={50}
+              height={50}
+              alt="avatar"
+            />
+          </Link>
         ) : (
-          <Image
-            src="/empty-avatar.png"
-            alt="default avatar pic"
-            width={50}
-            height={50}
-            placeholder="empty"
-            className="border border-sky-400 rounded-full"
-          />
+          <Link href={`/${info.username}`}>
+            <Image
+              src="/empty-avatar.png"
+              alt="default avatar pic"
+              width={50}
+              height={50}
+              placeholder="empty"
+              className="border border-sky-400 rounded-full"
+            />
+          </Link>
         )}
       </div>
       <div className="flex flex-col flex-1">

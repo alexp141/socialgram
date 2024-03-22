@@ -83,7 +83,7 @@ export default function Feed({
           })}
         </div>
       ))}
-      <div>
+      <div className="text-center text-amber-500 mt-6">
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
