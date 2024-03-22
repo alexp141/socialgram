@@ -20,8 +20,11 @@ export default function SearchBar() {
   return (
     <>
       <form action={updateSearchParams}>
+        <div className="flex justify-center items-center text-lg">
+          <label htmlFor="search">Explore</label>
+        </div>
         <input
-          className="w-full border-1 border-sky-300 p-2 rounded-full text-xl"
+          className="w-full border-1 border-sky-300 p-2 rounded-full text-xl my-4"
           type="text"
           name="search"
           id="search"

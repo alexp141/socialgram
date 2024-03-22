@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} box-border`}>
+      <body className={`${inter.className} box-border bg-gray-950`}>
         <Providers>
           <ReactQueryProvider>
             {children}

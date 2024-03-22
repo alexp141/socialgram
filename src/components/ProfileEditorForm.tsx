@@ -60,71 +60,85 @@ export default function ProfileEditorForm({
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Edit Profile">
         <form action={handleAction}>
+          <div className="flex justify-center items-center gap-8">
+            <div className="flex flex-col gap-2">
+              <Image
+                src={avatar}
+                width={200}
+                height={200}
+                alt="test"
+                className="border-2 dark:border-blue-800 rounded-full"
+              />
+
+              <input
+                type="file"
+                name="profileImage"
+                hidden
+                ref={avatarInputRef}
+              />
+              <Modal
+                isOpen={isAvatarCropperOpen}
+                setIsOpen={setIsAvatarCropperOpen}
+                title="Edit Avatar"
+              >
+                <ImageCropper
+                  cropAspectRatio={1}
+                  cropMinimumWidth={100}
+                  fileName="profile-pic"
+                  inputName="profileImage"
+                  setIsCropperOpen={setIsAvatarCropperOpen}
+                  updateImage={setAvatar}
+                  exteriorInputRef={avatarInputRef}
+                  circularCrop={true}
+                />
+              </Modal>
+
+              <button
+                type="button"
+                className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+                onClick={() => setIsAvatarCropperOpen(true)}
+              >
+                Change Avatar
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Image
+                src={banner}
+                width={400}
+                height={150}
+                alt="test"
+                onError={onBannerLoadError}
+                className="rounded-md"
+              />
+              <button
+                type="button"
+                className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+                onClick={() => setIsBannerCropperOpen(true)}
+              >
+                Change Banner
+              </button>
+              <Modal
+                isOpen={isBannerCropperOpen}
+                setIsOpen={setIsBannerCropperOpen}
+                title="Edit Banner"
+              >
+                <ImageCropper
+                  cropAspectRatio={16 / 9}
+                  cropMinimumWidth={200}
+                  fileName="banner"
+                  inputName="banner"
+                  setIsCropperOpen={setIsBannerCropperOpen}
+                  updateImage={setBanner}
+                  exteriorInputRef={bannerInputRef}
+                  circularCrop={false}
+                />
+              </Modal>
+            </div>
+          </div>
+
           <div>
-            <div className="flex justify-between"></div>
             <div className="flex flex-col">
-              <div className="my-12">
-                <Image src={avatar} width={200} height={200} alt="test" />
-                <Image
-                  src={banner}
-                  width={400}
-                  height={150}
-                  alt="test"
-                  onError={onBannerLoadError}
-                />
-                <button
-                  type="button"
-                  className="border rounded-sm bg-orange-700"
-                  onClick={() => setIsAvatarCropperOpen(true)}
-                >
-                  Change Avatar
-                </button>
-                <input
-                  type="file"
-                  name="profileImage"
-                  hidden
-                  ref={avatarInputRef}
-                />
-                <Modal
-                  isOpen={isAvatarCropperOpen}
-                  setIsOpen={setIsAvatarCropperOpen}
-                  title="Edit Avatar"
-                >
-                  <ImageCropper
-                    cropAspectRatio={1}
-                    cropMinimumWidth={100}
-                    fileName="profile-pic"
-                    inputName="profileImage"
-                    setIsCropperOpen={setIsAvatarCropperOpen}
-                    updateImage={setAvatar}
-                    exteriorInputRef={avatarInputRef}
-                    circularCrop={true}
-                  />
-                </Modal>
-                <button
-                  type="button"
-                  className="border rounded-sm bg-orange-700"
-                  onClick={() => setIsBannerCropperOpen(true)}
-                >
-                  Change Banner
-                </button>
-                <Modal
-                  isOpen={isBannerCropperOpen}
-                  setIsOpen={setIsBannerCropperOpen}
-                  title="Edit Banner"
-                >
-                  <ImageCropper
-                    cropAspectRatio={16 / 9}
-                    cropMinimumWidth={200}
-                    fileName="banner"
-                    inputName="banner"
-                    setIsCropperOpen={setIsBannerCropperOpen}
-                    updateImage={setBanner}
-                    exteriorInputRef={bannerInputRef}
-                    circularCrop={false}
-                  />
-                </Modal>
-              </div>
               <input type="file" name="banner" hidden ref={bannerInputRef} />
               <label htmlFor="firstName">First Name</label>
               <input type="text" name="firstName" />
@@ -145,7 +159,11 @@ export default function ProfileEditorForm({
               <input type="date" name="birthday" />
             </div>
           </div>
-          <button>Submit</button>
+          <div className="flex justify-center">
+            <button className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2 mt-6 text-xl">
+              Submit
+            </button>
+          </div>
         </form>
       </Modal>
     </div>

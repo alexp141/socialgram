@@ -25,7 +25,7 @@ export default function Post({ post }: { post: PostRow }) {
   }, [post.id]);
 
   return (
-    <div className="grid grid-cols-[auto_1fr] border-t border-red-500 py-2 px-2">
+    <div className="grid grid-cols-[auto_1fr] border-t border-slate-500 py-2 px-2">
       <div className="">
         <Link href={`/${post.username}`}>
           <Image

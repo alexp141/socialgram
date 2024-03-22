@@ -54,7 +54,7 @@ export default function LikeButton({
         </div>
       )}
       {hasLikedPost && (
-        <div className="flex gap-1">
+        <div className="flex gap-1 text-red-600">
           <button type="button" onClick={handleDislike}>
             <FaHeart />
           </button>

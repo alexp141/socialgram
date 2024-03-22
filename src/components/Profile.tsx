@@ -4,7 +4,7 @@ import {
   getProfileData,
 } from "@/lib/actions";
 import ProfileEditorForm from "./ProfileEditorForm";
-import { convertDate } from "@/lib/helper";
+import { convertDate, getAvatarImage } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLocationDot, FaCalendarDays, FaCakeCandles } from "react-icons/fa6";
@@ -43,9 +43,9 @@ export default async function Profile({
   }
   const { created_at, bio, birthday, location, avatar_url, banner_url } =
     profileData.data;
-  const profilePicImagePath = avatar_url;
   const bannerImagePath = banner_url;
-  const profileImageSource = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${profilePicImagePath}`;
+  const profileImageSource = getAvatarImage(avatar_url);
+
   const bannerImageSource = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${bannerImagePath}`;
 
   const joinDate = convertDate(new Date(created_at).toString())
@@ -97,7 +97,7 @@ export default async function Profile({
         <ProfileEditorForm
           userId={profileUserId}
           username={username}
-          initialAvatar={profileImageSource}
+          initialAvatar={profileImageSource || "/empty-avatar.png"}
           initialBanner={bannerImageSource}
         />
       ) : (
@@ -109,8 +109,10 @@ export default async function Profile({
         </div>
       )}
 
-      <div className="px-6">
-        <div className="mb-4 text-xl">@{profileData.data?.username}</div>
+      <div className="px-6 text-slate-400">
+        <div className="mb-4 text-xl text-blue-500">
+          @{profileData.data?.username}
+        </div>
         {bio && <p className="my-6">{bio}</p>}
         <div className="flex gap-4">
           {location && (
@@ -136,18 +138,18 @@ export default async function Profile({
           <Link href={`/${username}/following`}>
             <div className="flex gap-1">
               <p>Following</p>
-              <p>{followingCount}</p>
+              <p className="text-sky-50">{followingCount}</p>
             </div>
           </Link>
           <Link href={`/${username}/followers`}>
             <div className="flex gap-1">
               <p>Followers</p>
-              <p>{followerCount}</p>
+              <p className="text-sky-50">{followerCount}</p>
             </div>
           </Link>
         </div>
       </div>
-      <nav className="flex justify-evenly mt-4 items-stretch text-lg">
+      <nav className="flex justify-evenly mt-4 items-stretch text-lg text-blue-500">
         <Link href={`/${username}`} className="p-4">
           Posts
         </Link>
