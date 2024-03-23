@@ -19,7 +19,7 @@ export default function UserCard({
     <div className="flex gap-1 items-center mt-2">
       <div className=" flex-shrink-0 self-start">
         {avatar ? (
-          <Link href={`/${info.username}`}>
+          <Link href={`/user/${info.username}`}>
             <Image
               className="border rounded-full"
               src={avatar}
@@ -29,7 +29,7 @@ export default function UserCard({
             />
           </Link>
         ) : (
-          <Link href={`/${info.username}`}>
+          <Link href={`/user/${info.username}`}>
             <Image
               src="/empty-avatar.png"
               alt="default avatar pic"
@@ -42,7 +42,7 @@ export default function UserCard({
         )}
       </div>
       <div className="flex flex-col flex-1">
-        <Link href={`/${info.username}`}>@{info.username}</Link>
+        <Link href={`/user/${info.username}`}>@{info.username}</Link>
         <div className=" overflow-y-hidden overflow-ellipsis">
           <p className="my-1 line-clamp-2">
             {info.bio ? info.bio : "<no bio set>"}

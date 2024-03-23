@@ -633,6 +633,7 @@ export async function getUserId(username: string | undefined | null) {
     .eq("username", username)
     .single();
 
+  console.log("getUserId username", username);
   if (error) {
     throw new Error(error.message);
   }

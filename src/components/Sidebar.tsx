@@ -38,7 +38,7 @@ export default async function Sidebar() {
         </SideBarLink>
         <SideBarLink>
           <FaUser />
-          <Link href={`/${username}`}>Profile</Link>
+          <Link href={`/user/${username}`}>Profile</Link>
         </SideBarLink>
         <SideBarLink>
           <FaMagnifyingGlass />

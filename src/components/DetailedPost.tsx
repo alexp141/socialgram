@@ -38,7 +38,7 @@ export default async function DetailedPost({
   return (
     <div className="grid grid-cols-[auto_1fr] border-t border-slate-500 py-2">
       <div className="px-2">
-        <Link href={`/${post.username}`}>
+        <Link href={`/user/${post.username}`}>
           <Image
             className="border rounded-full"
             src={avatarURL ? avatarImg : "/empty-avatar.png"}

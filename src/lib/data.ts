@@ -115,8 +115,15 @@ export async function getPostFavorites(postId: number) {
   return count;
 }
 
-export async function getFavoritedStatus(postId: number, userId: string) {
+export async function getFavoritedStatus(postId: number) {
   const supabase = createClient();
+
+  const { data, error: userError } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
+  const userId = data.user.id;
 
   const { count, error } = await supabase
     .from("favorites")

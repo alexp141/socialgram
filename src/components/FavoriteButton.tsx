@@ -16,7 +16,7 @@ export default function FavoriteButton({
   userId: string;
 }) {
   const { favoritesCount, fetchStatus, error } = useFavoritesCount(postId);
-  const { hasFavoritedPost } = useFavoritedStatus(postId, userId);
+  const { hasFavoritedPost } = useFavoritedStatus(postId);
   const [localFavoriteCount, setLocalFavoriteCount] = useState<
     number | undefined
   >(0);
@@ -41,10 +41,6 @@ export default function FavoriteButton({
   if (error) {
     return <p>error</p>;
   }
-
-  //   if (fetchStatus === "fetching") {
-  //     return "...";
-  //   }
 
   return (
     <>

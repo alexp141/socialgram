@@ -135,13 +135,13 @@ export default async function Profile({
           )}
         </div>
         <div className="flex gap-2 py-2">
-          <Link href={`/${username}/following`}>
+          <Link href={`/user/${username}/following`}>
             <div className="flex gap-1">
               <p>Following</p>
               <p className="text-sky-50">{followingCount}</p>
             </div>
           </Link>
-          <Link href={`/${username}/followers`}>
+          <Link href={`/user/${username}/followers`}>
             <div className="flex gap-1">
               <p>Followers</p>
               <p className="text-sky-50">{followerCount}</p>
@@ -150,13 +150,16 @@ export default async function Profile({
         </div>
       </div>
       <nav className="flex justify-evenly mt-4 items-stretch text-lg text-blue-500">
-        <Link href={`/${username}`} className="p-4 hover:underline">
+        <Link href={`/user/${username}`} className="p-4 hover:underline">
           Posts
         </Link>
-        <Link href={`/${username}/favorites`} className="p-4 hover:underline">
+        <Link
+          href={`/user/${username}/favorites`}
+          className="p-4 hover:underline"
+        >
           Favorites
         </Link>
-        <Link href={`/${username}/likes`} className="p-4 hover:underline">
+        <Link href={`/user/${username}/likes`} className="p-4 hover:underline">
           Likes
         </Link>
       </nav>

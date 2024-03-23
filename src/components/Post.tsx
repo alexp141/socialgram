@@ -27,7 +27,7 @@ export default function Post({ post }: { post: PostRow }) {
   return (
     <div className="grid grid-cols-[auto_1fr] border-t border-slate-500 py-2 px-2">
       <div className="">
-        <Link href={`/${post.username}`}>
+        <Link href={`/user/${post.username}`}>
           <Image
             className="border rounded-full"
             src={avatar_url ? avatar : "/empty-avatar.png"}
@@ -39,7 +39,7 @@ export default function Post({ post }: { post: PostRow }) {
         </Link>
       </div>
       <div className="ml-1">
-        <Link href={`/${post.username}`}>
+        <Link href={`/user/${post.username}`}>
           <span className="hover:text-blue-500">{`@${post.username}`}</span>
         </Link>
         <Link href={`/posts/${hashedPostId}`}>
