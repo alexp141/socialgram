@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function FollowingHeader({ username }: { username: string }) {
   const pathName = usePathname();
   const leaf = pathName.split("/").slice(-1).join();
-  console.log("pathname", leaf);
+
   return (
     <>
       <div>
