@@ -6,7 +6,7 @@ export default async function FavoritesPage() {
   const userId = (await getUser()).id;
   return (
     <div>
-      <p>Your Favorites</p>
+      <h2 className="text-center p-4 text-xl text-blue-600">Your Favorites</h2>
       <Feed
         queryKey={["favorites", userId]}
         queryFunction={getUserFavoritesUsingId}

@@ -20,17 +20,19 @@ export default function SearchBar() {
   return (
     <>
       <form action={updateSearchParams}>
-        <div className="flex justify-center items-center text-lg">
-          <label htmlFor="search">Explore</label>
+        <h2 className="text-center p-2 text-xl text-blue-600 border-b border-slate-500">
+          Explore
+        </h2>
+        <div className="p-2">
+          <input
+            className="w-full border-1 border-sky-300 p-2 rounded-full text-xl my-4"
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Search"
+            defaultValue={searchParams.get("search") ?? ""}
+          />
         </div>
-        <input
-          className="w-full border-1 border-sky-300 p-2 rounded-full text-xl my-4"
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Search"
-          defaultValue={searchParams.get("search") ?? ""}
-        />
       </form>
     </>
   );
