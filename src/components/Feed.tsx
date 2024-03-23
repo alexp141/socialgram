@@ -10,6 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import UserCard from "./UserCard";
 import { isTypePostRow } from "@/lib/helper";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function Feed({
   queryKey,
@@ -57,9 +58,7 @@ export default function Feed({
   });
 
   return status === "pending" ? (
-    <div className="lg:min-w-[35rem] flex justify-center items-center mt-2">
-      <span className="spinner-loader"></span>
-    </div>
+    <LoadingSpinner />
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
