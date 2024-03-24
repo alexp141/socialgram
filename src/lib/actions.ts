@@ -717,6 +717,7 @@ export async function getAvatar(userId: string) {
 }
 
 export async function getFollowableUsers(loggedInUserId?: string) {
+  console.log("getFollowableUsers() executed");
   const supabase = createClient();
 
   if (!loggedInUserId) {

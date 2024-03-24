@@ -55,7 +55,15 @@ export async function middleware(request: NextRequest) {
   );
 
   console.log("in middleware");
-  await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (
+    (!data.user && !request.nextUrl.pathname.endsWith("/login")) ||
+    !request.nextUrl.pathname.endsWith("/signup")
+  ) {
+    // Redirect to login page if not authenticated
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   return response;
 }
