@@ -18,33 +18,33 @@ export default async function Sidebar() {
   const username = (await getUser()).user_metadata.username;
 
   return (
-    <div className="hidden sm:block sm:px-10 sm:py-6 max-w-72 justify-self-end">
-      <div className="flex flex-col gap-5 text-2xl font-semibold sticky top-4">
-        <SideBarLink>
+    <div className="hidden sm:block sm:px-10 sm:py-6 max-w-72 justify-self-end text-sky-500 font-extrabold">
+      <div className="flex flex-col gap-2 text-2xl sticky top-4">
+        <SideBarLink path="/home">
           <FaHouse />
-          <Link href="/home">Home</Link>
+          <span>Home</span>
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path="/favorites">
           <FaBookBookmark />
-          <Link href="/favorites">Favorites</Link>
+          <span>Favorites</span>
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path="/about">
           <FaCircleQuestion />
-          <Link href="/about">About</Link>
+          <span>About</span>
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path="">
           <FaPenToSquare />
           <CreatePost />
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path={`/user/${username}`}>
           <FaUser />
-          <Link href={`/user/${username}`}>Profile</Link>
+          <span>Profile</span>
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path={`/explore`}>
           <FaMagnifyingGlass />
-          <Link href={`/explore`}>Explore</Link>
+          <span>Explore</span>
         </SideBarLink>
-        <SideBarLink>
+        <SideBarLink path="">
           <FaTurnDown />
           <SignOutButton />
         </SideBarLink>
@@ -53,10 +53,18 @@ export default async function Sidebar() {
   );
 }
 
-function SideBarLink({ children }: { children: React.ReactNode }) {
+function SideBarLink({
+  children,
+  path,
+}: {
+  children: React.ReactNode;
+  path: string;
+}) {
   return (
-    <div className="flex gap-2 items-center hover:text-blue-500">
-      {children}
-    </div>
+    <Link href={path}>
+      <div className="flex gap-2 items-center hover:text-sky-500 rounded-full hover:bg-sky-900 p-2">
+        {children}
+      </div>
+    </Link>
   );
 }

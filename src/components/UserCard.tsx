@@ -14,14 +14,14 @@ export default function UserCard({
   isAlreadyFollowing?: boolean;
 }) {
   const avatar = getAvatarImage(info.avatar_url);
-
+  const avatarStyle = "border-2 rounded-full border-sky-400";
   return (
     <div className="flex gap-1 items-center mt-2">
       <div className=" flex-shrink-0 self-start">
         {avatar ? (
           <Link href={`/user/${info.username}`}>
             <Image
-              className="border rounded-full"
+              className={avatarStyle}
               src={avatar}
               width={50}
               height={50}
@@ -36,13 +36,18 @@ export default function UserCard({
               width={50}
               height={50}
               placeholder="empty"
-              className="border border-sky-400 rounded-full"
+              className={avatarStyle}
             />
           </Link>
         )}
       </div>
       <div className="flex flex-col flex-1">
-        <Link href={`/user/${info.username}`}>@{info.username}</Link>
+        <Link
+          className="text-sky-900 font-medium hover:text-sky-500"
+          href={`/user/${info.username}`}
+        >
+          @{info.username}
+        </Link>
         <div className=" overflow-y-hidden overflow-ellipsis">
           <p className="my-1 line-clamp-2">
             {info.bio ? info.bio : "<no bio set>"}

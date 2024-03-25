@@ -7,15 +7,14 @@ export default function HomeFeedPicker() {
   const searchParams = useSearchParams();
   const res = searchParams.get("feed");
   const isAtForYouRoute = !res || res === "forYou";
-  const linkStyle = `text-2xl`;
+  const linkStyle = `text-2xl font-semibold`;
+  const selectedLinkStyle = `text-sky-500 underline underline-offset-8`;
 
   return (
     <div className="flex text-center p-4 divide-x-2">
       <div className="justify-center items-center flex-1">
         <Link
-          className={`${linkStyle} ${
-            isAtForYouRoute ? "text-blue-700 underline" : ""
-          }`}
+          className={`${linkStyle} ${isAtForYouRoute ? selectedLinkStyle : ""}`}
           href={`/home?feed=forYou`}
         >
           For You
@@ -24,7 +23,7 @@ export default function HomeFeedPicker() {
       <div className="justify-center items-center flex-1">
         <Link
           className={`${linkStyle} ${
-            !isAtForYouRoute ? "text-blue-700 underline" : ""
+            !isAtForYouRoute ? selectedLinkStyle : ""
           }`}
           href={`/home?feed=following`}
         >

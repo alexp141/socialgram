@@ -20,7 +20,8 @@ export default function FollowButton({
     currUserId
   );
   const queryClient = useQueryClient();
-  const buttonStyle = "px-4 py-2 border rounded-full hover:bg-blue-700";
+  const buttonStyle =
+    "px-4 py-2 border-2 rounded-full border-sky-50 hover:bg-sky-700 bg-sky-400 text-sky-50";
 
   async function handleFollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
