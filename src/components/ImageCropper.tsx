@@ -167,7 +167,7 @@ export default function ImageCropper({
                 cropImage();
                 setUserHasCropped(true);
               }}
-              className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+              className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50"
             >
               Crop
             </button>
@@ -188,7 +188,7 @@ export default function ImageCropper({
                   updateImage(canvasRef.current!.toDataURL());
                   setIsCropperOpen(false);
                 }}
-                className="border border-sky-100 rounded-full bg-green-800 px-4 py-2"
+                className="border-2 border-sky-100 rounded-full bg-emerald-500 px-4 py-2 text-sky-50"
               >
                 Accept
               </button>

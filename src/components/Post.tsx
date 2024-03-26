@@ -27,7 +27,7 @@ export default function Post({ post }: { post: PostRow }) {
   return (
     <div className=" hover:bg-zinc-300 hover:bg-opacity-20 dark:bg-transparent">
       <Link href={`/posts/${hashedPostId}`}>
-        <div className="grid grid-cols-[auto_1fr] border-t border-zinc-900 py-2 px-2">
+        <div className="grid grid-cols-[auto_1fr] border-t border-zinc-900 dark:border-t-zinc-100 py-2 px-2">
           <div className="">
             <Link href={`/user/${post.username}`}>
               <Image

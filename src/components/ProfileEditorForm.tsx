@@ -54,7 +54,7 @@ export default function ProfileEditorForm({
       <button
         type="button"
         onClick={handleClick}
-        className="px-4 py-2 border rounded-full"
+        className="px-4 py-2 border-2 rounded-full border-sky-50 hover:bg-sky-700 bg-sky-400 text-sky-50"
       >
         Edit Profile
       </button>
@@ -67,7 +67,7 @@ export default function ProfileEditorForm({
                 width={200}
                 height={200}
                 alt="test"
-                className="border-2 dark:border-blue-800 rounded-full"
+                className="border-2 border-sky-500 rounded-full"
               />
 
               <input
@@ -95,11 +95,20 @@ export default function ProfileEditorForm({
 
               <button
                 type="button"
-                className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+                className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50"
                 onClick={() => setIsAvatarCropperOpen(true)}
               >
                 Change Avatar
               </button>
+              {avatar !== initialAvatar && (
+                <button
+                  type="button"
+                  className="border-2 border-sky-100 rounded-full bg-amber-500 px-4 py-2 text-sky-50"
+                  onClick={() => setAvatar(initialAvatar)}
+                >
+                  Clear Selection
+                </button>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -109,15 +118,24 @@ export default function ProfileEditorForm({
                 height={150}
                 alt="test"
                 onError={onBannerLoadError}
-                className="rounded-md"
+                className="border-2 border-sky-500 rounded-md"
               />
               <button
                 type="button"
-                className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+                className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50"
                 onClick={() => setIsBannerCropperOpen(true)}
               >
                 Change Banner
               </button>
+              {banner !== initialBanner && (
+                <button
+                  type="button"
+                  className="border-2 border-sky-100 rounded-full bg-amber-500 px-4 py-2 text-sky-50"
+                  onClick={() => setBanner(initialBanner)}
+                >
+                  Clear Selection
+                </button>
+              )}
               <Modal
                 isOpen={isBannerCropperOpen}
                 setIsOpen={setIsBannerCropperOpen}
@@ -137,9 +155,9 @@ export default function ProfileEditorForm({
             </div>
           </div>
 
-          <div>
-            <div className="flex flex-col">
-              <input type="file" name="banner" hidden ref={bannerInputRef} />
+          <div className="mt-6">
+            <input type="file" name="banner" hidden ref={bannerInputRef} />
+            <div className="flex flex-col [&>input]:p-2 [&>input]:text-lg [&>input]:rounded-md [&>input]:border [&>input]:border-sky-500 [&>input:focus]:outline-sky-500 [&>input:focus]:outline [&>label]:text-lg [&>label]:mt-2">
               <label htmlFor="firstName">First Name</label>
               <input type="text" name="firstName" />
 
@@ -160,7 +178,7 @@ export default function ProfileEditorForm({
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2 mt-6 text-xl">
+            <button className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50 mt-4">
               Submit
             </button>
           </div>

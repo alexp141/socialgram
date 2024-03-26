@@ -9,6 +9,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaLocationDot, FaCalendarDays, FaCakeCandles } from "react-icons/fa6";
 import FollowButton from "./FollowButton";
+import ProfileNavbar from "./ProfileNavbar";
+
+const avatarStyle = "border-2 rounded-full border-sky-400";
 
 export default async function Profile({
   username,
@@ -79,7 +82,7 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="outline outline-blue-400 rounded-full"
+              className={avatarStyle}
             />
           ) : (
             <Image
@@ -88,7 +91,7 @@ export default async function Profile({
               width={100}
               height={100}
               placeholder="empty"
-              className="outline outline-blue-400 rounded-full"
+              className={avatarStyle}
             />
           )}
         </div>
@@ -113,7 +116,7 @@ export default async function Profile({
         <div className="mb-4 text-xl text-blue-500">
           @{profileData.data?.username}
         </div>
-        {bio && <p className="my-6 dark:text-sky-100">{bio}</p>}
+        {bio && <p className="my-6 text-zinc-950 dark:text-sky-100">{bio}</p>}
         <div className="flex gap-4">
           {location && (
             <div className="flex gap-1 items-center">
@@ -138,31 +141,22 @@ export default async function Profile({
           <Link href={`/user/${username}/following`}>
             <div className="flex gap-1">
               <p>Following</p>
-              <p className="text-sky-50">{followingCount}</p>
+              <p className="text-sky-950 font-medium dark:text-sky-50">
+                {followingCount}
+              </p>
             </div>
           </Link>
           <Link href={`/user/${username}/followers`}>
             <div className="flex gap-1">
               <p>Followers</p>
-              <p className="text-sky-50">{followerCount}</p>
+              <p className="text-sky-950 font-medium dark:text-sky-50">
+                {followerCount}
+              </p>
             </div>
           </Link>
         </div>
       </div>
-      <nav className="flex justify-evenly mt-4 items-stretch text-lg text-blue-500">
-        <Link href={`/user/${username}`} className="p-4 hover:underline">
-          Posts
-        </Link>
-        <Link
-          href={`/user/${username}/favorites`}
-          className="p-4 hover:underline"
-        >
-          Favorites
-        </Link>
-        <Link href={`/user/${username}/likes`} className="p-4 hover:underline">
-          Likes
-        </Link>
-      </nav>
+      <ProfileNavbar username={username} />
     </div>
   );
 }

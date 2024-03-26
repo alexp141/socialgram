@@ -32,7 +32,7 @@ export default function ThemeButton() {
         {theme === "light" ? (
           <FaMoon className="w-full h-auto" />
         ) : (
-          <FaSun className="w-full h-auto" />
+          <FaSun className="w-full h-auto fill-sky-500" />
         )}
       </button>
     </>
