@@ -57,7 +57,7 @@ export default function CreatePost({
           }}
           className={
             replyToId
-              ? "px-4 py-2 bg-blue-400 duration-150 hover:bg-blue-900 text-lg border-2 border-sky-1000 rounded-full"
+              ? "px-4 py-2 border-2 rounded-full border-sky-50 hover:bg-sky-700 bg-sky-400 text-sky-50"
               : ""
           }
         >

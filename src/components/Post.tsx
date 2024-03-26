@@ -12,7 +12,6 @@ import useAvatar from "@/hooks/useAvatar";
 export default function Post({ post }: { post: PostRow }) {
   const { avatar_url, error, fetchStatus } = useAvatar(post.user_id);
   const avatar = getAvatarImage(avatar_url);
-
   let postImageURL;
 
   if (post.image_path) {
@@ -42,7 +41,7 @@ export default function Post({ post }: { post: PostRow }) {
           </div>
           <div className="ml-1">
             <Link href={`/user/${post.username}`}>
-              <span className="hover:text-sky-500 text-lg text-sky-900 font-medium">{`@${post.username}`}</span>
+              <span className="hover:text-sky-500 text-lg text-sky-500 font-medium">{`@${post.username}`}</span>
             </Link>
             <Link href={`/posts/${hashedPostId}`}>
               <div className="my-1">{post.content}</div>

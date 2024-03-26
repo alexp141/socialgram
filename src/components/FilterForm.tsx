@@ -23,7 +23,7 @@ export default function FilterForm() {
     <form action={updateSearchParams} ref={formRef} className="divide-y">
       <fieldset>
         <h2>Sort By</h2>
-        <div>
+        <div className="flex gap-2">
           <input
             type="radio"
             name="timeSort"
@@ -37,7 +37,7 @@ export default function FilterForm() {
           />
           <label htmlFor="newest">Newest</label>
         </div>
-        <div>
+        <div className="flex gap-2">
           <input
             type="radio"
             name="timeSort"
@@ -53,8 +53,8 @@ export default function FilterForm() {
       </fieldset>
 
       <fieldset className="">
-        <h2>Search For:</h2>
-        <div>
+        <h2>Search For</h2>
+        <div className="flex gap-2">
           <input
             type="radio"
             name="searchFor"
@@ -68,7 +68,7 @@ export default function FilterForm() {
           />
           <label htmlFor="postsInput">Posts</label>
         </div>
-        <div>
+        <div className="flex gap-2">
           <input
             type="radio"
             name="searchFor"

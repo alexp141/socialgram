@@ -113,7 +113,7 @@ export default async function Profile({
       )}
 
       <div className="px-6 text-slate-400">
-        <div className="mb-4 text-xl text-blue-500">
+        <div className="mb-4 text-xl text-sky-700">
           @{profileData.data?.username}
         </div>
         {bio && <p className="my-6 text-zinc-950 dark:text-sky-100">{bio}</p>}

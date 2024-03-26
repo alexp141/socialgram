@@ -50,7 +50,11 @@ export default function UserCard({
         </Link>
         <div className=" overflow-y-hidden overflow-ellipsis">
           <p className="my-1 line-clamp-2">
-            {info.bio ? info.bio : "<no bio set>"}
+            {info.bio ? (
+              info.bio
+            ) : (
+              <span className=" opacity-50">{"<No Bio Set>"}</span>
+            )}
           </p>
         </div>
       </div>
