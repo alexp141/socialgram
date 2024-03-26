@@ -113,7 +113,7 @@ export default async function Profile({
       )}
 
       <div className="px-6 text-slate-400">
-        <div className="mb-4 text-xl text-sky-700">
+        <div className="mb-4 text-xl text-sky-400">
           @{profileData.data?.username}
         </div>
         {bio && <p className="my-6 text-zinc-950 dark:text-sky-100">{bio}</p>}
@@ -141,7 +141,7 @@ export default async function Profile({
           <Link href={`/user/${username}/following`}>
             <div className="flex gap-1">
               <p>Following</p>
-              <p className="text-sky-950 font-medium dark:text-sky-50">
+              <p className="text-sky-500 font-medium dark:text-sky-50">
                 {followingCount}
               </p>
             </div>
@@ -149,7 +149,7 @@ export default async function Profile({
           <Link href={`/user/${username}/followers`}>
             <div className="flex gap-1">
               <p>Followers</p>
-              <p className="text-sky-950 font-medium dark:text-sky-50">
+              <p className="text-sky-500 font-medium dark:text-sky-50">
                 {followerCount}
               </p>
             </div>

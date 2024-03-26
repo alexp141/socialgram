@@ -13,7 +13,7 @@ export default function ExplorePage({
     <div>
       <Suspense fallback={<LoadingSpinner />}>
         <SearchBar />
-        <SearchFeed itemsPerPage={5} searchParams={searchParams} />
+        <SearchFeed itemsPerPage={10} searchParams={searchParams} />
       </Suspense>
     </div>
   );

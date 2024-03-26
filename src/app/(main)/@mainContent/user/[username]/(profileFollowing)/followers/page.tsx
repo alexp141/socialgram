@@ -14,7 +14,7 @@ export default async function page({
       queryKey={["followers", params.username]}
       queryFunction={getNextFollowersPage}
       initialPageParam={1}
-      itemsPerPage={4}
+      itemsPerPage={10}
       userId={userId}
     />
   );

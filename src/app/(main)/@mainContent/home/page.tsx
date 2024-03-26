@@ -1,6 +1,6 @@
 import Feed from "@/components/Feed";
 import { getNextPostsPage, getNextPostsPageFollowingOnly } from "@/lib/data";
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 10;
 
 export default async function HomePage({
   searchParams,

@@ -11,7 +11,7 @@ export default function LikesPage({
       queryKey={["favorites", params.username]}
       queryFunction={getUserLikes}
       initialPageParam={1}
-      itemsPerPage={4}
+      itemsPerPage={10}
       username={params.username}
     />
   );

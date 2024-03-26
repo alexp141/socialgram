@@ -14,7 +14,7 @@ export default async function Page({
       queryKey={["following", params.username]}
       queryFunction={getNextFollowingPage}
       initialPageParam={1}
-      itemsPerPage={4}
+      itemsPerPage={10}
       userId={userId}
       isAlreadyFollowing
     />
