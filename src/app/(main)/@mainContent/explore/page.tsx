@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/LoadingSpinner";
 import SearchBar from "@/components/SearchBar";
 import SearchFeed from "@/components/SearchFeed";
 import { SearchParams } from "@/lib/types";
@@ -10,7 +11,7 @@ export default function ExplorePage({
 }) {
   return (
     <div>
-      <Suspense fallback={<p>loading feed...</p>}>
+      <Suspense fallback={<LoadingSpinner />}>
         <SearchBar />
         <SearchFeed itemsPerPage={5} searchParams={searchParams} />
       </Suspense>

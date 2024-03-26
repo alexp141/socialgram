@@ -6,6 +6,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import { isTypePostRow } from "@/lib/helper";
 import UserCard from "./UserCard";
+import LoadingSpinner from "./LoadingSpinner";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 //a more specialized version of the generic feed component
 export default function SearchFeed({
@@ -15,6 +18,8 @@ export default function SearchFeed({
   searchParams: SearchParams;
   itemsPerPage: number;
 }) {
+  const { ref, inView } = useInView();
+
   const {
     data,
     fetchNextPage,
@@ -42,35 +47,59 @@ export default function SearchFeed({
     refetchOnMount: "always",
   });
 
+  useEffect(() => {
+    console.log("IN VIEW", inView);
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
+
   return status === "pending" ? (
     <div className="lg:min-w-[35rem]">
-      <p className="text-center">Loading...</p>
+      <LoadingSpinner />
     </div>
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
     <div className="">
-      {data.pages.map((group, i) => (
-        <div key={i}>
-          {group.map((item) => {
+      {data.pages.map((group, groupNumber) => (
+        <div key={groupNumber}>
+          {group.map((item, itemNumber) => {
             if (isTypePostRow(item)) {
-              return <Post key={item.id} post={item} />;
+              //we know it is a post
+              if (itemNumber === group.length - 1)
+                return (
+                  <div ref={ref}>
+                    <Post key={item.id} post={item} />;
+                  </div>
+                );
+              else return <Post key={item.id} post={item} />;
             } else {
-              return <UserCard info={item} key={item.user_id} />;
+              if (itemNumber === group.length - 1) {
+                return (
+                  <div ref={ref}>
+                    <UserCard key={item.user_id} info={item} />
+                  </div>
+                );
+              } else {
+                return <UserCard key={item.user_id} info={item} />;
+              }
             }
           })}
         </div>
       ))}
-      <div>
+      <div className="text-center">
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
         >
-          {isFetchingNextPage
-            ? "Loading more..."
-            : hasNextPage
-            ? "Load More"
-            : "Nothing more to load"}
+          {isFetchingNextPage ? (
+            <LoadingSpinner />
+          ) : hasNextPage ? (
+            "Load More"
+          ) : (
+            "Nothing more to load"
+          )}
         </button>
       </div>
     </div>

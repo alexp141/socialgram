@@ -1,16 +1,13 @@
 "use client";
 
-import {
-  FavoritesRow,
-  PostRow,
-  UserCardType,
-  UsersRow,
-} from "@/lib/types/type-collection";
+import { PostRow, UserCardType } from "@/lib/types/type-collection";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import UserCard from "./UserCard";
 import { isTypePostRow } from "@/lib/helper";
 import LoadingSpinner from "./LoadingSpinner";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 export default function Feed({
   queryKey,
@@ -35,6 +32,8 @@ export default function Feed({
   username?: string;
   isAlreadyFollowing?: boolean;
 }) {
+  const { ref, inView } = useInView();
+
   const {
     data,
     fetchNextPage,
@@ -57,32 +56,58 @@ export default function Feed({
     refetchOnMount: "always",
   });
 
+  useEffect(() => {
+    console.log("IN VIEW", inView);
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
+
   return status === "pending" ? (
     <LoadingSpinner />
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
     <div className="">
-      {data.pages.map((group, i) => (
-        <div key={i}>
-          {group.map((item) => {
+      {data.pages.map((group, groupNumber) => (
+        <div key={groupNumber}>
+          {group.map((item, itemNumber) => {
             if (isTypePostRow(item)) {
               //we know it is a post
-              return <Post key={item.id} post={item} />;
+              if (itemNumber === group.length - 1)
+                return (
+                  <div ref={ref}>
+                    <Post key={item.id} post={item} />;
+                  </div>
+                );
+              else return <Post key={item.id} post={item} />;
             } else {
-              return (
-                <UserCard
-                  currUserId={userId}
-                  key={item.user_id}
-                  isAlreadyFollowing={isAlreadyFollowing}
-                  info={item}
-                />
-              );
+              if (itemNumber === group.length - 1) {
+                return (
+                  <div ref={ref}>
+                    <UserCard
+                      currUserId={userId}
+                      key={item.user_id}
+                      isAlreadyFollowing={isAlreadyFollowing}
+                      info={item}
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <UserCard
+                    currUserId={userId}
+                    key={item.user_id}
+                    isAlreadyFollowing={isAlreadyFollowing}
+                    info={item}
+                  />
+                );
+              }
             }
           })}
         </div>
       ))}
-      <div className="text-center text-amber-500 mt-6">
+      <div className="text-center text-sky-500 mt-6">
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}

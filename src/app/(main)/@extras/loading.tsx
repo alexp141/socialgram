@@ -1,6 +1,5 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default function RootLoader() {
-  //loading root content
+export default function ExtrasLoader() {
   return <LoadingSpinner />;
 }

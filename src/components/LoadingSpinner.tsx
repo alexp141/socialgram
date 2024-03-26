@@ -1,6 +1,6 @@
 export default function LoadingSpinner() {
   return (
-    <div className="flex justify-center items-center mt-2">
+    <div className="flex justify-center mt-4">
       <span className="spinner-loader"></span>
     </div>
   );

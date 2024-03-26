@@ -460,7 +460,7 @@ export async function getNextFollowingPage(
 
   const { data, error } = await supabase
     .from("followers")
-    .select("follower(username, user_id, bio, avatar_url)")
+    .select("following(username, user_id, bio, avatar_url)")
     .eq("follower", userId)
     .range(start, end);
 
@@ -470,7 +470,7 @@ export async function getNextFollowingPage(
     throw new Error(error.message);
   }
 
-  let users = data.map((res) => res.follower).flat();
+  let users = data.map((res) => res.following).flat();
 
   return users;
 }
@@ -515,7 +515,7 @@ export async function getSearchResultsPage(
   let searchQuery = searchParams.search;
   let timeSort = searchParams.timeSort;
   let searchFor = searchParams.searchFor;
-  if (!searchQuery) searchQuery = "";
+  if (!searchQuery) return [];
   if (!timeSort) timeSort = "newest";
   if (!searchFor) searchFor = "false";
 

@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Profile from "@/components/Profile";
 import { getUser, getUserId } from "@/lib/actions";
 import { Suspense } from "react";
@@ -18,7 +19,7 @@ export default async function ProfileTabsLayout({
 
   return (
     <div>
-      <Suspense fallback={<p>loading profile...</p>}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Profile
           username={params.username}
           profileUserId={profileUserId}

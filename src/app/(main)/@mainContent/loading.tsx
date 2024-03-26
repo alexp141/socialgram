@@ -1,3 +1,5 @@
-export default function Loading() {
-  return <p>loading main content...</p>;
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+export default function MainContentLoader() {
+  return <LoadingSpinner />;
 }

@@ -53,7 +53,7 @@ export default function FavoriteButton({
         </div>
       )}
       {hasFavoritedPost && (
-        <div className="flex gap-1 text-green-600">
+        <div className="flex gap-1 text-emerald-600">
           <button type="button" onClick={handleUnfavorite}>
             <FaBookmark />
           </button>

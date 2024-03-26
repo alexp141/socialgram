@@ -12,7 +12,7 @@ export default function FollowingHeader({ username }: { username: string }) {
       <div>
         <Link
           href={`/user/${username}`}
-          className="hover:underline flex justify-center"
+          className="hover:underline flex justify-center text-sky-500 hover:underline-offset-4"
         >
           @{username}
         </Link>
@@ -20,7 +20,9 @@ export default function FollowingHeader({ username }: { username: string }) {
           <Link
             href={`/user/${username}/followers`}
             className={`hover:underline ${
-              leaf === "followers" ? "text-blue-400 underline" : ""
+              leaf === "followers"
+                ? "text-sky-500 underline underline-offset-4"
+                : ""
             }`}
           >
             Followers
@@ -28,7 +30,9 @@ export default function FollowingHeader({ username }: { username: string }) {
           <Link
             href={`/user/${username}/following`}
             className={`hover:underline ${
-              leaf === "following" ? "text-blue-400 underline" : ""
+              leaf === "following"
+                ? "text-sky-500 underline underline-offset-4"
+                : ""
             }`}
           >
             Following
