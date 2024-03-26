@@ -20,12 +20,12 @@ export default function SearchBar() {
   return (
     <>
       <form action={updateSearchParams}>
-        <h2 className="text-center p-2 text-xl text-blue-600 border-b border-slate-500">
+        <h2 className="text-center p-2 text-xl text-sky-500 border-b border-gray-950">
           Explore
         </h2>
         <div className="p-2">
           <input
-            className="w-full border-1 border-sky-300 p-2 rounded-full text-xl my-4"
+            className="w-full border border-gray-950 p-2 rounded-full text-xl my-4 focus:outline-2 focus:outline-sky-500"
             type="text"
             name="search"
             id="search"

@@ -77,7 +77,7 @@ export default function Feed({
               if (itemNumber === group.length - 1)
                 return (
                   <div ref={ref}>
-                    <Post key={item.id} post={item} />;
+                    <Post key={item.id} post={item} />
                   </div>
                 );
               else return <Post key={item.id} post={item} />;

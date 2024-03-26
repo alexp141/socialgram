@@ -2,10 +2,15 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import { getUserPosts } from "@/lib/data";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 const POSTS_PER_PAGE = 4;
 
 export default function UserPosts({ userId }: { userId: string }) {
+  const { ref, inView } = useInView();
+
   const {
     data,
     fetchNextPage,
@@ -26,19 +31,31 @@ export default function UserPosts({ userId }: { userId: string }) {
     staleTime: Infinity,
   });
 
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
+
   return status === "pending" ? (
     <div className="lg:min-w-[35rem]">
-      <p className="text-center">Loading...</p>
+      <LoadingSpinner />
     </div>
   ) : status === "error" ? (
     <p>Error: {error.message}</p>
   ) : (
     <div className="">
-      {data.pages.map((group, i) => (
-        <div key={i}>
-          {group.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
+      {data.pages.map((group, groupNumber) => (
+        <div key={groupNumber}>
+          {group.map((post, postIndex) => {
+            if (postIndex === group.length - 1)
+              return (
+                <div ref={ref}>
+                  <Post key={post.id} post={post} />
+                </div>
+              );
+            else return <Post key={post.id} post={post} />;
+          })}
         </div>
       ))}
       <div>

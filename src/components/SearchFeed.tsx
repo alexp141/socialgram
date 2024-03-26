@@ -48,7 +48,6 @@ export default function SearchFeed({
   });
 
   useEffect(() => {
-    console.log("IN VIEW", inView);
     if (inView && hasNextPage) {
       fetchNextPage();
     }
@@ -70,7 +69,7 @@ export default function SearchFeed({
               if (itemNumber === group.length - 1)
                 return (
                   <div ref={ref}>
-                    <Post key={item.id} post={item} />;
+                    <Post key={item.id} post={item} />
                   </div>
                 );
               else return <Post key={item.id} post={item} />;
