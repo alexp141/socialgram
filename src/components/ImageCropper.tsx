@@ -19,7 +19,7 @@ import setCanvasPreview from "@/lib/setCanvasPreview";
 
 export default function ImageCropper({
   cropMinimumWidth,
-  cropAspectRatio,
+  cropAspectRatio = 1,
   fileName,
   inputName,
   setIsCropperOpen,
@@ -29,7 +29,7 @@ export default function ImageCropper({
   isPostImage = false,
 }: {
   cropMinimumWidth: number;
-  cropAspectRatio: number;
+  cropAspectRatio?: number;
   fileName: string;
   inputName: string;
   setIsCropperOpen: Dispatch<SetStateAction<boolean>>;
@@ -146,7 +146,7 @@ export default function ImageCropper({
               circularCrop={circularCrop}
               onChange={(pc) => setCrop(pc)}
               keepSelection
-              aspect={cropAspectRatio > 0 ? cropAspectRatio : undefined}
+              aspect={!isPostImage ? cropAspectRatio : undefined}
               minWidth={cropMinimumWidth}
               onComplete={(c) => {
                 console.log("on complete");

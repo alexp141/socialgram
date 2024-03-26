@@ -70,11 +70,11 @@ export default function CreatePost({
         setIsOpen={setIsOpen}
         title={replyToId ? "Create Reply" : "Create New Post"}
       >
-        <form action={handleSubmit} className=" bg-gray-950">
+        <form action={handleSubmit} className=" dark:bg-gray-950">
           <textarea
             name="content"
             placeholder="What's on your mind?"
-            className="min-w-[32rem] min-h-32 bg-gray-950 outline-blue-800 p-2 my-4"
+            className="min-w-[32rem] min-h-32 dark:bg-gray-950 outline-sky-500 p-2 my-4"
           />
           {image && <Image src={image} width={200} height={200} alt="image" />}
           <input type="file" name="postImage" hidden ref={postInputRef} />
@@ -82,7 +82,7 @@ export default function CreatePost({
           <div className="flex justify-between mt-4">
             <button
               type="button"
-              className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2"
+              className="border border-sky-100 rounded-full bg-sky-500 px-4 py-2"
               onClick={() => setIsImageCropperOpen(true)}
             >
               {!image ? "Upload Image" : "Replace Image"}
@@ -90,13 +90,13 @@ export default function CreatePost({
             {image && (
               <button
                 type="button"
-                className="border border-sky-100 rounded-full bg-red-800 px-4 py-2"
+                className="border border-sky-100 rounded-full bg-red-800 px-4 py-2 text-sky-50"
                 onClick={() => setImage("")}
               >
                 Clear Image
               </button>
             )}
-            <button className="border border-sky-100 rounded-full bg-blue-800 px-4 py-2">
+            <button className="border border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50">
               Post
             </button>
           </div>
