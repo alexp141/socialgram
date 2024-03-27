@@ -74,12 +74,12 @@ export default function CreatePost({
           <textarea
             name="content"
             placeholder="What's on your mind?"
-            className="min-w-[32rem] min-h-32 dark:bg-gray-950 outline-sky-500 p-2 my-4"
+            className="w-full sm:min-w-[32rem] min-h-32 dark:bg-gray-950 outline-sky-500 p-2 my-4"
           />
           {image && <Image src={image} width={200} height={200} alt="image" />}
           <input type="file" name="postImage" hidden ref={postInputRef} />
 
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-4 flex-col gap-2">
             <button
               type="button"
               className="border border-sky-100 rounded-full bg-sky-500 px-4 py-2"

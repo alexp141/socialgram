@@ -45,17 +45,15 @@ export default function Post({ post }: { post: PostRow }) {
             </Link>
             <Link href={`/posts/${hashedPostId}`}>
               <div className="my-1">{post.content}</div>
-              <div>
+              <div className="">
                 {postImageURL && (
                   <Image
-                    className="border rounded-md"
+                    className="border rounded-md w-auto max-h-[30rem] object-contain"
                     src={postImageURL}
                     alt="post image"
                     width={0}
                     height={0}
                     sizes="100vw"
-                    style={{ width: "auto", maxHeight: "30rem" }}
-                    placeholder="empty"
                   />
                 )}
               </div>

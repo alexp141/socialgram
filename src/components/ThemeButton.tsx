@@ -28,7 +28,10 @@ export default function ThemeButton() {
 
   return (
     <>
-      <button onClick={handleClick} className="absolute top-4 left-4 w-12 h-12">
+      <button
+        onClick={handleClick}
+        className="absolute top-4 left-4 w-12 h-12 hidden"
+      >
         {theme === "light" ? (
           <FaMoon className="w-full h-auto" />
         ) : (

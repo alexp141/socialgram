@@ -139,7 +139,7 @@ export default function ImageCropper({
     <div>
       {error && <p className="text-red-500">{error}</p>}
       {imageSource && (
-        <div className="flex gap-8">
+        <div className="flex gap-8 flex-col">
           <div className="flex flex-col items-center gap-4">
             <ReactCrop
               crop={crop}
@@ -172,9 +172,9 @@ export default function ImageCropper({
               Crop
             </button>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 ">
             <canvas
-              className={`w-64 h-auto border ${
+              className={`max-w-full h-auto border ${
                 circularCrop ? "rounded-full" : ""
               } ${userHasCropped ? "block" : "hidden"}`}
               ref={canvasRef}
