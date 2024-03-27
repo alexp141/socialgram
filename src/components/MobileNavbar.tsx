@@ -9,8 +9,12 @@ import {
   FaMagnifyingGlass,
 } from "react-icons/fa6";
 import CreatePost from "./CreatePost";
+import { getUser } from "@/lib/actions";
+import MobileSettings from "./MobileSettings";
 
-export default function MobileNavbar() {
+export default async function MobileNavbar() {
+  const username = (await getUser()).user_metadata.username;
+
   return (
     <div className="flex sticky bottom-0 bg-black/90 sm:hidden w-full justify-between p-4 px-4 items-baseline">
       <Link href={"/home"}>
@@ -25,11 +29,7 @@ export default function MobileNavbar() {
       <Link href={"/explore"}>
         <FaMagnifyingGlass />
       </Link>
-      <div>
-        <button>
-          <FaCircleQuestion />
-        </button>
-      </div>
+      <MobileSettings username={username} />
     </div>
   );
 }

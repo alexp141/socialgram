@@ -1,9 +1,14 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { FaMoon, FaSun } from "react-icons/fa6";
 
-export default function ThemeButton() {
+export default function ThemeButton({
+  isListButton = false,
+}: {
+  isListButton?: boolean;
+}) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -24,6 +29,20 @@ export default function ThemeButton() {
     } else {
       setTheme("light");
     }
+  }
+
+  if (isListButton) {
+    return (
+      <div>
+        <button
+          type="button"
+          className="text-sky-50 px-4 py-2 border border-sky-100 bg-sky-500 rounded-full "
+          onClick={handleClick}
+        >
+          Toggle Theme
+        </button>
+      </div>
+    );
   }
 
   return (
