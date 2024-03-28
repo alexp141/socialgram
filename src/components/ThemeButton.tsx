@@ -57,7 +57,7 @@ export default function ThemeButton({
         ) : (
           <FaSun className="fill-sky-500" />
         )}{" "}
-        Toggle Theme
+        <span className="hidden md:inline whitespace-nowrap">Toggle Theme</span>
       </button>
     </div>
   );

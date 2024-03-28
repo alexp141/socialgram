@@ -10,9 +10,11 @@ export default async function ExploreFilterPage() {
   return (
     <div>
       <div className="space-y-2 mt-2 hidden lg:block lg:sticky lg:top-4">
-        <ExtrasContainer title="Who To Follow">
-          <RecommendedUsers users={recommendedUsers} />
-        </ExtrasContainer>
+        {recommendedUsers.length > 0 && (
+          <ExtrasContainer title="Who To Follow">
+            <RecommendedUsers users={recommendedUsers} />
+          </ExtrasContainer>
+        )}
         <ExtrasContainer title="Filters">
           <FilterForm />
         </ExtrasContainer>
