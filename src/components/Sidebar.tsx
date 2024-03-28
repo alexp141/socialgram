@@ -11,6 +11,7 @@ import {
   FaTurnDown,
   FaMagnifyingGlass,
 } from "react-icons/fa6";
+import ThemeButton from "./ThemeButton";
 
 const sidebarTextStyle = "hidden md:inline ";
 
@@ -32,7 +33,7 @@ export default async function Sidebar() {
           <FaCircleQuestion />
           <span className={sidebarTextStyle}>About</span>
         </SideBarLink>
-        <SideBarLink path="">
+        <SideBarLink path="#">
           <CreatePost displayAsSidebarButton />
         </SideBarLink>
         <SideBarLink path={`/user/${username}`}>
@@ -43,7 +44,10 @@ export default async function Sidebar() {
           <FaMagnifyingGlass />
           <span className={sidebarTextStyle}>Explore</span>
         </SideBarLink>
-        <SideBarLink path="">
+        <SideBarLink path="#">
+          <ThemeButton />
+        </SideBarLink>
+        <SideBarLink path="#">
           <FaTurnDown />
           <SignOutButton style={sidebarTextStyle} />
         </SideBarLink>

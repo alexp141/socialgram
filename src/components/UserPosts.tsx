@@ -50,7 +50,7 @@ export default function UserPosts({ userId }: { userId: string }) {
           {group.map((post, postIndex) => {
             if (postIndex === group.length - 1)
               return (
-                <div ref={ref}>
+                <div ref={ref} key={post.id}>
                   <Post key={post.id} post={post} />
                 </div>
               );

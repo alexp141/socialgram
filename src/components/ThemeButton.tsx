@@ -46,17 +46,19 @@ export default function ThemeButton({
   }
 
   return (
-    <>
+    <div>
       <button
+        type="button"
+        className="flex gap-2 items-center"
         onClick={handleClick}
-        className="absolute top-4 left-4 w-12 h-12 hidden"
       >
         {theme === "light" ? (
-          <FaMoon className="w-full h-auto" />
+          <FaMoon className="" />
         ) : (
-          <FaSun className="w-full h-auto fill-sky-500" />
-        )}
+          <FaSun className="fill-sky-500" />
+        )}{" "}
+        Toggle Theme
       </button>
-    </>
+    </div>
   );
 }

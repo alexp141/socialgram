@@ -28,7 +28,6 @@ export default function RootLayout({
         <Providers>
           <ReactQueryProvider>
             {children}
-            <ThemeButton />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ReactQueryProvider>
         </Providers>
