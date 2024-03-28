@@ -16,12 +16,12 @@ export default function Modal({
   description,
 }: modalProps) {
   return (
-    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+    <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="">
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       {/* centers the dialogue */}
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <Dialog.Panel className="bg-zinc-100 dark:bg-gray-950 dark:outline border-2 rounded-lg px-8 py-4 relative w-[95vw] overflow-y-scroll">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 overflow-y-scroll">
+        <Dialog.Panel className="bg-zinc-100 dark:bg-gray-950 dark:outline border-2 rounded-lg px-8 py-12 max-h-[95vh] overflow-y-scroll  relative">
           <Dialog.Title className="text-center text-2xl mb-4">
             {title}
           </Dialog.Title>

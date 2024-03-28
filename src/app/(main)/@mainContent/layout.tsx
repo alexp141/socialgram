@@ -8,7 +8,7 @@ export default function MainContentLayout({
   return (
     //general layout for @mainContent
     <div
-      className={`w-[35rem] border-x border-zinc-900 border-b dark:border-zinc-100`}
+      className={`w-full sm:w-[35rem] border-x border-zinc-900 border-b dark:border-zinc-100`}
     >
       {children}
     </div>

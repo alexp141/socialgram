@@ -36,7 +36,7 @@ export default function ThemeButton({
       <div>
         <button
           type="button"
-          className="text-sky-50 px-4 py-2 border border-sky-100 bg-sky-500 rounded-full "
+          className="text-sky-50 px-4 py-2 border-2 border-sky-100 bg-sky-500 rounded-full "
           onClick={handleClick}
         >
           Toggle Theme
