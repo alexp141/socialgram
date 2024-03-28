@@ -55,7 +55,7 @@ export default async function DetailedPost({
           {parentPost && (
             <span className="text-center text-blue-500 opacity-70 pr-2 hover:underline">
               <Link href={`/posts/${parentPostHashedId}`}>
-                Replying to {parentPost.username}'s post
+                {`Replying to ${parentPost.username}'s post`}
               </Link>
             </span>
           )}

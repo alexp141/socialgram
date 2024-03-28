@@ -76,7 +76,7 @@ export default function SearchFeed({
             } else {
               if (itemNumber === group.length - 1) {
                 return (
-                  <div ref={ref}>
+                  <div ref={ref} key={item.user_id}>
                     <UserCard key={item.user_id} info={item} />
                   </div>
                 );
