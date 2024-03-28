@@ -29,10 +29,10 @@ export default async function Sidebar() {
           <FaBookBookmark />
           <span className={sidebarTextStyle}>Favorites</span>
         </SideBarLink>
-        <SideBarLink path="/about">
+        {/* <SideBarLink path="/about">
           <FaCircleQuestion />
           <span className={sidebarTextStyle}>About</span>
-        </SideBarLink>
+        </SideBarLink> */}
         <SideBarLink path="#">
           <CreatePost displayAsSidebarButton />
         </SideBarLink>
