@@ -13,7 +13,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="">
+    <div className="p-2">
       <h2 className="text-center text-xl p-2">Thread</h2>
       <DetailedPost post={post} parentPost={parentPost} />
       <Feed

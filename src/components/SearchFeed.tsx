@@ -97,7 +97,7 @@ export default function SearchFeed({
           ) : hasNextPage ? (
             "Load More"
           ) : (
-            "Nothing more to load"
+            <span className="text-sky-500">Nothing more to load</span>
           )}
         </button>
       </div>

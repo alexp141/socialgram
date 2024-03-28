@@ -35,7 +35,9 @@ export default function CreatePost({
 
     //invalidate the feed from /userid
     queryClient.invalidateQueries({ queryKey: ["user-posts"] });
-
+    if (replyToId) {
+      queryClient.invalidateQueries({ queryKey: ["comments", replyToId] });
+    }
     toast.success("Successfully Submitted Post");
     setIsOpen(false);
   }
