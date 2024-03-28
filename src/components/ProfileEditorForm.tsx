@@ -60,7 +60,7 @@ export default function ProfileEditorForm({
       </button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Edit Profile">
         <form action={handleAction}>
-          <div className="flex flex-col justify-center items-center gap-8">
+          <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
             <div className="flex flex-col gap-2">
               <Image
                 src={avatar}

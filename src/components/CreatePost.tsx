@@ -7,14 +7,16 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import ImageCropper from "./ImageCropper";
-import { FaRegComment } from "react-icons/fa6";
+import { FaPenToSquare, FaRegComment } from "react-icons/fa6";
 
 export default function CreatePost({
   replyToId,
   displayAsCommentButton,
+  displayAsSidebarButton,
 }: {
   replyToId?: number;
   displayAsCommentButton?: boolean;
+  displayAsSidebarButton?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
@@ -40,7 +42,7 @@ export default function CreatePost({
 
   return (
     <div>
-      {displayAsCommentButton ? (
+      {displayAsCommentButton && (
         <button
           type="button"
           onClick={() => {
@@ -49,7 +51,26 @@ export default function CreatePost({
         >
           <FaRegComment />
         </button>
-      ) : (
+      )}
+
+      {displayAsSidebarButton && (
+        <div className="flex justify-center items-center">
+          <button
+            type="button"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className="flex items-center gap-2"
+          >
+            <FaPenToSquare />
+            <span className="hidden md:inline whitespace-nowrap">
+              Create Post
+            </span>
+          </button>
+        </div>
+      )}
+
+      {!displayAsSidebarButton && !displayAsCommentButton && (
         <button
           type="button"
           onClick={() => {
@@ -61,7 +82,11 @@ export default function CreatePost({
               : ""
           }
         >
-          {replyToId ? "Reply" : "Create Post"}
+          {replyToId ? (
+            <span className="hidden md:inline">Reply</span>
+          ) : (
+            <span className="hidden md:inline">Create Post</span>
+          )}
         </button>
       )}
 
@@ -76,7 +101,15 @@ export default function CreatePost({
             placeholder="What's on your mind?"
             className="w-full sm:min-w-[32rem] min-h-32 dark:bg-gray-950 outline-sky-500 p-2 my-4"
           />
-          {image && <Image src={image} width={200} height={200} alt="image" />}
+          {image && (
+            <Image
+              src={image}
+              width={200}
+              height={200}
+              alt="image"
+              className="border-2 border-sky-50 rounded-lg"
+            />
+          )}
           <input type="file" name="postImage" hidden ref={postInputRef} />
 
           <div className="flex justify-between mt-4 flex-col gap-2">

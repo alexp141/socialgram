@@ -12,41 +12,40 @@ import {
   FaMagnifyingGlass,
 } from "react-icons/fa6";
 
-const linkStyle = "flex";
+const sidebarTextStyle = "hidden md:inline ";
 
 export default async function Sidebar() {
   const username = (await getUser()).user_metadata.username;
 
   return (
-    <div className="hidden sm:block sm:px-10 sm:py-6 max-w-72 justify-self-end text-sky-500 font-extrabold">
-      <div className="flex flex-col gap-2 text-2xl sticky top-4">
+    <div className="hidden sm:block sm:px-4 md:px-10 lg:px-4 sm:py-6 lg:max-w-72 text-sky-500 font-extrabold">
+      <div className="flex flex-col gap-4 text-xl sticky top-4">
         <SideBarLink path="/home">
           <FaHouse />
-          <span>Home</span>
+          <span className={sidebarTextStyle}>Home</span>
         </SideBarLink>
         <SideBarLink path="/favorites">
           <FaBookBookmark />
-          <span>Favorites</span>
+          <span className={sidebarTextStyle}>Favorites</span>
         </SideBarLink>
         <SideBarLink path="/about">
           <FaCircleQuestion />
-          <span>About</span>
+          <span className={sidebarTextStyle}>About</span>
         </SideBarLink>
         <SideBarLink path="">
-          <FaPenToSquare />
-          <CreatePost />
+          <CreatePost displayAsSidebarButton />
         </SideBarLink>
         <SideBarLink path={`/user/${username}`}>
           <FaUser />
-          <span>Profile</span>
+          <span className={sidebarTextStyle}>Profile</span>
         </SideBarLink>
         <SideBarLink path={`/explore`}>
           <FaMagnifyingGlass />
-          <span>Explore</span>
+          <span className={sidebarTextStyle}>Explore</span>
         </SideBarLink>
         <SideBarLink path="">
           <FaTurnDown />
-          <SignOutButton />
+          <SignOutButton style={sidebarTextStyle} />
         </SideBarLink>
       </div>
     </div>
@@ -62,7 +61,7 @@ function SideBarLink({
 }) {
   return (
     <Link href={path}>
-      <div className="flex gap-2 items-center hover:text-sky-500 rounded-full hover:bg-sky-900 p-2">
+      <div className="flex md:gap-2 items-center justify-center md:justify-start hover:text-sky-500 rounded-full hover:bg-sky-900 p-2">
         {children}
       </div>
     </Link>

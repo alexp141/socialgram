@@ -43,7 +43,7 @@ export default function UserCard({
       </div>
       <div className="flex flex-col flex-1">
         <Link
-          className="text-sky-500 font-medium hover:text-sky-500"
+          className="text-sky-500 font-medium hover:text-sky-500 overflow-x-hidden"
           href={`/user/${info.username}`}
         >
           @{info.username}

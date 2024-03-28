@@ -13,10 +13,8 @@ export default function SignOutButton({ style = "" }: { style?: string }) {
   }
 
   return (
-    <div>
-      <button type="button" onClick={handleClick} className={style}>
-        Sign Out
-      </button>
-    </div>
+    <button type="button" onClick={handleClick} className={style}>
+      Sign Out
+    </button>
   );
 }

@@ -84,7 +84,7 @@ export default function Feed({
             } else {
               if (itemNumber === group.length - 1) {
                 return (
-                  <div ref={ref}>
+                  <div ref={ref} key={item.user_id}>
                     <UserCard
                       currUserId={userId}
                       key={item.user_id}
