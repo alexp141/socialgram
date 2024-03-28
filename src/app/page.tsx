@@ -1,3 +1,3 @@
-export default function RootPage({ children }: { children: React.ReactNode }) {
+export default function RootPage() {
   return null;
 }

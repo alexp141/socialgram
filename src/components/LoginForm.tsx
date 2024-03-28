@@ -24,7 +24,7 @@ export default function LoginForm() {
   const formInputStyle =
     "w-full border-2 border-gray-700 hover:border-sky-300 focus:outline-sky-300 rounded-lg bg-sky-900 text-xl p-1";
   return (
-    <div className="min-w-[30rem] bg-sky-500 p-6 flex flex-col border-2 border-sky-900 dark:border-sky-100 rounded-lg text-sky-50">
+    <div className="sm:min-w-[30rem] bg-sky-500 p-6 flex flex-col border-2 border-sky-900 dark:border-sky-100 rounded-lg text-sky-50">
       <h2 className="text-4xl font-bold text-center">Login</h2>
       <form action={submitHandler} className="flex flex-col my-4 gap-4">
         <div>
@@ -56,7 +56,7 @@ export default function LoginForm() {
         <div className="self-center">
           <button
             type="submit"
-            className="border border-blue-800 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg"
+            className="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg"
           >
             Login
           </button>
@@ -64,7 +64,7 @@ export default function LoginForm() {
         {state.message}
       </form>
       <p className="mt-6">
-        Don't have an account?{" "}
+        {"Don't have an account? "}
         <Link
           href={"/signup"}
           className="hover:underline text-blue-950 hover:text-blue-100"

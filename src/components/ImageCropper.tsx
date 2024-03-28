@@ -16,6 +16,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from "react-image-crop";
 import setCanvasPreview from "@/lib/setCanvasPreview";
+import Image from "next/image";
 
 export default function ImageCropper({
   cropMinimumWidth,
@@ -153,8 +154,10 @@ export default function ImageCropper({
                 setCompletedCrop(c);
               }}
             >
-              <img
+              <Image
                 ref={imgRef}
+                width="0"
+                height="0"
                 className="w-64 h-auto"
                 src={imageSource}
                 alt="image that will be cropped"
