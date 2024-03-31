@@ -41,9 +41,9 @@ export default function UserCard({
           </Link>
         )}
       </div>
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col min-w-0">
         <Link
-          className="text-sky-500 font-medium hover:text-sky-500 overflow-x-hidden"
+          className="text-sky-500 font-medium hover:text-sky-500 overflow-ellipsis overflow-x-hidden"
           href={`/user/${info.username}`}
         >
           @{info.username}
@@ -58,7 +58,7 @@ export default function UserCard({
           </p>
         </div>
       </div>
-      <div className="flex justify-center item-center">
+      <div className="flex justify-center item-center flex-initial">
         <FollowButton
           currUserId={currUserId}
           isAlreadyFollowing={isAlreadyFollowing}
