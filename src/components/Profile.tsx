@@ -113,6 +113,9 @@ export default async function Profile({
       )}
 
       <div className="px-6 text-slate-400">
+        <div className="-mb-1 text-xl text-sky-300 capitalize">
+          {profileData.data?.first_name} {profileData.data?.last_name}
+        </div>
         <div className="mb-4 text-xl text-sky-400">
           @{profileData.data?.username}
         </div>
