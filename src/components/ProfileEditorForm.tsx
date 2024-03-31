@@ -8,6 +8,7 @@ import ImageCropper from "./ImageCropper";
 import Image from "next/image";
 
 export default function ProfileEditorForm({
+  profileData,
   userId,
   username,
   initialAvatar,
@@ -17,6 +18,19 @@ export default function ProfileEditorForm({
   username: string;
   initialAvatar: string;
   initialBanner: string;
+  profileData: {
+    created_at: string;
+    user_id: string;
+    username: string;
+    bio: string;
+    birthday: any;
+    location: string;
+    avatar_url: string;
+    banner_url: string;
+    first_name: string;
+    last_name: string;
+    website: string;
+  };
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isAvatarCropperOpen, setIsAvatarCropperOpen] = useState(false);
@@ -43,12 +57,8 @@ export default function ProfileEditorForm({
     }
 
     toast.success("successfuly updated profile");
+    setIsOpen(false);
   }
-
-  function onBannerLoadError() {
-    setBanner("/default-banner.jpg");
-  }
-
   return (
     <div className="flex justify-end items-center p-2">
       <button
@@ -117,7 +127,7 @@ export default function ProfileEditorForm({
                 width={400}
                 height={150}
                 alt="test"
-                onError={onBannerLoadError}
+                // onError={onBannerLoadError}
                 className="border-2 border-sky-500 rounded-md"
               />
               <button
@@ -159,22 +169,42 @@ export default function ProfileEditorForm({
             <input type="file" name="banner" hidden ref={bannerInputRef} />
             <div className="flex flex-col [&>input]:p-2 [&>input]:text-lg [&>input]:rounded-md [&>input]:border [&>input]:border-sky-500 [&>input:focus]:outline-sky-500 [&>input:focus]:outline [&>label]:text-lg [&>label]:mt-2">
               <label htmlFor="firstName">First Name</label>
-              <input type="text" name="firstName" />
+              <input
+                type="text"
+                name="firstName"
+                defaultValue={profileData.first_name}
+              />
 
               <label htmlFor="lastName">Last Name</label>
-              <input type="text" name="lastName" />
+              <input
+                type="text"
+                name="lastName"
+                defaultValue={profileData.last_name}
+              />
 
               <label htmlFor="bio">Bio</label>
-              <input type="text" name="bio" />
+              <input type="text" name="bio" defaultValue={profileData.bio} />
 
               <label htmlFor="location">Location</label>
-              <input type="text" name="location" />
+              <input
+                type="text"
+                name="location"
+                defaultValue={profileData.location}
+              />
 
               <label htmlFor="website">Website</label>
-              <input type="text" name="website" />
+              <input
+                type="text"
+                name="website"
+                defaultValue={profileData.website}
+              />
 
               <label htmlFor="birthday">Birthday</label>
-              <input type="date" name="birthday" />
+              <input
+                type="date"
+                name="birthday"
+                defaultValue={profileData.birthday}
+              />
             </div>
           </div>
           <div className="flex justify-center">

@@ -576,7 +576,7 @@ export async function getProfileData(username: string) {
   const { data, error } = await supabase
     .from("users")
     .select(
-      "created_at, user_id, username, bio, birthday, location, avatar_url, banner_url"
+      "created_at, user_id, username, bio, birthday, location, avatar_url, banner_url, first_name, last_name, website"
     )
     .eq("username", username)
     .single();

@@ -4,7 +4,7 @@ import {
   getProfileData,
 } from "@/lib/actions";
 import ProfileEditorForm from "./ProfileEditorForm";
-import { convertDate, getAvatarImage } from "@/lib/helper";
+import { convertDate, getAvatarImage, getBannerImage } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLocationDot, FaCalendarDays, FaCakeCandles } from "react-icons/fa6";
@@ -46,10 +46,9 @@ export default async function Profile({
   }
   const { created_at, bio, birthday, location, avatar_url, banner_url } =
     profileData.data;
-  const bannerImagePath = banner_url;
   const profileImageSource = getAvatarImage(avatar_url);
 
-  const bannerImageSource = `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${bannerImagePath}`;
+  const bannerImageSource = getBannerImage(banner_url);
 
   const joinDate = convertDate(new Date(created_at).toString())
     .split(" ")
@@ -98,10 +97,11 @@ export default async function Profile({
       </div>
       {profileUserId === loggedInUserId ? (
         <ProfileEditorForm
+          profileData={profileData.data}
           userId={profileUserId}
           username={username}
           initialAvatar={profileImageSource || "/empty-avatar.png"}
-          initialBanner={bannerImageSource}
+          initialBanner={bannerImageSource || "/default-banner.jpg"}
         />
       ) : (
         <div className="flex justify-end items-center p-2">

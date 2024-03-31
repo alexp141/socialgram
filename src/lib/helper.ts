@@ -37,6 +37,13 @@ export function getAvatarImage(avatarPath: string | null | undefined) {
   return `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${avatarPath}`;
 }
 
+export function getBannerImage(bannerPath: string | null | undefined) {
+  if (!bannerPath) {
+    return "";
+  }
+  return `${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}/storage/v1/object/public/profile/${bannerPath}`;
+}
+
 export function getPostImage(postImagePath: string | null | undefined) {
   if (!postImagePath) {
     return "";

@@ -17,6 +17,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import setCanvasPreview from "@/lib/setCanvasPreview";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 export default function ImageCropper({
   cropMinimumWidth,
@@ -50,10 +51,25 @@ export default function ImageCropper({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const ACCEPTED_IMAGE_MIME_TYPES = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+  ];
+
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     setError("");
     if (e.target.files) {
       setCrop(undefined);
+
+      //validating the mime type
+      if (!ACCEPTED_IMAGE_MIME_TYPES.includes(e.target.files[0].type)) {
+        toast.error("only jpg, png and webp images are allowed");
+        setError("only jpg, png and webp images are allowed");
+        setImageSource("");
+        return;
+      }
       const fr = new FileReader();
       fr.addEventListener("load", () => {
         setImageSource(fr.result?.toString() || "");
@@ -123,12 +139,15 @@ export default function ImageCropper({
 
               console.log("input value", inputRef.current);
             } else {
+              toast.error(
+                "An error occured, please make sure you only use jpg, jpeg, png, avif, svg, or webp images"
+              );
               throw new Error("Filelist does not exist for input");
             }
           }
         },
         "image/*",
-        1.0
+        0.7
       );
     } else {
       console.error("fail");
@@ -139,6 +158,11 @@ export default function ImageCropper({
   return (
     <div>
       {error && <p className="text-red-500">{error}</p>}
+      {!error && (
+        <p className="text-emerald-500 my-2">
+          Only jpg, png and webp images are allowed
+        </p>
+      )}
       {imageSource && (
         <div className="flex gap-8 flex-col md:flex-row">
           <div className="flex flex-col items-center gap-4">
