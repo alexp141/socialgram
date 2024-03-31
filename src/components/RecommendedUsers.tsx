@@ -28,7 +28,7 @@ export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
       })}
 
       {listLength < users.length && (
-        <button type="button" onClick={handleShowMore}>
+        <button type="button" onClick={handleShowMore} className="text-sky-50">
           Show More
         </button>
       )}

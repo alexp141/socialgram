@@ -1,5 +1,5 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -57,6 +57,8 @@ export async function middleware(request: NextRequest) {
   console.log("in middleware");
   const { data, error } = await supabase.auth.getUser();
 
+  //redirects to login if user is not signed in and they are not already
+  // at /login or /signup
   if (
     !data.user &&
     !request.nextUrl.pathname.endsWith("/login") &&
@@ -64,6 +66,11 @@ export async function middleware(request: NextRequest) {
   ) {
     // Redirect to login page if not authenticated
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  //redirects to login if root path is requested
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("login", request.url));
   }
 
   return response;
