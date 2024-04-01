@@ -3,13 +3,7 @@
 import useCommentCount from "@/hooks/useCommentCount";
 import CreatePost from "./CreatePost";
 
-export default function CommentButton({
-  postId,
-  userId,
-}: {
-  postId: number;
-  userId: string;
-}) {
+export default function CommentButton({ postId }: { postId: number }) {
   const { commentCount, error, fetchStatus } = useCommentCount(postId);
 
   if (error) {

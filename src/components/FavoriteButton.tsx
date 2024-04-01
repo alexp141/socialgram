@@ -8,34 +8,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 
-export default function FavoriteButton({
-  postId,
-  userId,
-}: {
-  postId: number;
-  userId: string;
-}) {
+export default function FavoriteButton({ postId }: { postId: number }) {
   const { favoritesCount, fetchStatus, error } = useFavoritesCount(postId);
   const { hasFavoritedPost } = useFavoritedStatus(postId);
-  const [localFavoriteCount, setLocalFavoriteCount] = useState<
-    number | undefined
-  >(0);
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    setLocalFavoriteCount(favoritesCount);
-  }, [favoritesCount]);
 
   async function handleFavorite() {
     await favoritePost(postId);
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
-    setLocalFavoriteCount((curr) => curr! + 1);
   }
 
   async function handleUnfavorite() {
     await unfavoritePost(postId);
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
-    setLocalFavoriteCount((curr) => curr! - 1);
   }
 
   if (error) {
@@ -49,7 +34,7 @@ export default function FavoriteButton({
           <button type="button" onClick={handleFavorite}>
             <FaRegBookmark />
           </button>
-          <span>{localFavoriteCount}</span>
+          <span>{favoritesCount}</span>
         </div>
       )}
       {hasFavoritedPost && (
@@ -57,7 +42,7 @@ export default function FavoriteButton({
           <button type="button" onClick={handleUnfavorite}>
             <FaBookmark />
           </button>
-          <span>{localFavoriteCount}</span>
+          <span>{favoritesCount}</span>
         </div>
       )}
     </>

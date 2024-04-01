@@ -29,6 +29,7 @@ export default function UserPosts({ userId }: { userId: string }) {
       return lastPageParam + 1;
     },
     staleTime: Infinity,
+    refetchOnMount: "always",
   });
 
   useEffect(() => {

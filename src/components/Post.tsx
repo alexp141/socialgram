@@ -62,9 +62,9 @@ export default function Post({ post }: { post: PostRow }) {
         </div>
       </Link>
       <div className="flex justify-evenly items-center py-2 mt-2">
-        <CommentButton postId={post.id} userId={post.user_id} />
-        <LikeButton postId={post.id} userId={post.user_id} />
-        <FavoriteButton postId={post.id} userId={post.user_id} />
+        <CommentButton postId={post.id} />
+        <LikeButton postId={post.id} />
+        <FavoriteButton postId={post.id} />
       </div>
     </div>
   );

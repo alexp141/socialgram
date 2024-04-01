@@ -77,9 +77,9 @@ export default async function DetailedPost({
           <p className="text-slate-400">{date}</p>
         </div>
         <div className="flex justify-around items-center py-2">
-          <CommentButton postId={post.id} userId={post.user_id} />
-          <LikeButton postId={post.id} userId={post.user_id} />
-          <FavoriteButton postId={post.id} userId={post.user_id} />
+          <CommentButton postId={post.id} />
+          <LikeButton postId={post.id} />
+          <FavoriteButton postId={post.id} />
           <CreatePost replyToId={post.id} />
         </div>
       </div>

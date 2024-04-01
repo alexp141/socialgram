@@ -6,41 +6,33 @@ import { likePost, unlikePost } from "@/lib/actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
+import LoadingSpinner from "./LoadingSpinner";
 
-export default function LikeButton({
-  postId,
-  userId,
-}: {
-  postId: number;
-  userId: string;
-}) {
+export default function LikeButton({ postId }: { postId: number }) {
   const { likeCount, fetchStatus, error } = useLikeCount(postId);
   const { hasLikedPost } = useLikeStatus(postId);
-  const [localLikeCount, setLocalLikeCount] = useState<number | undefined>(0);
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    setLocalLikeCount(likeCount);
-  }, [likeCount]);
+  // const [isLoading, setIsLoading] = useState(false);
 
   async function handleLike() {
     await likePost(postId);
+    queryClient.invalidateQueries({ queryKey: ["like-count", postId] });
     queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
-    setLocalLikeCount((curr) => curr! + 1);
   }
 
   async function handleDislike() {
     await unlikePost(postId);
+
+    queryClient.invalidateQueries({ queryKey: ["like-count", postId] });
     queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
-    setLocalLikeCount((curr) => curr! - 1);
   }
 
   if (error) {
-    return <p>error</p>;
+    return <p className="text-red-500">N/A</p>;
   }
 
-  // if (fetchStatus === "fetching") {
-  //   return "...";
+  // if (isLoading) {
+  //   return <LoadingSpinner />;
   // }
 
   return (
@@ -50,7 +42,7 @@ export default function LikeButton({
           <button type="button" onClick={handleLike}>
             <FaRegHeart />
           </button>
-          <span>{localLikeCount}</span>
+          <span>{likeCount}</span>
         </div>
       )}
       {hasLikedPost && (
@@ -58,7 +50,7 @@ export default function LikeButton({
           <button type="button" onClick={handleDislike}>
             <FaHeart />
           </button>
-          <span>{localLikeCount}</span>
+          <span>{likeCount}</span>
         </div>
       )}
     </>
