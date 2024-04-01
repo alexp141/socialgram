@@ -2,22 +2,20 @@
 
 import useLikeCount from "@/hooks/useLikeCount";
 import useLikeStatus from "@/hooks/useLikeStatus";
-import { likePost, unlikePost } from "@/lib/actions";
+import { unlikePost } from "@/lib/actions";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
-import LoadingSpinner from "./LoadingSpinner";
+import useLike from "@/hooks/useLike";
+import TinyLoader from "./TinyLoader";
 
 export default function LikeButton({ postId }: { postId: number }) {
   const { likeCount, fetchStatus, error } = useLikeCount(postId);
   const { hasLikedPost } = useLikeStatus(postId);
   const queryClient = useQueryClient();
-  // const [isLoading, setIsLoading] = useState(false);
+  const { likePostMutation, likePostError, likePostStatus } = useLike();
 
   async function handleLike() {
-    await likePost(postId);
-    queryClient.invalidateQueries({ queryKey: ["like-count", postId] });
-    queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
+    likePostMutation({ postId });
   }
 
   async function handleDislike() {
@@ -31,26 +29,34 @@ export default function LikeButton({ postId }: { postId: number }) {
     return <p className="text-red-500">N/A</p>;
   }
 
-  // if (isLoading) {
-  //   return <LoadingSpinner />;
-  // }
-
   return (
     <>
       {!hasLikedPost && (
-        <div className="flex gap-1">
-          <button type="button" onClick={handleLike}>
+        <div>
+          <button
+            type="button"
+            onClick={handleLike}
+            className="flex justify-center items-center gap-1"
+          >
             <FaRegHeart />
+            {likePostStatus !== "pending" ? (
+              <span>{likeCount}</span>
+            ) : (
+              <TinyLoader style="flex" />
+            )}
           </button>
-          <span>{likeCount}</span>
         </div>
       )}
       {hasLikedPost && (
-        <div className="flex gap-1 text-red-600">
-          <button type="button" onClick={handleDislike}>
+        <div>
+          <button
+            type="button"
+            onClick={handleDislike}
+            className="flex justify-center items-center gap-1 text-red-600"
+          >
             <FaHeart />
+            <span>{likeCount}</span>
           </button>
-          <span>{likeCount}</span>
         </div>
       )}
     </>

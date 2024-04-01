@@ -288,6 +288,8 @@ export async function likePost(postId: number) {
   if (error) {
     throw new Error(error.message);
   }
+
+  return postId;
 }
 
 export async function unlikePost(postId: number) {

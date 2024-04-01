@@ -35,18 +35,26 @@ export default function FavoriteButton({ postId }: { postId: number }) {
     <>
       {!hasFavoritedPost && (
         <div className="flex gap-1">
-          <button type="button" onClick={handleFavorite}>
+          <button
+            type="button"
+            onClick={handleFavorite}
+            className="flex justify-center items-center gap-1"
+          >
             <FaRegBookmark />
+            <span>{favoritesCount}</span>
           </button>
-          <span>{favoritesCount}</span>
         </div>
       )}
       {hasFavoritedPost && (
-        <div className="flex gap-1 text-emerald-600">
-          <button type="button" onClick={handleUnfavorite}>
+        <div>
+          <button
+            type="button"
+            onClick={handleUnfavorite}
+            className="flex justify-center items-center gap-1 text-emerald-600"
+          >
             <FaBookmark />
+            <span>{favoritesCount}</span>
           </button>
-          <span>{favoritesCount}</span>
         </div>
       )}
     </>

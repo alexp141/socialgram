@@ -59,7 +59,7 @@ export default function UserPosts({ userId }: { userId: string }) {
           })}
         </div>
       ))}
-      <div>
+      <div className="text-center text-sky-500 mt-6">
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
