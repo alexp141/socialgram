@@ -15,16 +15,20 @@ export default function FavoriteButton({ postId }: { postId: number }) {
 
   async function handleFavorite() {
     await favoritePost(postId);
+
+    queryClient.invalidateQueries({ queryKey: ["favorited-count", postId] });
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
   }
 
   async function handleUnfavorite() {
     await unfavoritePost(postId);
+
+    queryClient.invalidateQueries({ queryKey: ["favorited-count", postId] });
     queryClient.invalidateQueries({ queryKey: ["favorited-status", postId] });
   }
 
   if (error) {
-    return <p>error</p>;
+    return <p className="text-red-500">error</p>;
   }
 
   return (
