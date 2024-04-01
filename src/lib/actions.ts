@@ -305,6 +305,8 @@ export async function unlikePost(postId: number) {
   if (error) {
     throw new Error(error.message);
   }
+
+  return postId;
 }
 
 export async function favoritePost(postId: number, loggedInUserId?: string) {
@@ -321,6 +323,8 @@ export async function favoritePost(postId: number, loggedInUserId?: string) {
   if (error) {
     throw new Error(error.message);
   }
+
+  return postId;
 }
 
 export async function unfavoritePost(postId: number, loggedInUserId?: string) {
@@ -339,6 +343,8 @@ export async function unfavoritePost(postId: number, loggedInUserId?: string) {
   if (error) {
     throw new Error(error.message);
   }
+
+  return postId;
 }
 const MAX_FILE_SIZE = 1024 * 1024 * 10;
 const ACCEPTED_IMAGE_MIME_TYPES = [

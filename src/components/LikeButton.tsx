@@ -2,8 +2,6 @@
 
 import useLikeCount from "@/hooks/useLikeCount";
 import useLikeStatus from "@/hooks/useLikeStatus";
-import { unlikePost } from "@/lib/actions";
-import { useQueryClient } from "@tanstack/react-query";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import useLike from "@/hooks/useLike";
 import TinyLoader from "./TinyLoader";
@@ -11,18 +9,14 @@ import TinyLoader from "./TinyLoader";
 export default function LikeButton({ postId }: { postId: number }) {
   const { likeCount, fetchStatus, error } = useLikeCount(postId);
   const { hasLikedPost } = useLikeStatus(postId);
-  const queryClient = useQueryClient();
   const { likePostMutation, likePostError, likePostStatus } = useLike();
 
   async function handleLike() {
-    likePostMutation({ postId });
+    likePostMutation({ postId, type: "like" });
   }
 
   async function handleDislike() {
-    await unlikePost(postId);
-
-    queryClient.invalidateQueries({ queryKey: ["like-count", postId] });
-    queryClient.invalidateQueries({ queryKey: ["like-status", postId] });
+    likePostMutation({ postId, type: "dislike" });
   }
 
   if (error) {
@@ -39,7 +33,7 @@ export default function LikeButton({ postId }: { postId: number }) {
             className="flex justify-center items-center gap-1"
           >
             <FaRegHeart />
-            {likePostStatus !== "pending" ? (
+            {likePostStatus !== "pending" && fetchStatus !== "fetching" ? (
               <span>{likeCount}</span>
             ) : (
               <TinyLoader style="flex" />
@@ -55,7 +49,11 @@ export default function LikeButton({ postId }: { postId: number }) {
             className="flex justify-center items-center gap-1 text-red-600"
           >
             <FaHeart />
-            <span>{likeCount}</span>
+            {likePostStatus !== "pending" && fetchStatus !== "fetching" ? (
+              <span>{likeCount}</span>
+            ) : (
+              <TinyLoader style="flex" />
+            )}
           </button>
         </div>
       )}
