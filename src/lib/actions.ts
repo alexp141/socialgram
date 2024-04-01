@@ -18,24 +18,36 @@ import {
 } from "./types/type-collection";
 import { revalidatePath } from "next/cache";
 
+const signupSchema = z.object({
+  username: z.string().max(20, "usernames can be a max of 20 characters"),
+  email: z.string().email(),
+  password: z.string(),
+});
+
 export async function signUpUser(prevState: any, formData: FormData) {
+  const validationResults = signupSchema.safeParse({
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validationResults.success) {
+    const errors = validationResults.error.format();
+    console.log(validationResults.error.format());
+    const usernameError = errors.username?._errors.join(" | ");
+    const emailError = errors.email?._errors.join(" | ");
+    const passwordError = errors.password?._errors.join(" | ");
+    return {
+      generalError: null,
+      usernameError,
+      emailError,
+      passwordError,
+    };
+  }
+
   const supabase = createClient();
 
-  let email = formData.get("email");
-  let password = formData.get("password");
-  let username = formData.get("username");
-
-  if (!email || !password) {
-    return { error: "email or password is null" };
-  }
-
-  if (!username) {
-    return { error: "user name is null" };
-  }
-
-  email = email.toString();
-  password = password.toString();
-  username = username.toString();
+  const { username, email, password } = validationResults.data;
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -49,13 +61,13 @@ export async function signUpUser(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { error: error.message };
+    return { generalError: error.message };
   }
 
   const userData = data.user;
 
   if (!userData) {
-    return { error: "user data not found" };
+    return { generalError: "user data not found" };
   }
   const { data: usersInsertData, error: usersError } = await supabase
     .from("users")
@@ -66,13 +78,19 @@ export async function signUpUser(prevState: any, formData: FormData) {
 
   if (usersError) {
     return {
-      message: "fail",
-      error: usersError.message,
+      message: "failure",
+      generalError: usersError.message,
+      usernameError: null,
+      emailError: null,
+      passwordError: null,
     };
   }
   return {
     message: "success",
-    error: null,
+    generalError: null,
+    usernameError: null,
+    emailError: null,
+    passwordError: null,
   };
 }
 

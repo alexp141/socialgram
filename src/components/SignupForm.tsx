@@ -9,7 +9,10 @@ export default function SignupForm() {
   const router = useRouter();
   const [state, formAction] = useFormState(signUpUser, {
     message: "",
-    error: null,
+    generalError: null,
+    usernameError: null,
+    emailError: null,
+    passwordError: null,
   });
 
   //executes when user has signed up
@@ -36,6 +39,9 @@ export default function SignupForm() {
             required
             className={formInputStyle}
           />
+          {state.usernameError && (
+            <p className="text-red-700 font-semibold"> {state.usernameError}</p>
+          )}
         </div>
         <div>
           <label htmlFor="email" className={formLabelStyle}>
@@ -48,6 +54,9 @@ export default function SignupForm() {
             required
             className={formInputStyle}
           />
+          {state.emailError && (
+            <p className="text-red-700 font-semibold"> {state.emailError}</p>
+          )}
         </div>
         <div>
           <label htmlFor="password" className={formLabelStyle}>
@@ -60,6 +69,9 @@ export default function SignupForm() {
             required
             className={formInputStyle}
           />
+          {state.passwordError && (
+            <p className="text-red-700 font-semibold"> {state.passwordError}</p>
+          )}
         </div>
         <div className="self-center">
           <button
@@ -70,7 +82,9 @@ export default function SignupForm() {
           </button>
         </div>
         {state.message && <p className="text-green-500"> {state.message}</p>}
-        {state.error && <p className="text-red-500"> {state.error}</p>}
+        {state.generalError && (
+          <p className="text-red-500"> {state.generalError}</p>
+        )}
       </form>
       <p className="mt-6">
         Already have an account?{" "}
