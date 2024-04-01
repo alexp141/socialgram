@@ -57,20 +57,24 @@ export default async function Profile({
 
   return (
     <div className="flex flex-col">
-      <div className="relative h-[200px]">
+      <div className="relative">
         {banner_url ? (
           <Image
             src={bannerImageSource}
             alt="banner"
-            fill
+            width={700}
+            height={400}
             placeholder="empty"
+            className="w-full h-auto aspect-video"
           />
         ) : (
           <Image
             src="/default-banner.jpg"
             alt="default banner"
-            fill
+            width={700}
+            height={400}
             placeholder="empty"
+            className="w-full h-auto aspect-video"
           />
         )}
         <div className="absolute top-full left-6 -translate-y-1/2">

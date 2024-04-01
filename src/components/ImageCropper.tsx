@@ -122,22 +122,23 @@ export default function ImageCropper({
                 Math.random() * 10000
               }`;
             }
-
+            console.log("BLOB SIZE", blob.size / (1024 * 1024));
             const file = new File([blob], completeFilename, {
               type: blob.type,
             });
+            console.log("FILESIZE", file.size / (1024 * 1024));
+            console.log("input value", inputRef.current);
             if (
-              inputRef.current &&
-              inputRef.current.files &&
+              // inputRef.current &&
+              //inputRef.current.files &&
               exteriorInputRef.current
             ) {
               // creating new file list and replacing the old one
               const dataTransfer = new DataTransfer();
+              //console.log("DATA TRANSFER SIZE", dataTransfer.files[0].size);
               dataTransfer.items.add(file);
 
               exteriorInputRef.current.files = dataTransfer.files;
-
-              console.log("input value", inputRef.current);
             } else {
               toast.error(
                 "An error occured, please make sure you only use jpg, jpeg, png, avif, svg, or webp images"
@@ -146,7 +147,7 @@ export default function ImageCropper({
             }
           }
         },
-        "image/*",
+        "image/png",
         0.7
       );
     } else {

@@ -48,7 +48,7 @@ export default function ProfileEditorForm({
   async function handleAction(formData: FormData) {
     //upload form
     const res = await updateProfile(userId, username, formData);
-
+    console.log("profile updated");
     //toast message
     if (res.error) {
       console.log(res.error);
