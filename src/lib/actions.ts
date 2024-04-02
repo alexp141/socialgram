@@ -680,9 +680,9 @@ export async function followUser(userToFollow: string) {
     .eq("following", userToFollow);
 
   if (isFollowingError) {
-    return { error: isFollowingError.message };
+    throw new Error(isFollowingError.message);
   } else if (count && count > 0) {
-    return { error: "You already follow this user" };
+    throw new Error("you already follow this user.");
   }
 
   const { error } = await supabase.from("followers").insert<FollowersInsert>({
@@ -691,10 +691,10 @@ export async function followUser(userToFollow: string) {
   });
 
   if (error) {
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
-  return { error: null };
+  return userToFollow;
 }
 
 export async function unfollowUser(userToUnfollow: string) {
@@ -708,9 +708,9 @@ export async function unfollowUser(userToUnfollow: string) {
     .eq("following", userToUnfollow);
 
   if (isFollowingError) {
-    return { error: isFollowingError.message };
+    throw new Error(isFollowingError.message);
   } else if (count && count === 0) {
-    return { error: "You do not follow this user" };
+    throw new Error("You do not follow this user");
   }
 
   const { error } = await supabase
@@ -720,10 +720,10 @@ export async function unfollowUser(userToUnfollow: string) {
     .eq("following", userToUnfollow);
 
   if (error) {
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
-  return { error: null };
+  return userToUnfollow;
 }
 
 export async function getAvatar(userId: string) {

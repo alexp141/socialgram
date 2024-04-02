@@ -1,61 +1,37 @@
 "use client";
 
+import useFollow from "@/hooks/useFollow";
 import useFollowingStatus from "@/hooks/useFollowingStatus";
-import { followUser, unfollowUser } from "@/lib/actions";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { useState } from "react";
 
 export default function FollowButton({
   userToFollow,
   currUserId,
-  isAlreadyFollowing = false,
 }: {
   userToFollow: string;
   currUserId?: string;
-  isAlreadyFollowing?: boolean;
 }) {
   const { isFollowing, error, fetchStatus } = useFollowingStatus(
     userToFollow,
-    isAlreadyFollowing,
     currUserId
   );
-  const queryClient = useQueryClient();
+  const { followMutation, followError, followStatus } = useFollow();
+
   const buttonStyle =
     "px-4 py-2 border-2 rounded-full border-sky-50 hover:bg-sky-700 bg-sky-400 text-sky-50";
 
   async function handleFollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-
-    const res = await followUser(userToFollow);
-    if (res.error) {
-      console.error(res.error);
-      toast.error(res.error);
-      return;
-    }
-
-    queryClient.invalidateQueries({
-      queryKey: ["following-status", userToFollow],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["following-feed"],
-    });
-
-    toast.success("user successfully followed");
+    followMutation(
+      { userId: userToFollow, type: "follow" },
+    );
   }
 
   async function handleUnfollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-
-    const res = await unfollowUser(userToFollow);
-    if (res.error) {
-      console.error(res.error);
-      toast.error(res.error);
-      return;
-    }
-    queryClient.invalidateQueries({
-      queryKey: ["following-status", userToFollow],
-    });
-    toast.success("user successfully unfollowed");
+    followMutation(
+      { userId: userToFollow, type: "unfollow" },
+    );
   }
 
   if (error) {
@@ -68,18 +44,22 @@ export default function FollowButton({
         <button
           onClick={handleUnfollow}
           className={`${buttonStyle}`}
-          disabled={fetchStatus === "fetching"}
+          disabled={fetchStatus === "fetching" || followStatus === "pending"}
         >
-          Unfollow
+          {fetchStatus === "fetching" || followStatus === "pending"
+            ? "Loading..."
+            : "Unfollow"}
         </button>
       )}
       {!isFollowing && (
         <button
           onClick={handleFollow}
           className={`${buttonStyle}`}
-          disabled={fetchStatus === "fetching"}
+          disabled={fetchStatus === "fetching" || followStatus === "pending"}
         >
-          Follow
+          {fetchStatus === "fetching" || followStatus === "pending"
+            ? "Loading..."
+            : "Follow"}
         </button>
       )}
     </div>

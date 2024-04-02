@@ -10,12 +10,14 @@ export default async function page({
   const userId = await getUserId(params.username);
 
   return (
-    <Feed
-      queryKey={["followers", params.username]}
-      queryFunction={getNextFollowersPage}
-      initialPageParam={1}
-      itemsPerPage={10}
-      userId={userId}
-    />
+    <div className="p-2">
+      <Feed
+        queryKey={["followers", params.username]}
+        queryFunction={getNextFollowersPage}
+        initialPageParam={1}
+        itemsPerPage={10}
+        userId={userId}
+      />
+    </div>
   );
 }

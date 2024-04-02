@@ -59,11 +59,7 @@ export default function UserCard({
         </div>
       </div>
       <div className="flex justify-center item-center flex-initial">
-        <FollowButton
-          currUserId={currUserId}
-          isAlreadyFollowing={isAlreadyFollowing}
-          userToFollow={info.user_id}
-        />
+        <FollowButton currUserId={currUserId} userToFollow={info.user_id} />
       </div>
     </div>
   );

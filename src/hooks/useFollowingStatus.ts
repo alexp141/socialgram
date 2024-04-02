@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useFollowingStatus(
   userToFollowId: string,
-  isAlreadyFollowing: boolean,
   currUserId?: string
 ) {
   const {
@@ -13,7 +12,7 @@ export default function useFollowingStatus(
   } = useQuery({
     queryKey: ["following-status", userToFollowId],
     queryFn: () =>
-      checkIfFollowing(userToFollowId, currUserId, isAlreadyFollowing),
+      checkIfFollowing(userToFollowId, currUserId),
   });
 
   return { isFollowing, error, fetchStatus };

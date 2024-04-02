@@ -479,12 +479,7 @@ export async function getNextFollowingPage(
 export async function checkIfFollowing(
   otherUserId: string,
   currUserId?: string,
-  isAlreadyFollowing?: boolean //in case we already know that otherUserId is being followed
 ) {
-  if (isAlreadyFollowing) {
-    return true;
-  }
-
   const supabase = createClient();
 
   if (!currUserId) currUserId = (await getUser()).id;
