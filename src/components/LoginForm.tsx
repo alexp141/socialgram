@@ -4,6 +4,7 @@ import { emailLogin } from "@/lib/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
+import SubmitButton from "./SubmitButton";
 
 export default function LoginForm() {
   const [state, formAction] = useFormState(emailLogin, {
@@ -54,12 +55,9 @@ export default function LoginForm() {
           {state.passwordError && <p>{state.passwordError}</p>}
         </div>
         <div className="self-center">
-          <button
-            type="submit"
-            className="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg"
-          >
+          <SubmitButton buttonStyle="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg">
             Login
-          </button>
+          </SubmitButton>
         </div>
         {state.message}
       </form>

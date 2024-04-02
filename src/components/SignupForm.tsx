@@ -4,6 +4,7 @@ import { signUpUser } from "@/lib/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
+import SubmitButton from "./SubmitButton";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -74,12 +75,9 @@ export default function SignupForm() {
           )}
         </div>
         <div className="self-center">
-          <button
-            type="submit"
-            className="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg"
-          >
-            Sign up
-          </button>
+          <SubmitButton buttonStyle="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg">
+            Sign Up
+          </SubmitButton>
         </div>
         {state.message && <p className="text-green-500"> {state.message}</p>}
         {state.generalError && (
