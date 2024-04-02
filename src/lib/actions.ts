@@ -346,7 +346,7 @@ export async function unfavoritePost(postId: number, loggedInUserId?: string) {
 
   return postId;
 }
-const MAX_FILE_SIZE = 1024 * 1024 * 10;
+const MAX_FILE_SIZE = 1024 * 1024 * 15;
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -544,7 +544,7 @@ export async function updateProfile(
   });
 
   if (!validation.success) {
-    // console.error(validation.error.message);
+    console.error("validation error", validation.error.message);
     return { error: validation.error.message };
   }
 
@@ -574,7 +574,7 @@ export async function updateProfile(
     .eq("user_id", userId);
 
   if (error) {
-    console.error(error.message);
+    console.error("user update error", error.message);
     return { error: error.message };
   }
 
@@ -582,14 +582,20 @@ export async function updateProfile(
   try {
     const pfPath = await uploadProfilePic(profileImage as File, userId);
   } catch (error) {
-    if (error instanceof Error) return { data: null, error: error.message };
+    if (error instanceof Error) {
+      console.error("avatar error", error.message);
+      return { data: null, error: error.message };
+    }
   }
 
   //update banner picture
   try {
     const pbPath = await uploadProfileBanner(banner as File, userId);
   } catch (error) {
-    if (error instanceof Error) return { data: null, error: error.message };
+    if (error instanceof Error) {
+      console.error("banner error", error.message);
+      return { data: null, error: error.message };
+    }
   }
 
   revalidatePath(`/${username}`);
