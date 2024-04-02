@@ -18,16 +18,6 @@ export default function FollowingHeader({ username }: { username: string }) {
         </Link>
         <nav className="flex justify-evenly">
           <Link
-            href={`/user/${username}/followers`}
-            className={`hover:underline ${
-              leaf === "followers"
-                ? "text-sky-500 underline underline-offset-4"
-                : ""
-            }`}
-          >
-            Followers
-          </Link>
-          <Link
             href={`/user/${username}/following`}
             className={`hover:underline ${
               leaf === "following"
@@ -36,6 +26,16 @@ export default function FollowingHeader({ username }: { username: string }) {
             }`}
           >
             Following
+          </Link>
+          <Link
+            href={`/user/${username}/followers`}
+            className={`hover:underline ${
+              leaf === "followers"
+                ? "text-sky-500 underline underline-offset-4"
+                : ""
+            }`}
+          >
+            Followers
           </Link>
         </nav>
       </div>
