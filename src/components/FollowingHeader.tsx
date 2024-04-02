@@ -12,7 +12,7 @@ export default function FollowingHeader({ username }: { username: string }) {
       <div>
         <Link
           href={`/user/${username}`}
-          className="hover:underline flex justify-center text-sky-500 hover:underline-offset-4"
+          className="hover:underline flex justify-center text-sky-500 hover:underline-offset-4 p-2"
         >
           @{username}
         </Link>

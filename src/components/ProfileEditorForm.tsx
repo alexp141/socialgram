@@ -183,7 +183,11 @@ export default function ProfileEditorForm({
               />
 
               <label htmlFor="bio">Bio</label>
-              <input type="text" name="bio" defaultValue={profileData.bio} />
+              <textarea
+                name="bio"
+                defaultValue={profileData.bio}
+                className=" min-h-24 p-2 text-lg rounded-md border border-sky-500 focus:outline-sky-500"
+              />
 
               <label htmlFor="location">Location</label>
               <input
