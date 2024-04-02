@@ -6,7 +6,7 @@ import UserCard from "./UserCard";
 
 export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
   const [listLength, setListLength] = useState(4);
-  const listToShow = users.slice(0, listLength + 1);
+  const listToShow = users.slice(0, listLength);
 
   function handleShowMore() {
     setListLength(users.length);
