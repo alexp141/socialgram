@@ -28,13 +28,13 @@ export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
       })}
 
       {listLength < users.length && (
-        <button type="button" onClick={handleShowMore} className="text-sky-50">
+        <button type="button" onClick={handleShowMore} className="text-sky-500">
           Show More
         </button>
       )}
 
       {listLength > 4 && (
-        <button type="button" onClick={handleShowLess}>
+        <button type="button" onClick={handleShowLess} className="text-sky-500">
           Show Less
         </button>
       )}
