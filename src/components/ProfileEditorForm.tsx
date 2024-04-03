@@ -158,8 +158,10 @@ export default function ProfileEditorForm({
               </Modal>
             </div>
           </div>
-
-          <div className="mt-6">
+          <p className="text-center text-emerald-500 mt-4">
+            *Changes to avatars and banners may take up to an hour to update!*
+          </p>
+          <div className="mt-4">
             <input type="file" name="banner" hidden ref={bannerInputRef} />
             <div className="flex flex-col [&>input]:p-2 [&>input]:text-lg [&>input]:rounded-md [&>input]:border [&>input]:border-sky-500 [&>input:focus]:outline-sky-500 [&>input:focus]:outline [&>label]:text-lg [&>label]:mt-2">
               <label htmlFor="firstName">First Name</label>

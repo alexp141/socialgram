@@ -18,17 +18,23 @@ import {
 } from "./types/type-collection";
 import { revalidatePath } from "next/cache";
 
-const signupSchema = z.object({
-  username: z.string().max(20, "usernames can be a max of 20 characters"),
-  email: z.string().email(),
-  password: z.string(),
-});
+const signupSchema = z
+  .object({
+    username: z.string().max(20, "usernames can be a max of 20 characters"),
+    email: z.string().email(),
+    password: z.string(),
+    confirmPassword: z.string(),
+  })
+  .refine((schema) => {
+    return schema.password === schema.confirmPassword;
+  }, "Passwords must match!");
 
 export async function signUpUser(prevState: any, formData: FormData) {
   const validationResults = signupSchema.safeParse({
     username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
   });
 
   if (!validationResults.success) {
@@ -37,11 +43,13 @@ export async function signUpUser(prevState: any, formData: FormData) {
     const usernameError = errors.username?._errors.join(" | ");
     const emailError = errors.email?._errors.join(" | ");
     const passwordError = errors.password?._errors.join(" | ");
+    const confirmPasswordError = errors.confirmPassword?._errors.join(" | ");
     return {
-      generalError: null,
+      generalError: validationResults.error.format()._errors.join(" | "),
       usernameError,
       emailError,
       passwordError,
+      confirmPasswordError,
     };
   }
 
@@ -83,6 +91,7 @@ export async function signUpUser(prevState: any, formData: FormData) {
       usernameError: null,
       emailError: null,
       passwordError: null,
+      confirmPasswordError: null,
     };
   }
   return {
@@ -91,6 +100,7 @@ export async function signUpUser(prevState: any, formData: FormData) {
     usernameError: null,
     emailError: null,
     passwordError: null,
+    confirmPasswordError: null,
   };
 }
 

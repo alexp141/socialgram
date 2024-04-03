@@ -14,6 +14,7 @@ export default function SignupForm() {
     usernameError: null,
     emailError: null,
     passwordError: null,
+    confirmPasswordError: null,
   });
 
   //executes when user has signed up
@@ -74,14 +75,31 @@ export default function SignupForm() {
             <p className="text-red-700 font-semibold"> {state.passwordError}</p>
           )}
         </div>
+        <div>
+          <label htmlFor="confirmPassword" className={formLabelStyle}>
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            required
+            className={formInputStyle}
+          />
+          {state.confirmPasswordError && (
+            <p className="text-red-700 font-semibold"> {state.passwordError}</p>
+          )}
+        </div>
         <div className="self-center">
           <SubmitButton buttonStyle="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg">
             Sign Up
           </SubmitButton>
         </div>
-        {state.message && <p className="text-green-500"> {state.message}</p>}
+        {state.message && (
+          <p className="text-emerald-500 font-semibold"> {state.message}</p>
+        )}
         {state.generalError && (
-          <p className="text-red-500"> {state.generalError}</p>
+          <p className="text-red-700 font-semibold"> {state.generalError}</p>
         )}
       </form>
       <p className="mt-6">
