@@ -2,13 +2,11 @@
 
 import { useRef, useState } from "react";
 import Modal from "./Modal";
-import { createPost } from "@/lib/actions";
 import Image from "next/image";
-import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
 import ImageCropper from "./ImageCropper";
 import { FaPenToSquare, FaRegComment } from "react-icons/fa6";
 import SubmitButton from "./SubmitButton";
+import usePostCreator from "@/hooks/usePostCreator";
 
 export default function CreatePost({
   replyToId,
@@ -19,28 +17,24 @@ export default function CreatePost({
   displayAsCommentButton?: boolean;
   displayAsSidebarButton?: boolean;
 }) {
+  const { createNewPost, createNewPostError, createNewPostStatus } =
+    usePostCreator();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
   const [image, setImage] = useState<string>("");
 
   const postInputRef = useRef<HTMLInputElement | null>(null);
 
-  const queryClient = useQueryClient();
-
   async function handleSubmit(formData: FormData) {
-    const res = await createPost(formData, replyToId);
-    if (res.error) {
-      toast.error(res.error);
-      return;
-    }
-
-    //invalidate the feed from /userid
-    queryClient.invalidateQueries({ queryKey: ["user-posts"] });
-    if (replyToId) {
-      queryClient.invalidateQueries({ queryKey: ["comments", replyToId] });
-    }
-    toast.success("Successfully Submitted Post");
-    setIsOpen(false);
+    createNewPost(
+      { formData, replyToId },
+      {
+        onSuccess: () => {
+          setIsOpen(false);
+        },
+      }
+    );
   }
 
   return (
@@ -132,9 +126,16 @@ export default function CreatePost({
                 Clear Image
               </button>
             )}
-            <SubmitButton buttonStyle="border border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50">
-              Post
-            </SubmitButton>
+            <button
+              disabled={createNewPostStatus === "pending"}
+              className="border border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50"
+            >
+              {createNewPostStatus === "pending" ? (
+                <span>Loading...</span>
+              ) : (
+                <span>Post</span>
+              )}
+            </button>
           </div>
 
           <Modal

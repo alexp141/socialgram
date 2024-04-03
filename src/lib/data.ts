@@ -4,7 +4,9 @@ import { z } from "zod";
 import { createClient } from "@/utils/supabase/client";
 import {
   FollowersRow,
+  PostInsert,
   PostRow,
+  PostUpdate,
   UsersRow,
   UsersUpdate,
 } from "./types/type-collection";
@@ -759,6 +761,112 @@ export async function uploadProfileBanner(file: File, userId: string) {
       banner_url: `${userId}/banner/banner.${fileExtension}`,
     })
     .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return data.path;
+}
+
+export async function createPost(
+  formData: FormData,
+  replyToId: number | null = null
+) {
+  const supabase = createClient();
+
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("user not found");
+  }
+
+  const userId = user.id;
+  const username = user.user_metadata["username"];
+
+  const content = formData.get("content") as FormDataEntryValue;
+
+  const image = formData.get("postImage") as File;
+
+  if (!content && image.size === 0) {
+    throw new Error("Cannot create post with no content");
+  }
+
+  //CREATE POST
+  const { data, error } = await supabase
+    .from("posts")
+    .insert<PostInsert>({
+      user_id: userId,
+      content: content.toString(),
+      image_path: null,
+      username,
+      reply_to_id: replyToId,
+    })
+    .select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data || !data[0]) {
+    throw new Error("unable to fetch newly created post data");
+  }
+
+  if (!data[0].id) {
+    throw new Error("record id is undefined");
+  }
+
+  //UPLOAD IMAGE IF IT EXISTS
+  const imageUrl = await uploadPostImage({
+    file: image as File,
+    user_id: userId,
+    post_id: data[0].id,
+  });
+
+  return { message: "success", error: null };
+}
+
+export async function uploadPostImage({
+  file,
+  user_id,
+  post_id,
+}: {
+  file: File;
+  user_id: string;
+  post_id: number;
+}) {
+  if (!file || !file.name || !file.size) {
+    return;
+  }
+
+  const supabase = createClient();
+  const fileExtension = file.name.split(".")[1];
+
+  // Upload file using standard upload
+  const { data, error } = await supabase.storage
+    .from("post_images")
+    .upload(
+      `${user_id}/posts/${String(post_id)}/post-image.${fileExtension}`,
+      file,
+      {
+        contentType: "image/*",
+      }
+    );
+
+  if (error) {
+    // Handle error
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("image data is null");
+  }
+
+  //UPDATE IMAGE URL IN POSTS TABLE
+  const { error: updateError } = await supabase
+    .from("posts")
+    .update<PostUpdate>({ image_path: data.path })
+    .eq("id", post_id);
 
   if (updateError) {
     throw new Error(updateError.message);
