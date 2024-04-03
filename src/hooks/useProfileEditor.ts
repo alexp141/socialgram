@@ -1,6 +1,6 @@
 "use client";
 
-import { updateProfile } from "@/lib/actions";
+import { updateProfile } from "@/lib/data";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 

@@ -1,7 +1,13 @@
 "use client";
 
+import { z } from "zod";
 import { createClient } from "@/utils/supabase/client";
-import { FollowersRow, PostRow, UsersRow } from "./types/type-collection";
+import {
+  FollowersRow,
+  PostRow,
+  UsersRow,
+  UsersUpdate,
+} from "./types/type-collection";
 import { SearchParams } from "./types";
 
 export async function getUser() {
@@ -478,7 +484,7 @@ export async function getNextFollowingPage(
 //check if current user is following userId
 export async function checkIfFollowing(
   otherUserId: string,
-  currUserId?: string,
+  currUserId?: string
 ) {
   const supabase = createClient();
 
@@ -562,4 +568,201 @@ export async function getSearchResultsPage(
 
     return posts;
   }
+}
+
+const MAX_FILE_SIZE = 1024 * 1024 * 15;
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+const profileDataSchema = z.object({
+  banner: z
+    .any()
+    .refine(
+      (file) => {
+        return file?.size >= MAX_FILE_SIZE ? false : true;
+      },
+      { message: "file size must be less than 10MB" }
+    )
+    .refine(
+      (file) => {
+        return (
+          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file?.size === 0
+        );
+      },
+      { message: "only jpg, png and webp images are allowed" }
+    ),
+  profileImage: z
+    .any()
+    .refine(
+      (file) => {
+        return file?.size >= MAX_FILE_SIZE ? false : true;
+      },
+      { message: "file size must be less than 10MB" }
+    )
+    .refine(
+      (file) => {
+        return (
+          ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type) || file?.size === 0
+        );
+      },
+      { message: "only jpg, png and webp images are allowed" }
+    ),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  bio: z.string().optional(),
+  location: z.string().optional(),
+  website: z.string().optional(),
+  birthday: z.string().refine((str) => {
+    if (typeof str === "string" || str === "") return true;
+    return false;
+  }),
+});
+
+export async function updateProfile(
+  userId: string,
+  username: string,
+  formData: FormData
+) {
+  const validation = profileDataSchema.safeParse({
+    banner: formData.get("banner"),
+    profileImage: formData.get("profileImage"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    bio: formData.get("bio"),
+    location: formData.get("location"),
+    website: formData.get("website"),
+    birthday: formData.get("birthday"),
+  });
+
+  if (!validation.success) {
+    console.error("validation error", validation.error.message);
+    throw new Error(validation.error.message);
+  }
+
+  const {
+    profileImage,
+    banner,
+    bio,
+    birthday,
+    location,
+    website,
+    firstName,
+    lastName,
+  } = validation.data;
+
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("users")
+    .update<UsersUpdate>({
+      bio,
+      birthday: birthday || null,
+      location,
+      website,
+      first_name: firstName,
+      last_name: lastName,
+    })
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("user update error", error.message);
+    throw new Error(error.message);
+  }
+
+  //update profile picture
+  Promise.all([
+    uploadProfilePic(profileImage as File, userId),
+    uploadProfileBanner(banner as File, userId),
+  ]);
+  // const pfPath = await uploadProfilePic(profileImage as File, userId);
+
+  //update banner picture
+  // const pbPath = await uploadProfileBanner(banner as File, userId);
+
+  //return then revalidate
+  return { message: "success" };
+}
+
+export async function uploadProfilePic(file: File, userId: string) {
+  if (!file.name || !file.size) {
+    return;
+  }
+
+  const fileExtension = file.name.split(".")[1];
+  // no validation required since it was already done
+  // Upload file using standard upload
+  const supabase = createClient();
+  const { data, error } = await supabase.storage
+    .from("profile")
+    .upload(`${userId}/profile_picture/profile-pic.${fileExtension}`, file, {
+      contentType: "image/*",
+      upsert: true,
+    });
+
+  if (error) {
+    // Handle error
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("image data is null");
+  }
+
+  //updating path to avatar
+  const { error: updateError } = await supabase
+    .from("users")
+    .update<UsersUpdate>({
+      avatar_url: `${userId}/profile_picture/profile-pic.${fileExtension}`,
+    })
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return data.path;
+}
+
+export async function uploadProfileBanner(file: File, userId: string) {
+  //no validation required
+  const supabase = createClient();
+
+  if (!file.name || !file.size) {
+    return;
+  }
+
+  const fileExtension = file.name.split(".")[1];
+
+  // Upload file using standard upload
+  const { data, error } = await supabase.storage
+    .from("profile")
+    .upload(`${userId}/banner/banner.${fileExtension}`, file, {
+      contentType: "image/*",
+      upsert: true,
+    });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("image data is null");
+  }
+
+  const { error: updateError } = await supabase
+    .from("users")
+    .update<UsersUpdate>({
+      banner_url: `${userId}/banner/banner.${fileExtension}`,
+    })
+    .eq("user_id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return data.path;
 }
