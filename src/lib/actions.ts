@@ -545,7 +545,7 @@ export async function updateProfile(
 
   if (!validation.success) {
     console.error("validation error", validation.error.message);
-    return { error: validation.error.message };
+    throw new Error(validation.error.message);
   }
 
   const {
@@ -575,28 +575,18 @@ export async function updateProfile(
 
   if (error) {
     console.error("user update error", error.message);
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
   //update profile picture
-  try {
-    const pfPath = await uploadProfilePic(profileImage as File, userId);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("avatar error", error.message);
-      return { data: null, error: error.message };
-    }
-  }
+  Promise.all([
+    uploadProfilePic(profileImage as File, userId),
+    uploadProfileBanner(banner as File, userId),
+  ]);
+  // const pfPath = await uploadProfilePic(profileImage as File, userId);
 
   //update banner picture
-  try {
-    const pbPath = await uploadProfileBanner(banner as File, userId);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("banner error", error.message);
-      return { data: null, error: error.message };
-    }
-  }
+  // const pbPath = await uploadProfileBanner(banner as File, userId);
 
   revalidatePath(`/${username}`);
   return { message: "success" };

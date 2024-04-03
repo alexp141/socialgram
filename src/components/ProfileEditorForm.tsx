@@ -2,10 +2,9 @@
 
 import { useRef, useState } from "react";
 import Modal from "./Modal";
-import { updateProfile } from "@/lib/actions";
-import { toast } from "react-toastify";
 import ImageCropper from "./ImageCropper";
 import Image from "next/image";
+import useProfileEditor from "@/hooks/useProfileEditor";
 
 export default function ProfileEditorForm({
   profileData,
@@ -32,6 +31,8 @@ export default function ProfileEditorForm({
     website: string;
   };
 }) {
+  const { editProfile, editProfileError, editProfileStatus } =
+    useProfileEditor();
   const [isOpen, setIsOpen] = useState(false);
   const [isAvatarCropperOpen, setIsAvatarCropperOpen] = useState(false);
   const [isBannerCropperOpen, setIsBannerCropperOpen] = useState(false);
@@ -45,19 +46,11 @@ export default function ProfileEditorForm({
     setIsOpen(true);
   }
 
-  async function handleAction(formData: FormData) {
+  function handleAction(formData: FormData) {
     //upload form
-    const res = await updateProfile(userId, username, formData);
+    editProfile({ userId, username, formData });
     console.log("profile updated");
-    console.log("profile update res", res);
-    //toast message
-    if (res.error) {
-      console.log(res.error);
-      toast.error(res.error);
-      return;
-    }
 
-    toast.success("successfuly updated profile");
     setIsOpen(false);
   }
   return (
@@ -213,8 +206,15 @@ export default function ProfileEditorForm({
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50 mt-4">
-              Submit
+            <button
+              className="border-2 border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50 mt-4"
+              disabled={editProfileStatus === "pending"}
+            >
+              {editProfileStatus === "pending" ? (
+                <span>Loading...</span>
+              ) : (
+                <span>Submit</span>
+              )}
             </button>
           </div>
         </form>
