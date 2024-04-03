@@ -178,7 +178,7 @@ export async function createPost(
   const image = formData.get("postImage") as File;
 
   if (!content && image.size === 0) {
-    return { error: "cannot create post with no content", message: null };
+    return { error: "Cannot create post with no content", message: null };
   }
 
   //CREATE POST

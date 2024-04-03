@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import ImageCropper from "./ImageCropper";
 import { FaPenToSquare, FaRegComment } from "react-icons/fa6";
+import SubmitButton from "./SubmitButton";
 
 export default function CreatePost({
   replyToId,
@@ -131,9 +132,9 @@ export default function CreatePost({
                 Clear Image
               </button>
             )}
-            <button className="border border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50">
+            <SubmitButton buttonStyle="border border-sky-100 rounded-full bg-sky-500 px-4 py-2 text-sky-50">
               Post
-            </button>
+            </SubmitButton>
           </div>
 
           <Modal
