@@ -471,3 +471,7 @@ export async function getFollowableUsers(loggedInUserId?: string) {
 
   return data;
 }
+
+export async function validatePath(path: string) {
+  revalidatePath(path);
+}

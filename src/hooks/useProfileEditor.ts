@@ -1,10 +1,11 @@
 "use client";
 
+import { validatePath } from "@/lib/actions";
 import { updateProfile } from "@/lib/data";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export default function useProfileEditor() {
+export default function useProfileEditor(username: string) {
   const {
     mutate: editProfile,
     error: editProfileError,
@@ -24,6 +25,7 @@ export default function useProfileEditor() {
     },
     onSuccess: () => {
       toast.success("Successfully updated profile");
+      validatePath(`/user/${username}`);
     },
   });
 

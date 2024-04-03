@@ -18,6 +18,7 @@ export default function usePostCreator() {
       replyToId: number | undefined;
     }) => createPost(formData, replyToId),
     onSuccess: (replyToId) => {
+      queryClient.invalidateQueries({ queryKey: ["main-feed"] });
       //invalidate the feed from /userid
       queryClient.invalidateQueries({ queryKey: ["user-posts"] });
       if (replyToId) {

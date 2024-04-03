@@ -32,7 +32,7 @@ export default function ProfileEditorForm({
   };
 }) {
   const { editProfile, editProfileError, editProfileStatus } =
-    useProfileEditor();
+    useProfileEditor(username);
   const [isOpen, setIsOpen] = useState(false);
   const [isAvatarCropperOpen, setIsAvatarCropperOpen] = useState(false);
   const [isBannerCropperOpen, setIsBannerCropperOpen] = useState(false);
@@ -159,7 +159,8 @@ export default function ProfileEditorForm({
             </div>
           </div>
           <p className="text-center text-emerald-500 mt-4">
-            *Changes to avatars and banners may take up to an hour to update!*
+            *Changes to avatars and banners may take up to 15 minutes to
+            update!*
           </p>
           <div className="mt-4">
             <input type="file" name="banner" hidden ref={bannerInputRef} />
