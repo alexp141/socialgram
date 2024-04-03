@@ -111,7 +111,7 @@ export async function emailLogin(prevState: any, formData: FormData) {
   let password = formData.get("password");
   if (!email || !password) {
     return {
-      message: "",
+      message: "failure",
       generalError: "email or password is null",
       emailError: null,
       passwordError: null,
@@ -126,10 +126,12 @@ export async function emailLogin(prevState: any, formData: FormData) {
     password,
   });
 
+  console.log(error);
+
   if (error) {
     return {
-      message: "",
-      generalError: error,
+      message: "failure",
+      generalError: error.message,
       emailError: null,
       passwordError: null,
     };
