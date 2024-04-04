@@ -2,6 +2,7 @@
 
 import useCommentCount from "@/hooks/useCommentCount";
 import CreatePost from "./CreatePost";
+import TinyLoader from "./TinyLoader";
 
 export default function CommentButton({ postId }: { postId: number }) {
   const { commentCount, error, fetchStatus } = useCommentCount(postId);
@@ -11,9 +12,14 @@ export default function CommentButton({ postId }: { postId: number }) {
   }
 
   return (
-    <div className="flex gap-1">
-      <CreatePost replyToId={postId} displayAsCommentButton />
-      <span>{commentCount}</span>
+    <div className="">
+      <CreatePost replyToId={postId} displayAsCommentButton>
+        {fetchStatus !== "fetching" ? (
+          <span>{commentCount}</span>
+        ) : (
+          <TinyLoader style="flex" />
+        )}
+      </CreatePost>
     </div>
   );
 }

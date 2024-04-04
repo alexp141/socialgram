@@ -12,10 +12,12 @@ export default function CreatePost({
   replyToId,
   displayAsCommentButton,
   displayAsSidebarButton,
+  children,
 }: {
   replyToId?: number;
   displayAsCommentButton?: boolean;
   displayAsSidebarButton?: boolean;
+  children?: React.ReactNode;
 }) {
   const { createNewPost, createNewPostError, createNewPostStatus } =
     usePostCreator();
@@ -45,8 +47,10 @@ export default function CreatePost({
           onClick={() => {
             setIsOpen(true);
           }}
+          className="flex gap-1 justify-center items-center"
         >
           <FaRegComment />
+          {children}
         </button>
       )}
 

@@ -9,6 +9,7 @@ export default function useFavoritesCount(postId: number) {
   } = useQuery({
     queryKey: ["favorited-count", postId],
     queryFn: () => getPostFavorites(postId),
+    refetchOnWindowFocus: false,
   });
 
   return { favoritesCount, error, fetchStatus };
