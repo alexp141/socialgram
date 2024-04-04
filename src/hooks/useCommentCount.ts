@@ -9,6 +9,7 @@ export default function useCommentCount(postId: number) {
   } = useQuery({
     queryKey: ["comment-count", postId],
     queryFn: () => getCommentCount(postId),
+    refetchOnWindowFocus: false,
   });
 
   return { commentCount, error, fetchStatus };
