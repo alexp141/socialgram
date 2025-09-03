@@ -1,84 +1,141 @@
 "use client";
-
-import { emailLogin } from "@/lib/actions";
-import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { emailLogin, guestLogin } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { useFormState } from "react-dom";
-import SubmitButton from "./SubmitButton";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import Link from "next/link";
+
+const formSchema = z.object({
+  email: z.string().email({ message: "invalid email" }),
+  password: z.string().min(1, { message: "Please Enter Your Password" }),
+});
 
 export default function LoginForm() {
-  const [state, formAction] = useFormState(emailLogin, {
-    message: "",
-    generalError: null,
-    emailError: null,
-    passwordError: null,
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const router = useRouter();
-
-  if (state.message === "success") {
-    router.push("/home");
+  const [guestButtonLoading, setGuestButtonLoading] = useState(false);
+  async function handleGuestLogin() {
+    setGuestButtonLoading(true);
+    const res = await guestLogin();
+    if (res.success) {
+      router.push(`/home`);
+    } else {
+      toast.error(`Guest login failed: ${res.message}`);
+    }
+    setGuestButtonLoading(false);
   }
 
-  const formLabelStyle = "text-lg";
-  const formInputStyle =
-    "w-full border-2 border-gray-700 hover:border-sky-300 focus:outline-sky-300 rounded-lg bg-sky-900 text-xl p-1";
-  return (
-    <div className="sm:min-w-[30rem] bg-sky-500 p-6 flex flex-col border-2 border-sky-900 dark:border-sky-100 rounded-lg text-sky-50">
-      <h2 className="text-4xl font-bold text-center">Login</h2>
-      <form action={formAction} className="flex flex-col my-4 gap-4">
-        <div>
-          <label htmlFor="email" className={formLabelStyle}>
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            required
-            className={formInputStyle}
-          />
-          {state.emailError && (
-            <p className="text-rose-700 font-semibold">{state.emailError}</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor="password" className={formLabelStyle}>
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            required
-            className={formInputStyle}
-          />
-          {state.passwordError && (
-            <p className="text-rose-700 font-semibold">{state.passwordError}</p>
-          )}
-        </div>
-        <div className="self-center">
-          <SubmitButton buttonStyle="border-2 border-sky-100 text-sky-50 rounded-full py-2 px-4 bg-blue-800 text-lg">
-            {state.message === "success" ? (
-              <span>Redirecting...</span>
-            ) : (
-              <span>Login</span>
-            )}
-          </SubmitButton>
-        </div>
+  async function handleSubmit(values: z.infer<typeof formSchema>) {
+    const res = await emailLogin(values);
+    if (res.success) {
+      //redirect
+      router.push(`/home`);
+    } else {
+      toast.error(`Guest login failed: ${res.message}`);
+    }
+  }
 
-        {state.generalError && (
-          <p className="text-rose-700 font-semibold">{state.generalError}</p>
-        )}
-      </form>
-      <p className="mt-6">
-        {"Don't have an account? "}
-        <Link
-          href={"/signup"}
-          className="hover:underline text-blue-950 hover:text-blue-100"
-        >
-          Sign up
-        </Link>
-      </p>
-    </div>
+  return (
+    <Card className="w-full max-w-sm bg-sky-300">
+      <CardHeader>
+        <CardTitle className="text-2xl">Login to your account</CardTitle>
+        <CardDescription className="text-zinc-700 ">
+          Quickly Login as a Guest or enter your email below
+        </CardDescription>
+        <CardHeader>
+          <Button variant="default" onClick={handleGuestLogin}>
+            {guestButtonLoading ? "Redirecting..." : "Login As Guest"}
+          </Button>
+        </CardHeader>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="example@email.com"
+                      className="border-black"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      className="border-black"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full">
+              {form.formState.isSubmitting ? "Loading..." : "Login"}
+            </Button>
+            <div>
+              <p>
+                Don&apos;t have an account?{" "}
+                <Link
+                  href={`/signup`}
+                  className="text-blue-700 hover:underline-offset-4 hover:underline"
+                >
+                  Signup
+                </Link>
+              </p>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

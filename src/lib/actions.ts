@@ -29,33 +29,14 @@ const signupSchema = z
     return schema.password === schema.confirmPassword;
   }, "Passwords must match!");
 
-export async function signUpUser(prevState: any, formData: FormData) {
-  const validationResults = signupSchema.safeParse({
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirmPassword: formData.get("confirmPassword"),
-  });
-
-  if (!validationResults.success) {
-    const errors = validationResults.error.format();
-    console.log(validationResults.error.format());
-    const usernameError = errors.username?._errors.join(" | ");
-    const emailError = errors.email?._errors.join(" | ");
-    const passwordError = errors.password?._errors.join(" | ");
-    const confirmPasswordError = errors.confirmPassword?._errors.join(" | ");
-    return {
-      generalError: validationResults.error.format()._errors.join(" | "),
-      usernameError,
-      emailError,
-      passwordError,
-      confirmPasswordError,
-    };
-  }
-
+export async function signUpUser(values: {
+  username: string;
+  email: string;
+  password: string;
+}) {
   const supabase = createClient();
 
-  const { username, email, password } = validationResults.data;
+  const { username, email, password } = values;
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -69,13 +50,19 @@ export async function signUpUser(prevState: any, formData: FormData) {
   });
 
   if (error) {
-    return { generalError: error.message };
+    return {
+      success: false,
+      message: error.message,
+    };
   }
 
   const userData = data.user;
 
   if (!userData) {
-    return { generalError: "user data not found" };
+    return {
+      success: false,
+      message: "user data not found",
+    };
   }
   const { data: usersInsertData, error: usersError } = await supabase
     .from("users")
@@ -86,62 +73,65 @@ export async function signUpUser(prevState: any, formData: FormData) {
 
   if (usersError) {
     return {
-      message: "failure",
-      generalError: usersError.message,
-      usernameError: null,
-      emailError: null,
-      passwordError: null,
-      confirmPasswordError: null,
+      success: false,
+      message: usersError.message,
     };
   }
   return {
-    message: "success",
-    generalError: null,
-    usernameError: null,
-    emailError: null,
-    passwordError: null,
-    confirmPasswordError: null,
+    success: true,
+    message: "",
   };
 }
 
-export async function emailLogin(prevState: any, formData: FormData) {
+export async function emailLogin(values: { email: string; password: string }) {
   const supabase = createClient();
 
-  let email = formData.get("email");
-  let password = formData.get("password");
+  let email = values.email;
+  let password = values.password;
+
   if (!email || !password) {
     return {
-      message: "failure",
-      generalError: "email or password is null",
-      emailError: null,
-      passwordError: null,
+      success: false,
+      message: "email or password is null",
     };
   }
-
-  email = email.toString();
-  password = password.toString();
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  console.log(error);
-
   if (error) {
     return {
-      message: "failure",
-      generalError: error.message,
-      emailError: null,
-      passwordError: null,
+      success: false,
+      message: error.message,
     };
   }
 
   return {
-    message: "success",
-    generalError: null,
-    emailError: null,
-    passwordError: null,
+    success: true,
+    message: "",
+  };
+}
+
+export async function guestLogin() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: "GuestUser@email.com",
+    password: "C8cGhGQtHBGR8Y9", // this is public on purpose since it is a guest login
+  });
+
+  if (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+
+  return {
+    success: true,
+    message: "",
   };
 }
 
