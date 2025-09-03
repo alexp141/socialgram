@@ -1,87 +1,57 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Label } from "./ui/label";
 
 export default function FilterForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const formRef = useRef<HTMLFormElement | null>(null);
 
-  function updateSearchParams(formData: FormData) {
+  const [timeSort, setTimeSort] = useState(
+    () => searchParams.get("timeSort") || "newest"
+  );
+  const [searchFor, setSearchFor] = useState(
+    () => searchParams.get("searchFor") || "posts"
+  );
+
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-
-    formData.forEach((value, key, parent) => {
-      console.log(value, key, parent);
-      params.set(key, value.toString());
-    });
-
+    params.set("timeSort", timeSort);
+    params.set("searchFor", searchFor);
     router.push(`/explore?${params.toString()}`);
-  }
+  }, [timeSort, searchFor, router, searchParams]);
 
   return (
-    <form action={updateSearchParams} ref={formRef} className="divide-y">
-      <fieldset>
-        <h2>Sort By</h2>
-        <div className="flex gap-2">
-          <input
-            type="radio"
-            name="timeSort"
-            id="newest"
-            value="newest"
-            defaultChecked={
-              !searchParams.get("timeSort") ||
-              searchParams.get("timeSort")?.toString() === "newest"
-            }
-            onChange={() => formRef.current?.requestSubmit()}
-          />
-          <label htmlFor="newest">Newest</label>
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="radio"
-            name="timeSort"
-            id="oldest"
-            value="oldest"
-            defaultChecked={
-              searchParams.get("timeSort")?.toString() === "oldest"
-            }
-            onChange={() => formRef.current?.requestSubmit()}
-          />
-          <label htmlFor="oldest">Oldest</label>
-        </div>
+    <div className="divide-y">
+      <fieldset className="pb-4">
+        <h2 className="mb-3 text-lg font-medium">Sort By</h2>
+        <RadioGroup value={timeSort} onValueChange={setTimeSort}>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="newest" id="newest" />
+            <Label htmlFor="newest">Newest</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="oldest" id="oldest" />
+            <Label htmlFor="oldest">Oldest</Label>
+          </div>
+        </RadioGroup>
       </fieldset>
 
-      <fieldset className="">
-        <h2>Search For</h2>
-        <div className="flex gap-2">
-          <input
-            type="radio"
-            name="searchFor"
-            id="postsInput"
-            value="posts"
-            defaultChecked={
-              !searchParams.get("timeSort") ||
-              searchParams.get("searchFor")?.toString() === "posts"
-            }
-            onChange={() => formRef.current?.requestSubmit()}
-          />
-          <label htmlFor="postsInput">Posts</label>
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="radio"
-            name="searchFor"
-            id="usersInput"
-            value="users"
-            defaultChecked={
-              searchParams.get("searchFor")?.toString() === "users"
-            }
-            onChange={() => formRef.current?.requestSubmit()}
-          />
-          <label htmlFor="usersInput">Users</label>
-        </div>
+      <fieldset className="pt-4">
+        <h2 className="mb-3 text-lg font-medium">Search For</h2>
+        <RadioGroup value={searchFor} onValueChange={setSearchFor}>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="posts" id="posts" />
+            <Label htmlFor="posts">Posts</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="users" id="users" />
+            <Label htmlFor="users">Users</Label>
+          </div>
+        </RadioGroup>
       </fieldset>
-    </form>
+    </div>
   );
 }
