@@ -96,9 +96,7 @@ export default function SearchFeed({
             <LoadingSpinner />
           ) : hasNextPage ? (
             "Load More"
-          ) : (
-            <span className="text-sky-500">Nothing more to load</span>
-          )}
+          ) : null}
         </button>
       </div>
     </div>
