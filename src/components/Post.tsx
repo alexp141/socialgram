@@ -24,10 +24,10 @@ export default function Post({ post }: { post: PostRow }) {
   }, [post.id]);
 
   return (
-    <div className=" hover:bg-zinc-300 hover:bg-opacity-20 dark:bg-transparent">
+    <div className="bg-zinc-100 dark:hover:bg-zinc-700 hover:bg-opacity-20 dark:bg-zinc-800 rounded-lg">
       <Link href={`/posts/${hashedPostId}`}>
-        <div className="grid grid-cols-[auto_1fr] border-t border-zinc-900 dark:border-t-zinc-100 py-2 px-2">
-          <div className="">
+        <div className="grid grid-cols-[auto_1fr]  py-2 px-2">
+          <div>
             <Link href={`/user/${post.username}`}>
               <Image
                 className="border-2 rounded-full border-sky-400"
@@ -40,7 +40,10 @@ export default function Post({ post }: { post: PostRow }) {
             </Link>
           </div>
           <div className="ml-1">
-            <Link href={`/user/${post.username}`}>
+            <Link
+              href={`/user/${post.username}`}
+              className="hover:underline hover:underline-offset-4 text-sky-500"
+            >
               <span className="hover:text-sky-500 text-lg text-sky-500 font-medium">{`@${post.username}`}</span>
             </Link>
             <Link href={`/posts/${hashedPostId}`}>

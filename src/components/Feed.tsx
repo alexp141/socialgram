@@ -70,7 +70,7 @@ export default function Feed({
   ) : (
     <div className="">
       {data.pages.map((group, groupNumber) => (
-        <div key={groupNumber}>
+        <div key={groupNumber} className="flex flex-col gap-2">
           {group.map((item, itemNumber) => {
             if (isTypePostRow(item)) {
               //we know it is a post
