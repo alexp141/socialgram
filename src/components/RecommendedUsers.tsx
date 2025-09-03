@@ -3,6 +3,7 @@
 import { UsersRow } from "@/lib/types/type-collection";
 import { useState } from "react";
 import UserCard from "./UserCard";
+import { Button } from "./ui/button";
 
 export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
   const [listLength, setListLength] = useState(4);
@@ -28,9 +29,13 @@ export default function RecommendedUsers({ users }: { users: UsersRow[] }) {
       })}
 
       {listLength < users.length && (
-        <button type="button" onClick={handleShowMore} className="text-sky-500">
+        <Button
+          variant={"ghost"}
+          onClick={handleShowMore}
+          className="text-sky-500"
+        >
           Show More
-        </button>
+        </Button>
       )}
 
       {listLength > 4 && (

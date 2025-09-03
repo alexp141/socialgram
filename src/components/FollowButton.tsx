@@ -3,6 +3,7 @@
 import useFollow from "@/hooks/useFollow";
 import useFollowingStatus from "@/hooks/useFollowingStatus";
 import { useState } from "react";
+import { Button } from "./ui/button";
 
 export default function FollowButton({
   userToFollow,
@@ -17,21 +18,16 @@ export default function FollowButton({
   );
   const { followMutation, followError, followStatus } = useFollow();
 
-  const buttonStyle =
-    "px-4 py-2 border-2 rounded-full border-sky-50 hover:bg-sky-700 bg-sky-400 text-sky-50";
+  const buttonStyle = "bg-sky-300 text-black dark:text-white";
 
   async function handleFollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    followMutation(
-      { userId: userToFollow, type: "follow" },
-    );
+    followMutation({ userId: userToFollow, type: "follow" });
   }
 
   async function handleUnfollow(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    followMutation(
-      { userId: userToFollow, type: "unfollow" },
-    );
+    followMutation({ userId: userToFollow, type: "unfollow" });
   }
 
   if (error) {
@@ -41,7 +37,8 @@ export default function FollowButton({
   return (
     <div className="">
       {isFollowing && (
-        <button
+        <Button
+          variant={"outline"}
           onClick={handleUnfollow}
           className={`${buttonStyle}`}
           disabled={fetchStatus === "fetching" || followStatus === "pending"}
@@ -49,10 +46,10 @@ export default function FollowButton({
           {fetchStatus === "fetching" || followStatus === "pending"
             ? "Loading..."
             : "Unfollow"}
-        </button>
+        </Button>
       )}
       {!isFollowing && (
-        <button
+        <Button
           onClick={handleFollow}
           className={`${buttonStyle}`}
           disabled={fetchStatus === "fetching" || followStatus === "pending"}
@@ -60,7 +57,7 @@ export default function FollowButton({
           {fetchStatus === "fetching" || followStatus === "pending"
             ? "Loading..."
             : "Follow"}
-        </button>
+        </Button>
       )}
     </div>
   );
