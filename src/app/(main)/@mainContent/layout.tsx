@@ -7,10 +7,6 @@ export default function MainContentLayout({
 }) {
   return (
     //general layout for @mainContent
-    <div
-      className={`w-full md:w-[35rem] lg:max-w-[35rem] border-x border-zinc-900 border-b dark:border-zinc-100`}
-    >
-      {children}
-    </div>
+    <div className={`w-full md:w-[35rem] lg:max-w-[35rem]`}>{children}</div>
   );
 }
